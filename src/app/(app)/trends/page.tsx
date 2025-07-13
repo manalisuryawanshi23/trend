@@ -8,26 +8,23 @@ import { LoaderCircle } from "lucide-react";
 
 import { trendForecasting } from "@/ai/flows/trend-forecasting";
 import type { Trend } from "@/lib/types";
+import { platforms, niches, countries, userTypes } from "@/lib/data";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendCard } from "@/components/trend-card";
 import { useToast } from "@/hooks/use-toast";
 
 const trendFormSchema = z.object({
-  platform: z.enum(['Instagram', 'YouTube Shorts', 'TikTok', 'Twitter', 'Facebook'], {
-    required_error: "Please select a platform.",
-  }),
-  niche: z.string().min(2, { message: "Niche must be at least 2 characters." }),
-  region: z.string().min(2, { message: "Region must be at least 2 characters." }),
-  userType: z.string().min(2, { message: "User type must be at least 2 characters." }),
+  platform: z.string({ required_error: "Please select a platform." }),
+  niche: z.string({ required_error: "Please select a niche." }),
+  microNiche: z.string().optional(),
+  region: z.string({ required_error: "Please select a region." }),
+  userType: z.string({ required_error: "Please select a user type." }),
 });
-
-const platforms = ['Instagram', 'YouTube Shorts', 'TikTok', 'Twitter', 'Facebook'] as const;
 
 export default function TrendsPage() {
   const [trends, setTrends] = useState<Trend[]>([]);
@@ -38,17 +35,25 @@ export default function TrendsPage() {
     resolver: zodResolver(trendFormSchema),
     defaultValues: {
       platform: 'TikTok',
-      niche: 'fashion',
-      region: 'USA',
-      userType: 'Influencer',
+      niche: 'Fashion',
+      microNiche: 'Streetwear',
+      region: 'United States',
+      userType: 'Content Creator / Influencer',
     },
   });
+
+  const selectedNiche = trendForm.watch("niche");
 
   async function onTrendSubmit(values: z.infer<typeof trendFormSchema>) {
     setIsLoadingTrends(true);
     setTrends([]);
     try {
-      const result = await trendForecasting(values);
+      const nicheValue = values.microNiche ? `${values.niche} (${values.microNiche})` : values.niche;
+      const result = await trendForecasting({
+        ...values,
+        niche: nicheValue,
+      });
+
       if (result && result.trends) {
         setTrends(result.trends);
       } else {
@@ -65,6 +70,8 @@ export default function TrendsPage() {
       setIsLoadingTrends(false);
     }
   }
+
+  const microNicheOptions = niches.find(n => n.name === selectedNiche)?.microNiches || [];
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
@@ -111,39 +118,83 @@ export default function TrendsPage() {
                   />
                   <FormField
                     control={trendForm.control}
-                    name="niche"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Niche</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., fashion, gaming" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={trendForm.control}
                     name="region"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Region</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., USA, Brazil" {...field} />
-                        </FormControl>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                           <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a region" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="max-h-60">
+                            {countries.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={trendForm.control}
-                    name="userType"
+                    name="niche"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>Niche</FormLabel>
+                        <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            trendForm.setValue("microNiche", "");
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a niche" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {niches.map(n => <SelectItem key={n.name} value={n.name}>{n.name}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={trendForm.control}
+                    name="microNiche"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Micro-Niche (Optional)</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value} disabled={microNicheOptions.length === 0}>
+                           <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a micro-niche" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {microNicheOptions.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                   <FormField
+                    control={trendForm.control}
+                    name="userType"
+                    render={({ field }) => (
+                      <FormItem className="sm:col-span-2">
                         <FormLabel>User Type</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., Influencer" {...field} />
-                        </FormControl>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select your user type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {userTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
