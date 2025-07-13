@@ -21,7 +21,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        {children}
+        <div className="min-h-screen bg-background">
+          {children}
+        </div>
         <Toaster />
       </body>
     </html>
