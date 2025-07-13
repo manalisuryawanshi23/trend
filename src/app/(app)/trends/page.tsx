@@ -13,6 +13,7 @@ import { getPlatformsForCountry, niches, countries, userTypes } from "@/lib/data
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendCard } from "@/components/trend-card";
@@ -21,7 +22,9 @@ import { useToast } from "@/hooks/use-toast";
 const trendFormSchema = z.object({
   platform: z.string({ required_error: "Please select a platform." }),
   niche: z.string({ required_error: "Please select a niche." }),
+  otherNiche: z.string().optional(),
   microNiche: z.string().optional(),
+  otherMicroNiche: z.string().optional(),
   region: z.string({ required_error: "Please select a region." }),
   userType: z.string({ required_error: "Please select a user type." }),
 });
@@ -37,13 +40,16 @@ export default function TrendsPage() {
     defaultValues: {
       platform: '',
       niche: 'Fashion',
+      otherNiche: '',
       microNiche: 'Streetwear',
+      otherMicroNiche: '',
       region: '',
       userType: 'Content Creator / Influencer',
     },
   });
 
   const selectedNiche = trendForm.watch("niche");
+  const selectedMicroNiche = trendForm.watch("microNiche");
   const selectedRegion = trendForm.watch("region");
 
   useEffect(() => {
@@ -85,10 +91,16 @@ export default function TrendsPage() {
     setIsLoadingTrends(true);
     setTrends([]);
     try {
-      const nicheValue = values.microNiche ? `${values.niche} (${values.microNiche})` : values.niche;
+      const niche = values.niche === 'Other' ? values.otherNiche : values.niche;
+      const microNiche = values.microNiche === 'Other' ? values.otherMicroNiche : values.microNiche;
+      
+      const nicheValue = microNiche ? `${niche} (${microNiche})` : niche;
+
       const result = await trendForecasting({
-        ...values,
-        niche: nicheValue,
+        platform: values.platform,
+        niche: nicheValue || '',
+        region: values.region,
+        userType: values.userType,
       });
 
       if (result && result.trends) {
@@ -184,40 +196,77 @@ export default function TrendsPage() {
                         <Select onValueChange={(value) => {
                             field.onChange(value);
                             trendForm.setValue("microNiche", "");
+                            trendForm.setValue("otherNiche", "");
+                            trendForm.setValue("otherMicroNiche", "");
                         }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select a niche" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="max-h-60">
                             {niches.map(n => <SelectItem key={n.name} value={n.name}>{n.name}</SelectItem>)}
+                             <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={trendForm.control}
-                    name="microNiche"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Micro-Niche (Optional)</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value} disabled={microNicheOptions.length === 0}>
-                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a micro-niche" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {microNicheOptions.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {selectedNiche === 'Other' ? (
+                     <FormField
+                        control={trendForm.control}
+                        name="otherNiche"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Your Niche</FormLabel>
+                            <FormControl>
+                                <Input placeholder="e.g., Historical Fashion" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                  ) : (
+                    <FormField
+                        control={trendForm.control}
+                        name="microNiche"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Micro-Niche (Optional)</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value} disabled={microNicheOptions.length === 0}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a micro-niche" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="max-h-60">
+                                {microNicheOptions.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                                <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                  )}
+                  
+                  {selectedMicroNiche === 'Other' && selectedNiche !== 'Other' && (
+                     <FormField
+                        control={trendForm.control}
+                        name="otherMicroNiche"
+                        render={({ field }) => (
+                        <FormItem className="sm:col-span-2">
+                            <FormLabel>Your Micro-Niche</FormLabel>
+                            <FormControl>
+                                <Input placeholder="e.g., Victorian Era Gowns" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                  )}
+                  
                    <FormField
                     control={trendForm.control}
                     name="userType"
