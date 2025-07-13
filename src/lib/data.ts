@@ -19,7 +19,7 @@ export function getPlatformsForCountry(country: string) {
     return [...countrySpecificPlatforms, ...globalPlatforms];
 }
 
-export const platforms = allPlatforms.map(p => p.name);
+export const platforms = allPlatforms.map(p => p.name) as [string, ...string[]];
 
 export const userTypes = [
     "Content Creator / Influencer",

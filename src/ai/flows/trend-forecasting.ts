@@ -10,15 +10,11 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { platforms } from '@/lib/data';
 
 const TrendForecastingInputSchema = z.object({
-  platform: z.enum([
-    'Instagram',
-    'YouTube Shorts',
-    'TikTok',
-    'Twitter',
-    'Facebook',
-  ]).describe('The social media platform to focus on.'),
+  platform: z.enum(platforms)
+    .describe('The social media platform to focus on.'),
   niche: z.string().describe('The content niche (e.g., fashion, food, memes).'),
   region: z.string().describe('The region or country to focus on.'),
   userType: z.string().describe('The type of user (e.g., influencer, business).'),
