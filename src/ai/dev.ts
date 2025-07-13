@@ -1,1 +1,7 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/virality-score.ts';
+import '@/ai/flows/trend-forecasting.ts';
+import '@/ai/flows/trend-reasoning.ts';
+import '@/ai/flows/ai-post-plan.ts';
