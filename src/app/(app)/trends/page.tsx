@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -8,7 +8,7 @@ import { LoaderCircle } from "lucide-react";
 
 import { trendForecasting } from "@/ai/flows/trend-forecasting";
 import type { Trend } from "@/lib/types";
-import { platforms, niches, countries, userTypes } from "@/lib/data";
+import { getPlatformsForCountry, niches, countries, userTypes } from "@/lib/data";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,20 +29,57 @@ const trendFormSchema = z.object({
 export default function TrendsPage() {
   const [trends, setTrends] = useState<Trend[]>([]);
   const [isLoadingTrends, setIsLoadingTrends] = useState(false);
+  const [isDetectingLocation, setIsDetectingLocation] = useState(true);
   const { toast } = useToast();
 
   const trendForm = useForm<z.infer<typeof trendFormSchema>>({
     resolver: zodResolver(trendFormSchema),
     defaultValues: {
-      platform: 'TikTok',
+      platform: '',
       niche: 'Fashion',
       microNiche: 'Streetwear',
-      region: 'United States',
+      region: '',
       userType: 'Content Creator / Influencer',
     },
   });
 
   const selectedNiche = trendForm.watch("niche");
+  const selectedRegion = trendForm.watch("region");
+
+  useEffect(() => {
+    async function detectLocation() {
+      setIsDetectingLocation(true);
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) throw new Error("Could not fetch location");
+        const data = await response.json();
+        const countryName = data.country_name;
+
+        if (countryName && countries.includes(countryName as any)) {
+          trendForm.setValue('region', countryName);
+        } else {
+           // Fallback to a default if detection fails or country not in list
+          trendForm.setValue('region', 'United States');
+        }
+      } catch (error) {
+        console.error("Location detection error:", error);
+         // Fallback to a default on error
+        trendForm.setValue('region', 'United States');
+      } finally {
+        setIsDetectingLocation(false);
+      }
+    }
+    detectLocation();
+  }, [trendForm]);
+
+  useEffect(() => {
+    // When region changes, update platform options and reset selected platform
+    if (selectedRegion) {
+        const availablePlatforms = getPlatformsForCountry(selectedRegion);
+        trendForm.setValue('platform', availablePlatforms[0]?.name || '');
+    }
+  }, [selectedRegion, trendForm]);
+
 
   async function onTrendSubmit(values: z.infer<typeof trendFormSchema>) {
     setIsLoadingTrends(true);
@@ -72,6 +109,7 @@ export default function TrendsPage() {
   }
 
   const microNicheOptions = niches.find(n => n.name === selectedNiche)?.microNiches || [];
+  const platformOptions = selectedRegion ? getPlatformsForCountry(selectedRegion) : [];
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
@@ -98,18 +136,19 @@ export default function TrendsPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <FormField
                     control={trendForm.control}
-                    name="platform"
+                    name="region"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Platform</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
+                        <FormLabel>Region</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value} disabled={isDetectingLocation}>
+                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a platform" />
+                              {isDetectingLocation && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+                              <SelectValue placeholder={isDetectingLocation ? "Detecting location..." : "Select a region"} />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
-                            {platforms.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                          <SelectContent className="max-h-60">
+                            {countries.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -118,18 +157,18 @@ export default function TrendsPage() {
                   />
                   <FormField
                     control={trendForm.control}
-                    name="region"
+                    name="platform"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Region</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                           <FormControl>
+                        <FormLabel>Platform</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value} disabled={!selectedRegion}>
+                          <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a region" />
+                              <SelectValue placeholder="Select a platform" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent className="max-h-60">
-                            {countries.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                          <SelectContent>
+                            {platformOptions.map(p => <SelectItem key={p.name} value={p.name}>{p.name}</SelectItem>)}
                           </SelectContent>
                         </Select>
                         <FormMessage />

@@ -1,13 +1,25 @@
-export const platforms = [
-  'TikTok',
-  'Instagram Reels',
-  'YouTube Shorts',
-  'Twitter / X',
-  'Facebook Reels',
-  'Pinterest',
-  'LinkedIn',
-  'Snapchat',
+export const allPlatforms = [
+  { name: 'TikTok', regions: 'global' },
+  { name: 'Instagram Reels', regions: 'global' },
+  { name: 'YouTube Shorts', regions: 'global' },
+  { name: 'Twitter / X', regions: 'global' },
+  { name: 'Facebook Reels', regions: 'global' },
+  { name: 'Pinterest', regions: 'global' },
+  { name: 'LinkedIn', regions: 'global' },
+  { name: 'Snapchat', regions: ['United States', 'Canada', 'United Kingdom', 'Australia', 'France', 'Saudi Arabia', 'India'] },
+  { name: 'VK', regions: ['Russia'] },
+  { name: 'WeChat', regions: ['China'] },
+  { name: 'Line', regions: ['Japan', 'Thailand', 'Taiwan', 'Indonesia'] },
+  { name: 'KakaoTalk', regions: ['South Korea'] }
 ] as const;
+
+export function getPlatformsForCountry(country: string) {
+    const countrySpecificPlatforms = allPlatforms.filter(p => Array.isArray(p.regions) && p.regions.includes(country));
+    const globalPlatforms = allPlatforms.filter(p => p.regions === 'global');
+    return [...countrySpecificPlatforms, ...globalPlatforms];
+}
+
+export const platforms = allPlatforms.map(p => p.name);
 
 export const userTypes = [
     "Content Creator / Influencer",
