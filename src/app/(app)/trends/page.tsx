@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Wand2 } from "lucide-react";
 
 import { trendForecasting } from "@/ai/flows/trend-forecasting";
 import type { Trend } from "@/lib/types";
-import { getPlatformsForCountry, niches, countries, userTypes } from "@/lib/data";
+import { getPlatformsForCountry, niches, countries, userTypes, aiModels } from "@/lib/data";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,6 +28,7 @@ const trendFormSchema = z.object({
   region: z.string({ required_error: "Please select a region." }),
   userType: z.string({ required_error: "Please select a user type." }),
   otherUserType: z.string().optional(),
+  model: z.string({ required_error: "Please select an AI model." }),
 });
 
 export default function TrendsPage() {
@@ -47,6 +48,7 @@ export default function TrendsPage() {
       region: '',
       userType: 'Content Creator / Influencer',
       otherUserType: '',
+      model: aiModels[0].name,
     },
   });
 
@@ -105,6 +107,7 @@ export default function TrendsPage() {
         niche: nicheValue || '',
         region: values.region,
         userType: userType || '',
+        model: values.model,
       });
 
       if (result && result.trends) {
@@ -117,7 +120,7 @@ export default function TrendsPage() {
       toast({
         variant: "destructive",
         title: "Error Forecasting Trends",
-        description: "An unexpected error occurred. Please try again later.",
+        description: "An unexpected error occurred. The selected AI model may be overloaded. Please try again later.",
       });
     } finally {
       setIsLoadingTrends(false);
@@ -240,7 +243,11 @@ export default function TrendsPage() {
                       render={({ field }) => (
                       <FormItem>
                           <FormLabel>Micro-Niche (Optional)</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value} disabled={selectedNiche !== 'Other' && microNicheOptions.length === 0}>
+                           <Select 
+                              onValuechange={field.onChange} 
+                              value={field.value} 
+                              disabled={selectedNiche !== 'Other' && microNicheOptions.length === 0}
+                          >
                           <FormControl>
                               <SelectTrigger>
                               <SelectValue placeholder="Select a micro-niche" />
@@ -308,6 +315,41 @@ export default function TrendsPage() {
                           )}
                       />
                     )}
+                   </div>
+                   <div className="sm:col-span-2 space-y-2">
+                     <FormField
+                      control={trendForm.control}
+                      name="model"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="flex items-center gap-2">
+                            <Wand2 className="h-4 w-4" />
+                            AI Model
+                          </FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select an AI model" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {aiModels.map(m => (
+                                <SelectItem key={m.name} value={m.name}>
+                                    <div className="flex flex-col">
+                                        <span>{m.label}</span>
+                                        <span className="text-xs text-muted-foreground">{m.description}</span>
+                                    </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            More powerful models may provide higher quality results, but take longer to process.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                    </div>
                 </div>
                 <Button type="submit" disabled={isLoadingTrends} className="w-full md:w-auto font-bold text-lg py-6 px-8" size="lg">

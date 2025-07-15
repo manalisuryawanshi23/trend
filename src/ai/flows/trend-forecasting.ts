@@ -18,6 +18,7 @@ const TrendForecastingInputSchema = z.object({
   niche: z.string().describe('The content niche (e.g., fashion, food, memes).'),
   region: z.string().describe('The region or country to focus on.'),
   userType: z.string().describe('The type of user (e.g., influencer, business).'),
+  model: z.string().optional().describe('The AI model to use for the prediction.'),
 });
 export type TrendForecastingInput = z.infer<typeof TrendForecastingInputSchema>;
 
@@ -95,8 +96,8 @@ const trendForecastingFlow = ai.defineFlow(
     inputSchema: TrendForecastingInputSchema,
     outputSchema: TrendForecastingOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
+  async ({ model, ...restOfInput }) => {
+    const {output} = await prompt(restOfInput, { model });
     return output!;
   }
 );

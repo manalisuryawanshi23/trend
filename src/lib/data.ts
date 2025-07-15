@@ -141,3 +141,8 @@ export const countries = [
     "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen",
     "Zambia", "Zimbabwe"
   ] as const;
+
+export const aiModels = [
+    { name: 'gemini-1.5-flash-latest', label: 'Gemini 1.5 Flash (Fast)', description: 'Best for most tasks. Quick and cost-effective.' },
+    { name: 'gemini-1.5-pro-latest', label: 'Gemini 1.5 Pro (Powerful)', description: 'Best for complex analysis and creative tasks.' },
+] as const;
