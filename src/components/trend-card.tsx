@@ -37,9 +37,9 @@ export function TrendCard({ trend }: { trend: Trend }) {
                   <span className="font-semibold text-primary text-sm whitespace-nowrap">{trend.viralityScore} / 100 Virality</span>
                 </div>
               </div>
-              <Button variant="ghost" className="shrink-0 text-primary hover:text-primary hover:bg-primary/10">
+              <div className="shrink-0 text-primary hover:text-primary hover:bg-primary/10 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-10 px-4 py-2">
                 View Details
-              </Button>
+              </div>
             </div>
           </AccordionTrigger>
           <AccordionContent>
