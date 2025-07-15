@@ -97,7 +97,8 @@ const trendForecastingFlow = ai.defineFlow(
     outputSchema: TrendForecastingOutputSchema,
   },
   async ({ model, ...restOfInput }) => {
-    const {output} = await prompt(restOfInput, { model });
+    const modelToUse = model ? `googleai/${model}` : undefined;
+    const {output} = await prompt(restOfInput, { model: modelToUse });
     return output!;
   }
 );
