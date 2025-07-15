@@ -27,6 +27,7 @@ const trendFormSchema = z.object({
   otherMicroNiche: z.string().optional(),
   region: z.string({ required_error: "Please select a region." }),
   userType: z.string({ required_error: "Please select a user type." }),
+  otherUserType: z.string().optional(),
 });
 
 export default function TrendsPage() {
@@ -45,12 +46,14 @@ export default function TrendsPage() {
       otherMicroNiche: '',
       region: '',
       userType: 'Content Creator / Influencer',
+      otherUserType: '',
     },
   });
 
   const selectedNiche = trendForm.watch("niche");
   const selectedMicroNiche = trendForm.watch("microNiche");
   const selectedRegion = trendForm.watch("region");
+  const selectedUserType = trendForm.watch("userType");
 
   useEffect(() => {
     async function detectLocation() {
@@ -93,6 +96,7 @@ export default function TrendsPage() {
     try {
       const niche = values.niche === 'Other' ? values.otherNiche : values.niche;
       const microNiche = values.microNiche === 'Other' ? values.otherMicroNiche : values.microNiche;
+      const userType = values.userType === 'Other' ? values.otherUserType : values.userType;
       
       const nicheValue = microNiche ? `${niche} (${microNiche})` : niche;
 
@@ -100,7 +104,7 @@ export default function TrendsPage() {
         platform: values.platform,
         niche: nicheValue || '',
         region: values.region,
-        userType: values.userType,
+        userType: userType || '',
       });
 
       if (result && result.trends) {
@@ -268,26 +272,43 @@ export default function TrendsPage() {
                     />
                   )}
                   
-                   <FormField
-                    control={trendForm.control}
-                    name="userType"
-                    render={({ field }) => (
-                      <FormItem className="sm:col-span-2">
-                        <FormLabel>User Type</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select your user type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {userTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
+                   <div className="sm:col-span-2 space-y-2">
+                     <FormField
+                      control={trendForm.control}
+                      name="userType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>User Type</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select your user type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {userTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {selectedUserType === 'Other' && (
+                       <FormField
+                          control={trendForm.control}
+                          name="otherUserType"
+                          render={({ field }) => (
+                          <FormItem>
+                              <FormLabel>Your User Type</FormLabel>
+                              <FormControl>
+                                  <Input placeholder="e.g., Independent Journalist" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                          </FormItem>
+                          )}
+                      />
                     )}
-                  />
+                   </div>
                 </div>
                 <Button type="submit" disabled={isLoadingTrends} className="w-full md:w-auto font-bold text-lg py-6 px-8" size="lg">
                   {isLoadingTrends && <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />}

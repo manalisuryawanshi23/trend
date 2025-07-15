@@ -34,7 +34,8 @@ export const userTypes = [
     "Educator / Coach",
     "Non-profit",
     "Student",
-    "Hobbyist"
+    "Hobbyist",
+    "Other"
 ] as const;
 
 export const niches = [
