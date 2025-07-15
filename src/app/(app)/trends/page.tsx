@@ -237,31 +237,33 @@ export default function TrendsPage() {
                     />
                   )}
                   
-                  <FormField
-                      control={trendForm.control}
-                      name="microNiche"
-                      render={({ field }) => (
-                      <FormItem>
-                          <FormLabel>Micro-Niche (Optional)</FormLabel>
-                           <Select 
-                              onValuechange={field.onChange} 
-                              value={field.value} 
-                              disabled={selectedNiche !== 'Other' && microNicheOptions.length === 0}
-                          >
-                          <FormControl>
-                              <SelectTrigger>
-                              <SelectValue placeholder="Select a micro-niche" />
-                              </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="max-h-60">
-                              {microNicheOptions.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
-                              <SelectItem value="Other">Other</SelectItem>
-                          </SelectContent>
-                          </Select>
-                          <FormMessage />
-                      </FormItem>
-                      )}
-                  />
+                  <div className="contents sm:block sm:col-span-1">
+                    <FormField
+                        control={trendForm.control}
+                        name="microNiche"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Micro-Niche (Optional)</FormLabel>
+                            <Select 
+                                onValueChange={field.onChange} 
+                                value={field.value} 
+                                disabled={selectedNiche !== 'Other' && microNicheOptions.length === 0}
+                            >
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a micro-niche" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="max-h-60">
+                                {microNicheOptions.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                                <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                  </div>
                   
                   {selectedMicroNiche === 'Other' && (
                      <FormField
@@ -336,7 +338,7 @@ export default function TrendsPage() {
                               {aiModels.map(m => (
                                 <SelectItem key={m.name} value={m.name}>
                                     <div className="flex flex-col">
-                                        <span>{m.label}</span>
+                                        <span className="font-medium">{m.label}</span>
                                         <span className="text-xs text-muted-foreground">{m.description}</span>
                                     </div>
                                 </SelectItem>
