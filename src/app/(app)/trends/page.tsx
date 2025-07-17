@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LoaderCircle, Wand2 } from "lucide-react";
+import { LoaderCircle, Wand2, Save } from "lucide-react";
 
 import { trendForecasting } from "@/ai/flows/trend-forecasting";
 import type { Trend } from "@/lib/types";
@@ -31,13 +32,17 @@ const trendFormSchema = z.object({
   model: z.string({ required_error: "Please select an AI model." }),
 });
 
+type TrendFormValues = z.infer<typeof trendFormSchema>;
+
+const LOCAL_STORAGE_KEY = 'trendseer_prefs';
+
 export default function TrendsPage() {
   const [trends, setTrends] = useState<Trend[]>([]);
   const [isLoadingTrends, setIsLoadingTrends] = useState(false);
   const [isDetectingLocation, setIsDetectingLocation] = useState(true);
   const { toast } = useToast();
 
-  const trendForm = useForm<z.infer<typeof trendFormSchema>>({
+  const trendForm = useForm<TrendFormValues>({
     resolver: zodResolver(trendFormSchema),
     defaultValues: {
       platform: '',
@@ -52,12 +57,20 @@ export default function TrendsPage() {
     },
   });
 
-  const selectedNiche = trendForm.watch("niche");
-  const selectedMicroNiche = trendForm.watch("microNiche");
-  const selectedRegion = trendForm.watch("region");
-  const selectedUserType = trendForm.watch("userType");
-
   useEffect(() => {
+    // Load preferences from localStorage
+    const savedPrefsString = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (savedPrefsString) {
+      try {
+        const savedPrefs = JSON.parse(savedPrefsString);
+        trendForm.reset(savedPrefs);
+        setIsDetectingLocation(false); // Preferences loaded, no need to detect
+        return;
+      } catch (e) {
+        console.error("Failed to parse saved preferences", e);
+      }
+    }
+    
     async function detectLocation() {
       setIsDetectingLocation(true);
       try {
@@ -80,19 +93,28 @@ export default function TrendsPage() {
         setIsDetectingLocation(false);
       }
     }
+    
     detectLocation();
   }, [trendForm]);
 
+  const selectedNiche = trendForm.watch("niche");
+  const selectedMicroNiche = trendForm.watch("microNiche");
+  const selectedRegion = trendForm.watch("region");
+  const selectedUserType = trendForm.watch("userType");
+
   useEffect(() => {
-    // When region changes, update platform options and reset selected platform
+    // When region changes, update platform options and reset selected platform if it's not available
     if (selectedRegion) {
         const availablePlatforms = getPlatformsForCountry(selectedRegion);
-        trendForm.setValue('platform', availablePlatforms[0]?.name || '');
+        const currentPlatform = trendForm.getValues("platform");
+        if (!availablePlatforms.some(p => p.name === currentPlatform)) {
+             trendForm.setValue('platform', availablePlatforms[0]?.name || '');
+        }
     }
   }, [selectedRegion, trendForm]);
 
 
-  async function onTrendSubmit(values: z.infer<typeof trendFormSchema>) {
+  async function onTrendSubmit(values: TrendFormValues) {
     setIsLoadingTrends(true);
     setTrends([]);
     try {
@@ -127,6 +149,24 @@ export default function TrendsPage() {
     }
   }
 
+  function savePreferences() {
+    const values = trendForm.getValues();
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(values));
+      toast({
+        title: "Preferences Saved",
+        description: "Your forecasting parameters have been saved for your next visit.",
+      });
+    } catch (e) {
+       console.error("Failed to save preferences", e);
+       toast({
+        variant: "destructive",
+        title: "Error Saving Preferences",
+        description: "Could not save your preferences. Your browser might have local storage disabled.",
+       });
+    }
+  }
+
   const microNicheOptions = niches.find(n => n.name === selectedNiche)?.microNiches || [];
   const platformOptions = selectedRegion ? getPlatformsForCountry(selectedRegion) : [];
 
@@ -146,7 +186,7 @@ export default function TrendsPage() {
           <CardHeader>
             <CardTitle className="font-headline text-2xl">Forecasting Parameters</CardTitle>
             <CardDescription>
-              Fill out the details below to get started.
+              Fill out the details below to get started. You can save your preferences for next time.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -205,7 +245,7 @@ export default function TrendsPage() {
                             trendForm.setValue("microNiche", "");
                             trendForm.setValue("otherNiche", "");
                             trendForm.setValue("otherMicroNiche", "");
-                        }} defaultValue={field.value}>
+                        }} value={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select a niche" />
@@ -288,7 +328,7 @@ export default function TrendsPage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>User Type</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select your user type" />
@@ -328,7 +368,7 @@ export default function TrendsPage() {
                             <Wand2 className="h-4 w-4" />
                             AI Model
                           </FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select an AI model" />
@@ -354,10 +394,16 @@ export default function TrendsPage() {
                     />
                    </div>
                 </div>
-                <Button type="submit" disabled={isLoadingTrends} className="w-full md:w-auto font-bold text-lg py-6 px-8" size="lg">
-                  {isLoadingTrends && <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />}
-                  {isLoadingTrends ? 'Conjuring Trends...' : 'Forecast Trends'}
-                </Button>
+                <div className="flex flex-col md:flex-row gap-4">
+                    <Button type="submit" disabled={isLoadingTrends} className="w-full md:w-auto font-bold text-lg py-6 px-8 flex-grow" size="lg">
+                        {isLoadingTrends && <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />}
+                        {isLoadingTrends ? 'Conjuring Trends...' : 'Forecast Trends'}
+                    </Button>
+                    <Button type="button" variant="outline" onClick={savePreferences} className="w-full md:w-auto">
+                        <Save className="mr-2 h-4 w-4" />
+                        Save Preferences
+                    </Button>
+                </div>
               </form>
             </Form>
           </CardContent>
@@ -394,3 +440,5 @@ export default function TrendsPage() {
     </div>
   );
 }
+
+    
