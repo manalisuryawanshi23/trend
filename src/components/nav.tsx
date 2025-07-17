@@ -8,6 +8,7 @@ import { buttonVariants } from '@/components/ui/button';
 const navItems = [
   { href: '/trends', label: 'Trend Forecasting' },
   { href: '/repurpose', label: 'Repurpose Content' },
+  { href: '/analyze', label: 'Analyze Post' },
 ];
 
 export function Nav() {
