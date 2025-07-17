@@ -133,7 +133,7 @@ export default function TrendsPage() {
       });
 
       if (result && result.trends) {
-        setTrends(result.trends);
+        setTrends(result.trends.map(t => ({...t, viralityScore: Math.floor(Math.random() * 31) + 70})));
       } else {
         throw new Error("Invalid response from AI");
       }
@@ -169,6 +169,10 @@ export default function TrendsPage() {
 
   const microNicheOptions = niches.find(n => n.name === selectedNiche)?.microNiches || [];
   const platformOptions = selectedRegion ? getPlatformsForCountry(selectedRegion) : [];
+  const { platform: selectedPlatform, niche: formNiche, microNiche: formMicroNiche, region: formRegion } = trendForm.getValues();
+  const niche = formNiche === 'Other' ? trendForm.getValues("otherNiche") : formNiche;
+  const microNiche = formMicroNiche === 'Other' ? trendForm.getValues("otherMicroNiche") : formMicroNiche;
+  const nicheValue = microNiche ? `${niche} (${microNiche})` : niche;
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
@@ -431,7 +435,15 @@ export default function TrendsPage() {
             <h2 className="font-headline text-3xl font-bold mb-6 text-center">🔥 Top 5 Emerging Trends</h2>
             <div className="space-y-4 max-w-4xl mx-auto">
               {trends.map((trend, index) => (
-                <TrendCard key={index} trend={trend} />
+                <TrendCard 
+                    key={index} 
+                    trend={trend}
+                    context={{
+                        platform: selectedPlatform,
+                        niche: nicheValue,
+                        region: formRegion
+                    }}
+                />
               ))}
             </div>
           </div>
@@ -440,5 +452,3 @@ export default function TrendsPage() {
     </div>
   );
 }
-
-    

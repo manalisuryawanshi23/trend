@@ -10,11 +10,9 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { platforms } from '@/lib/data';
 
 const TrendForecastingInputSchema = z.object({
-  platform: z.string()
-    .describe('The social media platform to focus on.'),
+  platform: z.string().describe('The social media platform to focus on.'),
   niche: z.string().describe('The content niche (e.g., fashion, food, memes).'),
   region: z.string().describe('The region or country to focus on.'),
   userType: z.string().describe('The type of user (e.g., influencer, business).'),
@@ -26,7 +24,7 @@ const TrendForecastingOutputSchema = z.object({
   trends: z.array(
     z.object({
       trendName: z.string().describe('The name of the emerging trend.'),
-      viralityScore: z.number().describe('A score from 0 to 100 indicating the trend virality.'),
+      reasonWhyRising: z.string().describe('A brief, one-sentence insight into why the trend is emerging.'),
       postPlan: z.object({
         hook: z.string().describe('A suggested hook for a post.'),
         caption: z.string().describe('A suggested caption for the post.'),
@@ -35,11 +33,8 @@ const TrendForecastingOutputSchema = z.object({
         suggestedPostFormat: z.string().describe('Suggested post format (Reel, meme, tweet).'),
         bestTimeToPost: z.string().describe('The best time to post in the specified region.'),
       }),
-      googleTrendsLink: z.string().describe('Link to Google Trends keyword used.'),
-      reasonWhyRising: z.string().describe('Insight into why the trend is emerging.'),
-      viralAudioSound: z.string().optional().describe('The name or ID of a viral audio/sound.'),
     })
-  ).describe('Top 5 emerging trends with virality scores and AI-powered post plans'),
+  ).describe('Top 5 emerging trends with AI-powered post plans'),
 });
 export type TrendForecastingOutput = z.infer<typeof TrendForecastingOutputSchema>;
 
@@ -61,22 +56,17 @@ const prompt = ai.definePrompt({
   Region: {{{region}}}
   User Type: {{{userType}}}
 
-  Leverage Google Trends to identify rising keywords or public interest in this domain + location. Use that data to support your trend suggestions.
-
   Output Should Include:
   1. 🔥 Top 5 "Emerging Trends" with early signals (hashtags, sounds, hooks, challenges, post formats)
-  2. 📈 Virality Score (0-100) – based on combined social + search indicators
-  3. 🧠 AI-Powered Post Plan:
+  2. 💬 A **brief, one-sentence** reason why each trend is rising.
+  3. 🧠 AI-Powered Post Plan for each trend:
      - Hook
      - Caption
      - Hashtags
      - Emoji combo
      - Suggested post format (Reel, meme, tweet, etc.)
      - Best time to post in {{{region}}}
-  4. 🔍 Google Trends Keyword Link or keyword(s) used to detect the trend
-  5. 💬 Reason Why It’s Rising – short insight (e.g., celebrity event, movie release, seasonal topic)
-  6. 🎵 If applicable: Viral Audio/Sound name or ID
-  7. ⚠️ Avoid saturated or overused trends (focus on emerging ones)
+  4. ⚠️ Avoid saturated or overused trends (focus on emerging ones)
 
   Style:
   - Output in JSON format
@@ -84,7 +74,7 @@ const prompt = ai.definePrompt({
   - No filler or academic explanations
 
   Goal:
-  Give the user a trend advantage based on verified search + social signals.
+  Give the user a trend advantage based on verified social signals.
   
   Remember to respond in JSON format.
   `, 

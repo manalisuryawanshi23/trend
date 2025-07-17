@@ -1,9 +1,9 @@
-// trend-reasoning.ts
 'use server';
+
 /**
- * @fileOverview Provides reasoning behind why a trend is predicted to rise, including the Google Trends keyword link and any viral audio/sound.
+ * @fileOverview An AI agent that provides a detailed analysis of why a social media trend is emerging.
  *
- * - trendReasoning - A function that provides reasoning behind a trend.
+ * - trendReasoning - A function that provides a detailed reasoning for a trend.
  * - TrendReasoningInput - The input type for the trendReasoning function.
  * - TrendReasoningOutput - The return type for the trendReasoning function.
  */
@@ -12,17 +12,17 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const TrendReasoningInputSchema = z.object({
-  platform: z.string().describe('Social media platform (e.g., Instagram, TikTok).'),
-  niche: z.string().describe('Content niche (e.g., fashion, food).'),
-  region: z.string().describe('User selected country or location.'),
-  trend: z.string().describe('The predicted trend to analyze.'),
+  trendName: z.string().describe('The name of the trend to analyze.'),
+  platform: z.string().describe('The social media platform.'),
+  niche: z.string().describe('The content niche.'),
+  region: z.string().describe('The geographical region.'),
 });
 export type TrendReasoningInput = z.infer<typeof TrendReasoningInputSchema>;
 
 const TrendReasoningOutputSchema = z.object({
-  reasoning: z.string().describe('Explanation of why the trend is rising.'),
-  googleTrendsLink: z.string().describe('Link to Google Trends keyword data.'),
-  viralAudioSound: z.string().optional().describe('Name or ID of viral audio/sound, if applicable.'),
+  reasoning: z.string().describe('A detailed explanation of why the trend is rising, citing cultural context, events, or other factors.'),
+  googleTrendsLink: z.string().url().describe('A full, working URL to the Google Trends page for a relevant keyword.'),
+  viralAudioSound: z.string().optional().describe('The name or ID of a viral audio/sound associated with the trend, if applicable.'),
 });
 export type TrendReasoningOutput = z.infer<typeof TrendReasoningOutputSchema>;
 
@@ -34,13 +34,20 @@ const trendReasoningPrompt = ai.definePrompt({
   name: 'trendReasoningPrompt',
   input: {schema: TrendReasoningInputSchema},
   output: {schema: TrendReasoningOutputSchema},
-  prompt: `You are a social media trend expert. Explain why the following trend is predicted to rise on {{platform}} in the {{niche}} niche, specifically in {{region}}. Provide a Google Trends link related to the trend.
+  prompt: `You are a social media trend expert and data analyst.
+For the given trend, provide a deeper analysis of why it is becoming popular.
 
-Trend: {{trend}}
-\nYour Output Should Include:
-1.  Reason Why It’s Rising – short insight (e.g., celebrity event, movie release, seasonal topic)
-2.  Google Trends Keyword Link or keyword(s) used to detect the trend
-3.  If applicable: Viral Audio/Sound name or ID`,
+Trend: "{{trendName}}"
+Platform: {{platform}}
+Niche: {{niche}}
+Region: {{region}}
+
+Your analysis must include:
+1.  **Detailed Reasoning**: A comprehensive explanation for why the trend is rising. Go beyond the obvious. Is it tied to a recent movie, a cultural event, a new technology, a meme format, or a specific community's behavior?
+2.  **Google Trends Link**: Find a relevant, popular search term for this trend on Google Trends and construct a full, working URL for it (e.g., https://trends.google.com/trends/explore?q=your-keyword). Do not just output the keyword.
+3.  **Viral Audio**: If applicable, identify a specific viral audio or sound that is commonly used with this trend on the specified platform. If there is no specific sound, omit this field.
+
+Output your response in JSON format.`,
 });
 
 const trendReasoningFlow = ai.defineFlow(

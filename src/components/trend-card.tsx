@@ -1,13 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import type { Trend } from "@/lib/types";
+import { trendReasoning } from "@/ai/flows/trend-reasoning";
+import type { TrendReasoningOutput } from "@/ai/flows/trend-reasoning";
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { PlatformIcon } from "@/components/platform-icon";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Lightbulb, 
   Captions, 
@@ -17,10 +23,53 @@ import {
   Clock, 
   BarChart3, 
   Link as LinkIcon, 
-  Music 
+  Music,
+  HelpCircle,
+  LoaderCircle
 } from "lucide-react";
 
-export function TrendCard({ trend }: { trend: Trend }) {
+type TrendCardProps = {
+    trend: Trend;
+    context: {
+        platform: string;
+        niche: string;
+        region: string;
+    }
+}
+
+export function TrendCard({ trend, context }: TrendCardProps) {
+  const [reasoning, setReasoning] = useState<TrendReasoningOutput | null>(null);
+  const [isLoadingReasoning, setIsLoadingReasoning] = useState(false);
+  const { toast } = useToast();
+
+  const handleReasoningClick = async () => {
+    if (reasoning) { // If we already have the data, don't re-fetch
+      return;
+    }
+    setIsLoadingReasoning(true);
+    try {
+      const result = await trendReasoning({
+        trendName: trend.trendName,
+        ...context
+      });
+      if (result) {
+        setReasoning(result);
+      } else {
+         throw new Error("Invalid response from AI");
+      }
+    } catch(e) {
+      console.error(e);
+      toast({
+        variant: "destructive",
+        title: "Error Getting Details",
+        description: "Could not fetch detailed analysis for this trend.",
+      });
+    } finally {
+      setIsLoadingReasoning(false);
+    }
+  };
+
+
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
       <Accordion type="single" collapsible className="w-full">
@@ -81,21 +130,43 @@ export function TrendCard({ trend }: { trend: Trend }) {
                   <h3 className="font-headline text-xl font-semibold text-foreground flex items-center"><BarChart3 className="w-5 h-5 mr-2 text-primary" />Trend Analysis</h3>
                   <div className="space-y-3 text-sm text-muted-foreground">
                     <p>
-                      <strong>Reason Why It’s Rising:</strong> {trend.reasonWhyRising}
+                      <strong>Initial Insight:</strong> {trend.reasonWhyRising}
                     </p>
-                    {trend.googleTrendsLink && (
-                       <div className="flex items-start gap-3">
-                        <LinkIcon className="h-4 w-4 mt-0.5 shrink-0 text-accent-foreground" />
-                        <a href={trend.googleTrendsLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold break-all">
-                          Google Trends Data
-                        </a>
+                    
+                     {isLoadingReasoning && (
+                       <div className="space-y-2">
+                         <Skeleton className="h-4 w-3/4" />
+                         <Skeleton className="h-4 w-1/2" />
+                       </div>
+                     )}
+
+                    {!isLoadingReasoning && reasoning && (
+                       <div className="space-y-3 text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg">
+                        <p>
+                          <strong>Deeper Analysis:</strong> {reasoning.reasoning}
+                        </p>
+                        {reasoning.googleTrendsLink && (
+                           <div className="flex items-start gap-3">
+                            <LinkIcon className="h-4 w-4 mt-0.5 shrink-0 text-accent-foreground" />
+                            <a href={reasoning.googleTrendsLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold break-all">
+                              View on Google Trends
+                            </a>
+                          </div>
+                        )}
+                        {reasoning.viralAudioSound && (
+                          <div className="flex items-start gap-3">
+                            <Music className="h-4 w-4 mt-0.5 shrink-0 text-accent-foreground" />
+                            <div><strong>Viral Audio:</strong> {reasoning.viralAudioSound}</div>
+                          </div>
+                        )}
                       </div>
                     )}
-                    {trend.viralAudioSound && (
-                      <div className="flex items-start gap-3">
-                        <Music className="h-4 w-4 mt-0.5 shrink-0 text-accent-foreground" />
-                        <div><strong>Viral Audio:</strong> {trend.viralAudioSound}</div>
-                      </div>
+                    
+                    {!reasoning && (
+                      <Button variant="outline" size="sm" onClick={handleReasoningClick} disabled={isLoadingReasoning}>
+                        {isLoadingReasoning ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <HelpCircle className="mr-2 h-4 w-4" />}
+                        {isLoadingReasoning ? 'Analyzing...' : 'Why is this trending?'}
+                      </Button>
                     )}
                   </div>
                 </div>
