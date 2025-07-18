@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -107,7 +108,7 @@ export function TrendCard({ trend, context }: TrendCardProps) {
 
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-      <Accordion type="single" collapsible className="w-full" onValueChange={handleReasoningClick}>
+      <Accordion type="single" collapsible className="w-full">
         <AccordionItem value={trend.trendName} className="border-b-0">
           <AccordionTrigger className="p-6 text-left hover:no-underline [&[data-state=open]]:bg-primary/5">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full gap-4">
@@ -168,8 +169,15 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                       <strong>Initial Insight:</strong> {trend.reasonWhyRising}
                     </p>
                     
+                     {!reasoning && !isLoadingReasoning && (
+                       <Button variant="outline" size="sm" onClick={handleReasoningClick}>
+                         <HelpCircle className="mr-2 h-4 w-4" />
+                         Analyze Deeper
+                       </Button>
+                     )}
+
                      {isLoadingReasoning && (
-                       <div className="space-y-2">
+                       <div className="space-y-2 pt-2">
                          <Skeleton className="h-4 w-3/4" />
                          <Skeleton className="h-4 w-1/2" />
                        </div>
