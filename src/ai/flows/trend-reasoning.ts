@@ -21,7 +21,7 @@ export type TrendReasoningInput = z.infer<typeof TrendReasoningInputSchema>;
 
 const TrendReasoningOutputSchema = z.object({
   reasoning: z.string().describe('A detailed explanation of why the trend is rising, citing cultural context, events, or other factors.'),
-  googleTrendsLink: z.string().url().describe('A full, working URL to the Google Trends page for a relevant keyword.'),
+  googleTrendsLink: z.string().describe('A full, working URL to the Google Trends page for a relevant keyword.'),
   viralAudioSound: z.string().optional().describe('The name or ID of a viral audio/sound associated with the trend, if applicable.'),
 });
 export type TrendReasoningOutput = z.infer<typeof TrendReasoningOutputSchema>;
