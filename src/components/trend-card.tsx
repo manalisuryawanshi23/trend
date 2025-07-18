@@ -30,7 +30,8 @@ import {
   Music,
   HelpCircle,
   LoaderCircle,
-  Sparkles
+  Sparkles,
+  Download
 } from "lucide-react";
 
 type TrendCardProps = {
@@ -216,7 +217,7 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                     )}
 
                     {visualConcept?.imageUrl && (
-                      <div className="aspect-video w-full max-w-sm relative">
+                      <div className="aspect-video w-full max-w-sm relative group">
                         <Image
                           src={visualConcept.imageUrl}
                           alt={`AI concept for ${trend.trendName}`}
@@ -224,6 +225,17 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                           objectFit="cover"
                           className="rounded-lg border"
                         />
+                        <Button 
+                          asChild
+                          variant="secondary"
+                          size="icon"
+                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                           <a href={visualConcept.imageUrl} download={`${trend.trendName.replace(/\s+/g, '-').toLowerCase()}-concept.png`}>
+                             <Download className="h-5 w-5" />
+                             <span className="sr-only">Download image</span>
+                           </a>
+                        </Button>
                       </div>
                     )}
                 </div>
