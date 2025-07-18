@@ -28,6 +28,17 @@ export async function generateVisualConcept(input: GenerateVisualConceptInput): 
   return generateVisualConceptFlow(input);
 }
 
+function getAspectRatio(format: string): string {
+    const lowerFormat = format.toLowerCase();
+    if (lowerFormat.includes('reel') || lowerFormat.includes('short') || lowerFormat.includes('tiktok') || lowerFormat.includes('story')) {
+        return 'portrait 9:16';
+    }
+    if (lowerFormat.includes('instagram post') || lowerFormat.includes('facebook post')) {
+        return 'square 1:1';
+    }
+    return 'landscape 16:9';
+}
+
 const generateVisualConceptFlow = ai.defineFlow(
   {
     name: 'generateVisualConceptFlow',
@@ -35,13 +46,17 @@ const generateVisualConceptFlow = ai.defineFlow(
     outputSchema: GenerateVisualConceptOutputSchema,
   },
   async ({ trendName, hook, caption, suggestedPostFormat }) => {
+    const aspectRatio = getAspectRatio(suggestedPostFormat);
+
     const prompt = `Generate a compelling visual concept for a social media post.
 Theme: "${trendName}"
 Format: ${suggestedPostFormat}
 Hook: "${hook}"
 Caption: "${caption}"
 
-Create an eye-catching, high-quality image that captures the essence of this idea. The style should be modern, photographic, and suitable for social media.`;
+Create an eye-catching, high-quality image that captures the essence of this idea.
+The image must have a ${aspectRatio} aspect ratio.
+The style should be modern, photographic, and suitable for social media.`;
     
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-preview-image-generation',
