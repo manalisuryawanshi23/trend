@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Trend Seer',
+  title: 'Up Trend Finder',
   description: 'Uncover tomorrow\'s viral trends today.',
 };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
            <header className="container mx-auto px-4 sm:px-6 py-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <h1 className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                  Trend Seer
+                  Up Trend Finder
                 </h1>
                 <Nav />
             </div>
