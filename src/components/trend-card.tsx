@@ -116,7 +116,6 @@ export function TrendCard({ trend, context }: TrendCardProps) {
         <AccordionItem value={trend.trendName} className="border-b-0">
           <AccordionTrigger 
              className="p-4 md:p-6 text-left hover:no-underline [&[data-state=open]]:bg-primary/5"
-             onClick={handleReasoningClick}
           >
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full gap-4">
               <div className="flex-1">
@@ -176,14 +175,27 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                       <strong>Initial Insight:</strong> {trend.reasonWhyRising}
                     </p>
                     
-                     {isLoadingReasoning && (
-                       <div className="space-y-2">
+                     {!reasoning && (
+                       <Button onClick={handleReasoningClick} disabled={isLoadingReasoning} size="sm" variant="outline">
+                           {isLoadingReasoning ? (
+                               <>
+                                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                                   Analyzing...
+                               </>
+                           ) : (
+                                "Get Deeper Analysis"
+                           )}
+                       </Button>
+                     )}
+
+                    {isLoadingReasoning && !reasoning && (
+                       <div className="space-y-2 pt-2">
                          <Skeleton className="h-4 w-3/4" />
                          <Skeleton className="h-4 w-1/2" />
                        </div>
                      )}
 
-                    {!isLoadingReasoning && reasoning && (
+                    {reasoning && (
                        <div className="space-y-3 text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg">
                         <p>
                           <strong>Deeper Analysis:</strong> {reasoning.reasoning}
