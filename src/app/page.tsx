@@ -39,7 +39,6 @@ const LOCAL_STORAGE_KEY = 'trendseer_prefs';
 export default function TrendsPage() {
   const [trends, setTrends] = useState<Trend[]>([]);
   const [isLoadingTrends, setIsLoadingTrends] = useState(false);
-  const [isDetectingLocation, setIsDetectingLocation] = useState(true);
   const { toast } = useToast();
 
   const trendForm = useForm<TrendFormValues>({
@@ -50,7 +49,7 @@ export default function TrendsPage() {
       otherNiche: '',
       microNiche: 'Streetwear',
       otherMicroNiche: '',
-      region: '',
+      region: 'United States',
       userType: 'Content Creator / Influencer',
       otherUserType: '',
       model: aiModels[0].name,
@@ -64,37 +63,10 @@ export default function TrendsPage() {
       try {
         const savedPrefs = JSON.parse(savedPrefsString);
         trendForm.reset(savedPrefs);
-        setIsDetectingLocation(false); // Preferences loaded, no need to detect
-        return;
       } catch (e) {
         console.error("Failed to parse saved preferences", e);
       }
     }
-    
-    async function detectLocation() {
-      setIsDetectingLocation(true);
-      try {
-        const response = await fetch('https://ipapi.co/json/');
-        if (!response.ok) throw new Error("Could not fetch location");
-        const data = await response.json();
-        const countryName = data.country_name;
-
-        if (countryName && countries.includes(countryName as any)) {
-          trendForm.setValue('region', countryName);
-        } else {
-           // Fallback to a default if detection fails or country not in list
-          trendForm.setValue('region', 'United States');
-        }
-      } catch (error) {
-        console.error("Location detection error:", error);
-         // Fallback to a default on error
-        trendForm.setValue('region', 'United States');
-      } finally {
-        setIsDetectingLocation(false);
-      }
-    }
-    
-    detectLocation();
   }, [trendForm]);
 
   const selectedNiche = trendForm.watch("niche");
@@ -203,11 +175,10 @@ export default function TrendsPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Region</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value} disabled={isDetectingLocation}>
+                        <Select onValueChange={field.onChange} value={field.value}>
                            <FormControl>
                             <SelectTrigger>
-                              {isDetectingLocation && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-                              <SelectValue placeholder={isDetectingLocation ? "Detecting location..." : "Select a region"} />
+                              <SelectValue placeholder="Select a region" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="max-h-60">
