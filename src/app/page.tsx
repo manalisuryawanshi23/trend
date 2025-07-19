@@ -44,7 +44,7 @@ export default function TrendsPage() {
   const trendForm = useForm<TrendFormValues>({
     resolver: zodResolver(trendFormSchema),
     defaultValues: {
-      platform: 'Instagram Reels',
+      platform: '',
       niche: 'Fashion',
       otherNiche: '',
       microNiche: 'Streetwear',
@@ -73,6 +73,18 @@ export default function TrendsPage() {
   const selectedMicroNiche = trendForm.watch("microNiche");
   const selectedRegion = trendForm.watch("region");
   const selectedUserType = trendForm.watch("userType");
+
+   useEffect(() => {
+    // When region changes, update platform options and reset selected platform if it's not available
+    if (selectedRegion) {
+        const availablePlatforms = getPlatformsForCountry(selectedRegion);
+        const currentPlatform = trendForm.getValues("platform");
+        if (!availablePlatforms.some(p => p.name === currentPlatform)) {
+             trendForm.setValue('platform', availablePlatforms[0]?.name || '');
+        }
+    }
+   }, [selectedRegion, trendForm]);
+
 
   async function onTrendSubmit(values: TrendFormValues) {
     setIsLoadingTrends(true);
@@ -137,10 +149,10 @@ export default function TrendsPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <header className="text-center mb-12">
-        <h2 className="font-headline text-5xl md:text-6xl font-bold tracking-tighter">
+        <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
           Find Your Next Viral Hit
         </h2>
-        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
           Tell us about your content, and we'll predict the next big thing for you.
         </p>
       </header>
@@ -166,7 +178,7 @@ export default function TrendsPage() {
                         <Select onValueChange={field.onChange} value={field.value}>
                            <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a region" />
+                              <SelectValue placeholder={"Select a region"} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="max-h-60">
@@ -357,12 +369,12 @@ export default function TrendsPage() {
                     />
                    </div>
                 </div>
-                <div className="flex flex-col md:flex-row gap-4">
-                    <Button type="submit" disabled={isLoadingTrends} className="w-full md:w-auto font-bold text-lg py-6 px-8 flex-grow" size="lg">
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <Button type="submit" disabled={isLoadingTrends} className="w-full sm:w-auto font-bold text-lg py-6 px-8 flex-grow" size="lg">
                         {isLoadingTrends && <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />}
                         {isLoadingTrends ? 'Conjuring Trends...' : 'Forecast Trends'}
                     </Button>
-                    <Button type="button" variant="outline" onClick={savePreferences} className="w-full md:w-auto">
+                    <Button type="button" variant="outline" onClick={savePreferences} className="w-full sm:w-auto">
                         <Save className="mr-2 h-4 w-4" />
                         Save Preferences
                     </Button>
@@ -398,7 +410,7 @@ export default function TrendsPage() {
                     key={index} 
                     trend={trend}
                     context={{
-                        platform: selectedPlatform || 'default',
+                        platform: selectedPlatform,
                         niche: nicheValue,
                         region: formRegion
                     }}

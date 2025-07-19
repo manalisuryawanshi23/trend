@@ -1,13 +1,9 @@
-
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import type { Trend } from "@/lib/types";
 import { trendReasoning } from "@/ai/flows/trend-reasoning";
 import type { TrendReasoningOutput } from "@/ai/flows/trend-reasoning";
-import { generateVisualConcept } from "@/ai/flows/generate-visual-concept";
-import type { GenerateVisualConceptOutput } from "@/ai/flows/generate-visual-concept";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -17,7 +13,6 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PlatformIcon } from "@/components/platform-icon";
-import { ImageIcon } from "@/components/icons/image-icon";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Lightbulb, 
@@ -30,9 +25,7 @@ import {
   Link as LinkIcon, 
   Music,
   HelpCircle,
-  LoaderCircle,
-  Sparkles,
-  Download
+  LoaderCircle
 } from "lucide-react";
 
 type TrendCardProps = {
@@ -47,8 +40,6 @@ type TrendCardProps = {
 export function TrendCard({ trend, context }: TrendCardProps) {
   const [reasoning, setReasoning] = useState<TrendReasoningOutput | null>(null);
   const [isLoadingReasoning, setIsLoadingReasoning] = useState(false);
-  const [visualConcept, setVisualConcept] = useState<GenerateVisualConceptOutput | null>(null);
-  const [isLoadingVisualConcept, setIsLoadingVisualConcept] = useState(false);
   const { toast } = useToast();
 
   const handleReasoningClick = async () => {
@@ -78,47 +69,23 @@ export function TrendCard({ trend, context }: TrendCardProps) {
     }
   };
 
-  const handleVisualConceptClick = async () => {
-    if (visualConcept) return;
-    setIsLoadingVisualConcept(true);
-    try {
-      const result = await generateVisualConcept({
-        trendName: trend.trendName,
-        hook: trend.postPlan.hook,
-        caption: trend.postPlan.caption,
-        suggestedPostFormat: trend.postPlan.suggestedPostFormat,
-      });
-      if (result && result.imageUrl) {
-        setVisualConcept(result);
-      } else {
-        throw new Error("Invalid response from AI for visual concept.");
-      }
-    } catch(e) {
-      console.error(e);
-      toast({
-        variant: "destructive",
-        title: "Error Generating Visual",
-        description: "Could not generate a visual concept. The model might be busy. Please try again.",
-      });
-    } finally {
-      setIsLoadingVisualConcept(false);
-    }
-  };
-
 
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value={trend.trendName} className="border-b-0">
-          <AccordionTrigger className="p-6 text-left hover:no-underline [&[data-state=open]]:bg-primary/5">
+          <AccordionTrigger 
+             className="p-4 md:p-6 text-left hover:no-underline [&[data-state=open]]:bg-primary/5"
+             onClick={handleReasoningClick}
+          >
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <PlatformIcon platform={trend.postPlan.suggestedPostFormat} />
-                  <p className="font-headline text-2xl font-bold text-foreground">{trend.trendName}</p>
+                  <p className="font-headline text-xl md:text-2xl font-bold text-foreground">{trend.trendName}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Progress value={trend.viralityScore} className="h-3 w-full max-w-[200px]" />
+                  <Progress value={trend.viralityScore} className="h-3 w-full max-w-[150px] md:max-w-[200px]" />
                   <span className="font-semibold text-primary text-sm whitespace-nowrap">{trend.viralityScore} / 100 Virality</span>
                 </div>
               </div>
@@ -128,7 +95,7 @@ export function TrendCard({ trend, context }: TrendCardProps) {
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="px-6 pb-6">
+            <div className="px-4 md:px-6 pb-6">
               <Separator className="mb-6" />
               <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                 
@@ -169,15 +136,8 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                       <strong>Initial Insight:</strong> {trend.reasonWhyRising}
                     </p>
                     
-                     {!reasoning && !isLoadingReasoning && (
-                       <Button variant="outline" size="sm" onClick={handleReasoningClick}>
-                         <HelpCircle className="mr-2 h-4 w-4" />
-                         Analyze Deeper
-                       </Button>
-                     )}
-
                      {isLoadingReasoning && (
-                       <div className="space-y-2 pt-2">
+                       <div className="space-y-2">
                          <Skeleton className="h-4 w-3/4" />
                          <Skeleton className="h-4 w-1/2" />
                        </div>
@@ -206,48 +166,6 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                     )}
                   </div>
                 </div>
-
-                <div className="md:col-span-2 space-y-4">
-                  <Separator />
-                   <h3 className="font-headline text-xl font-semibold text-foreground flex items-center"><ImageIcon className="w-5 h-5 mr-2 text-primary" />Visual Concept</h3>
-                  
-                   {!visualConcept && (
-                      <Button variant="outline" size="sm" onClick={handleVisualConceptClick} disabled={isLoadingVisualConcept}>
-                        {isLoadingVisualConcept ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                        {isLoadingVisualConcept ? 'Generating...' : 'Generate Visual Idea'}
-                      </Button>
-                    )}
-
-                    {isLoadingVisualConcept && (
-                      <div className="aspect-video w-full max-w-sm">
-                        <Skeleton className="w-full h-full rounded-lg" />
-                      </div>
-                    )}
-
-                    {visualConcept?.imageUrl && (
-                      <div className="aspect-video w-full max-w-sm relative group">
-                        <Image
-                          src={visualConcept.imageUrl}
-                          alt={`AI concept for ${trend.trendName}`}
-                          layout="fill"
-                          objectFit="cover"
-                          className="rounded-lg border"
-                        />
-                        <Button 
-                          asChild
-                          variant="secondary"
-                          size="icon"
-                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                           <a href={visualConcept.imageUrl} download={`${trend.trendName.replace(/\s+/g, '-').toLowerCase()}-concept.png`}>
-                             <Download className="h-5 w-5" />
-                             <span className="sr-only">Download image</span>
-                           </a>
-                        </Button>
-                      </div>
-                    )}
-                </div>
-
               </div>
             </div>
           </AccordionContent>
