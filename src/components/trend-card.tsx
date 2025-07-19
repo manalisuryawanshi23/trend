@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { Trend } from "@/lib/types";
 import { trendReasoning } from "@/ai/flows/trend-reasoning";
 import type { TrendReasoningOutput } from "@/ai/flows/trend-reasoning";
+import { generateVisualConcept } from "@/ai/flows/generate-visual-concept";
+import type { GenerateVisualConceptOutput } from "@/ai/flows/generate-visual-concept";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -14,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PlatformIcon } from "@/components/platform-icon";
 import { useToast } from "@/hooks/use-toast";
+import { ImageIcon } from "@/components/icons/image-icon";
 import { 
   Lightbulb, 
   Captions, 
@@ -24,8 +28,8 @@ import {
   BarChart3, 
   Link as LinkIcon, 
   Music,
-  HelpCircle,
-  LoaderCircle
+  LoaderCircle,
+  Wand2,
 } from "lucide-react";
 
 type TrendCardProps = {
@@ -39,7 +43,9 @@ type TrendCardProps = {
 
 export function TrendCard({ trend, context }: TrendCardProps) {
   const [reasoning, setReasoning] = useState<TrendReasoningOutput | null>(null);
+  const [visualConcept, setVisualConcept] = useState<GenerateVisualConceptOutput | null>(null);
   const [isLoadingReasoning, setIsLoadingReasoning] = useState(false);
+  const [isLoadingVisual, setIsLoadingVisual] = useState(false);
   const { toast } = useToast();
 
   const handleReasoningClick = async () => {
@@ -68,6 +74,35 @@ export function TrendCard({ trend, context }: TrendCardProps) {
       setIsLoadingReasoning(false);
     }
   };
+
+  const handleVisualConceptClick = async () => {
+    if (visualConcept) {
+        return;
+    }
+    setIsLoadingVisual(true);
+    try {
+      const result = await generateVisualConcept({
+        trendName: trend.trendName,
+        hook: trend.postPlan.hook,
+        caption: trend.postPlan.caption,
+        suggestedPostFormat: trend.postPlan.suggestedPostFormat,
+      });
+      if (result && result.imageUrl) {
+        setVisualConcept(result);
+      } else {
+         throw new Error("Invalid response from AI");
+      }
+    } catch(e) {
+      console.error(e);
+      toast({
+        variant: "destructive",
+        title: "Error Generating Visual",
+        description: "Could not generate visual concept. The AI may be overloaded.",
+      });
+    } finally {
+      setIsLoadingVisual(false);
+    }
+  }
 
 
   return (
@@ -166,6 +201,50 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                     )}
                   </div>
                 </div>
+              </div>
+              <Separator className="my-6" />
+                <div className="space-y-4">
+                    <h3 className="font-headline text-xl font-semibold text-foreground flex items-center"><ImageIcon className="w-5 h-5 mr-2 text-primary" />Visual Concept</h3>
+                    
+                    {!visualConcept && (
+                        <div className="flex flex-col items-start gap-4">
+                            <p className="text-sm text-muted-foreground">Want to see what this trend could look like? Let AI generate a visual concept for you.</p>
+                            <Button onClick={handleVisualConceptClick} disabled={isLoadingVisual}>
+                                {isLoadingVisual ? (
+                                    <>
+                                        <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                                        Generating...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Wand2 className="mr-2 h-4 w-4" />
+                                        Generate Visual
+                                    </>
+                                )}
+                            </Button>
+                        </div>
+                    )}
+
+                    {isLoadingVisual && (
+                         <div className="aspect-video w-full max-w-lg mx-auto flex items-center justify-center bg-muted rounded-lg">
+                            <div className="text-center space-y-2">
+                                <LoaderCircle className="mx-auto h-8 w-8 animate-spin text-primary" />
+                                <p className="text-muted-foreground font-medium">Painting with pixels...</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {visualConcept && (
+                        <div className="w-full max-w-lg mx-auto">
+                           <Image
+                                src={visualConcept.imageUrl}
+                                alt={`AI concept for ${trend.trendName}`}
+                                width={1024}
+                                height={576}
+                                className="w-full h-auto rounded-lg border-2 border-primary shadow-lg"
+                            />
+                        </div>
+                    )}
               </div>
             </div>
           </AccordionContent>
