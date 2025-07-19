@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -30,6 +31,7 @@ import {
   Music,
   LoaderCircle,
   Wand2,
+  Download,
 } from "lucide-react";
 
 type TrendCardProps = {
@@ -104,6 +106,9 @@ export function TrendCard({ trend, context }: TrendCardProps) {
     }
   }
 
+  const slugify = (text: string) => {
+    return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+  }
 
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
@@ -235,7 +240,7 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                     )}
 
                     {visualConcept && (
-                        <div className="w-full max-w-lg mx-auto">
+                        <div className="w-full max-w-lg mx-auto space-y-4">
                            <Image
                                 src={visualConcept.imageUrl}
                                 alt={`AI concept for ${trend.trendName}`}
@@ -243,6 +248,16 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                                 height={576}
                                 className="w-full h-auto rounded-lg border-2 border-primary shadow-lg"
                             />
+                            <a
+                              href={visualConcept.imageUrl}
+                              download={`uptrend-visual-${slugify(trend.trendName)}.png`}
+                              className="inline-block"
+                            >
+                                <Button variant="outline">
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Download Image
+                                </Button>
+                            </a>
                         </div>
                     )}
               </div>

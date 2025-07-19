@@ -9,8 +9,10 @@ import {
   Quote,
   Captions,
   Clapperboard,
-  Sparkles
+  Sparkles,
+  Download,
 } from "lucide-react";
+import { Button } from "./ui/button";
 
 type VisualConceptCardProps = {
   result: {
@@ -21,6 +23,10 @@ type VisualConceptCardProps = {
 
 export function VisualConceptCard({ result }: VisualConceptCardProps) {
   const { input, output } = result;
+
+  const slugify = (text: string) => {
+    return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+  }
 
   return (
     <Card className="shadow-md border">
@@ -34,14 +40,26 @@ export function VisualConceptCard({ result }: VisualConceptCardProps) {
             </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-            <div className="border rounded-lg overflow-hidden">
-                <Image
-                    src={output.imageUrl}
-                    alt={input.trendName}
-                    width={1024}
-                    height={576}
-                    className="w-full object-cover"
-                />
+            <div className="space-y-4">
+                <div className="border rounded-lg overflow-hidden">
+                    <Image
+                        src={output.imageUrl}
+                        alt={input.trendName}
+                        width={1024}
+                        height={576}
+                        className="w-full object-cover"
+                    />
+                </div>
+                 <a
+                    href={output.imageUrl}
+                    download={`uptrend-visual-${slugify(input.trendName)}.png`}
+                    className="inline-block"
+                >
+                    <Button variant="outline">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Image
+                    </Button>
+                </a>
             </div>
             
             <div className="space-y-4">
