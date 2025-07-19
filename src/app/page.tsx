@@ -44,7 +44,7 @@ export default function TrendsPage() {
   const trendForm = useForm<TrendFormValues>({
     resolver: zodResolver(trendFormSchema),
     defaultValues: {
-      platform: '',
+      platform: 'Instagram Reels',
       niche: 'Fashion',
       otherNiche: '',
       microNiche: 'Streetwear',
@@ -73,18 +73,6 @@ export default function TrendsPage() {
   const selectedMicroNiche = trendForm.watch("microNiche");
   const selectedRegion = trendForm.watch("region");
   const selectedUserType = trendForm.watch("userType");
-
-  useEffect(() => {
-    // When region changes, update platform options and reset selected platform if it's not available
-    if (selectedRegion) {
-        const availablePlatforms = getPlatformsForCountry(selectedRegion);
-        const currentPlatform = trendForm.getValues("platform");
-        if (!availablePlatforms.some(p => p.name === currentPlatform)) {
-             trendForm.setValue('platform', availablePlatforms[0]?.name || '');
-        }
-    }
-  }, [selectedRegion, trendForm]);
-
 
   async function onTrendSubmit(values: TrendFormValues) {
     setIsLoadingTrends(true);
@@ -410,7 +398,7 @@ export default function TrendsPage() {
                     key={index} 
                     trend={trend}
                     context={{
-                        platform: selectedPlatform,
+                        platform: selectedPlatform || 'default',
                         niche: nicheValue,
                         region: formRegion
                     }}
