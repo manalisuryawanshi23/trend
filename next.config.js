@@ -17,6 +17,12 @@ const nextConfig = {
       },
     ],
   },
+  devIndicators: {
+    buildActivity: false,
+  },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
 };
 
 module.exports = nextConfig;
