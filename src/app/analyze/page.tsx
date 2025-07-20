@@ -59,10 +59,10 @@ export default function AnalyzePage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
         <header className="text-center mb-12">
-            <h2 className="font-headline text-5xl md:text-6xl font-bold tracking-tighter">
+            <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
                 Deconstruct Any Post
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Paste a link to any social media post to get an AI-powered breakdown of what made it work (or what didn't).
             </p>
         </header>
@@ -156,7 +156,7 @@ export default function AnalyzePage() {
                     </div>
                 </CardContent>
                 {analysisResult.improvementSuggestions && (
-                    <CardFooter className="flex-col items-start gap-4 bg-muted/50 pt-6">
+                    <CardFooter className="flex-col items-start gap-4 bg-muted/50 p-6">
                         <h3 className="font-headline text-xl font-semibold flex items-center"><Wand2 className="w-5 h-5 mr-2 text-accent"/>Improvement Suggestions</h3>
                         <p className="text-muted-foreground">{analysisResult.improvementSuggestions}</p>
                     </CardFooter>

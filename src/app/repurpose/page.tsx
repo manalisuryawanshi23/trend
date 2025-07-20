@@ -65,10 +65,10 @@ export default function RepurposePage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
         <header className="text-center mb-12">
-            <h2 className="font-headline text-5xl md:text-6xl font-bold tracking-tighter">
+            <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
                 Repurpose Content with AI
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Paste any URL (blog post, news article) to magically turn it into a social media post.
             </p>
         </header>

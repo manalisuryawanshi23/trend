@@ -17,8 +17,8 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PlatformIcon } from "@/components/platform-icon";
-import { ImageIcon } from "@/components/icons/image-icon";
 import { useToast } from "@/hooks/use-toast";
+import { ImageIcon } from "@/components/icons/image-icon";
 import { 
   Lightbulb, 
   Captions, 
@@ -29,10 +29,9 @@ import {
   BarChart3, 
   Link as LinkIcon, 
   Music,
-  HelpCircle,
   LoaderCircle,
-  Sparkles,
-  Download
+  Wand2,
+  Download,
 } from "lucide-react";
 
 type TrendCardProps = {
@@ -46,9 +45,9 @@ type TrendCardProps = {
 
 export function TrendCard({ trend, context }: TrendCardProps) {
   const [reasoning, setReasoning] = useState<TrendReasoningOutput | null>(null);
-  const [isLoadingReasoning, setIsLoadingReasoning] = useState(false);
   const [visualConcept, setVisualConcept] = useState<GenerateVisualConceptOutput | null>(null);
-  const [isLoadingVisualConcept, setIsLoadingVisualConcept] = useState(false);
+  const [isLoadingReasoning, setIsLoadingReasoning] = useState(false);
+  const [isLoadingVisual, setIsLoadingVisual] = useState(false);
   const { toast } = useToast();
 
   const handleReasoningClick = async () => {
@@ -79,8 +78,10 @@ export function TrendCard({ trend, context }: TrendCardProps) {
   };
 
   const handleVisualConceptClick = async () => {
-    if (visualConcept) return;
-    setIsLoadingVisualConcept(true);
+    if (visualConcept) {
+        return;
+    }
+    setIsLoadingVisual(true);
     try {
       const result = await generateVisualConcept({
         trendName: trend.trendName,
@@ -91,34 +92,39 @@ export function TrendCard({ trend, context }: TrendCardProps) {
       if (result && result.imageUrl) {
         setVisualConcept(result);
       } else {
-        throw new Error("Invalid response from AI for visual concept.");
+         throw new Error("Invalid response from AI");
       }
     } catch(e) {
       console.error(e);
       toast({
         variant: "destructive",
         title: "Error Generating Visual",
-        description: "Could not generate a visual concept. The model might be busy. Please try again.",
+        description: "Could not generate visual concept. The AI may be overloaded.",
       });
     } finally {
-      setIsLoadingVisualConcept(false);
+      setIsLoadingVisual(false);
     }
-  };
+  }
 
+  const slugify = (text: string) => {
+    return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+  }
 
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value={trend.trendName} className="border-b-0">
-          <AccordionTrigger className="p-6 text-left hover:no-underline [&[data-state=open]]:bg-primary/5">
+          <AccordionTrigger 
+             className="p-4 md:p-6 text-left hover:no-underline [&[data-state=open]]:bg-primary/5"
+          >
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <PlatformIcon platform={trend.postPlan.suggestedPostFormat} />
-                  <p className="font-headline text-2xl font-bold text-foreground">{trend.trendName}</p>
+                  <p className="font-headline text-xl md:text-2xl font-bold text-foreground">{trend.trendName}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Progress value={trend.viralityScore} className="h-3 w-full max-w-[200px]" />
+                  <Progress value={trend.viralityScore} className="h-3 w-full max-w-[150px] md:max-w-[200px]" />
                   <span className="font-semibold text-primary text-sm whitespace-nowrap">{trend.viralityScore} / 100 Virality</span>
                 </div>
               </div>
@@ -128,7 +134,7 @@ export function TrendCard({ trend, context }: TrendCardProps) {
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <div className="px-6 pb-6">
+            <div className="px-4 md:px-6 pb-6">
               <Separator className="mb-6" />
               <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                 
@@ -169,21 +175,27 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                       <strong>Initial Insight:</strong> {trend.reasonWhyRising}
                     </p>
                     
-                     {!reasoning && !isLoadingReasoning && (
-                       <Button variant="outline" size="sm" onClick={handleReasoningClick}>
-                         <HelpCircle className="mr-2 h-4 w-4" />
-                         Analyze Deeper
+                     {!reasoning && (
+                       <Button onClick={handleReasoningClick} disabled={isLoadingReasoning} size="sm" variant="outline">
+                           {isLoadingReasoning ? (
+                               <>
+                                   <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                                   Analyzing...
+                               </>
+                           ) : (
+                                "Get Deeper Analysis"
+                           )}
                        </Button>
                      )}
 
-                     {isLoadingReasoning && (
+                    {isLoadingReasoning && !reasoning && (
                        <div className="space-y-2 pt-2">
                          <Skeleton className="h-4 w-3/4" />
                          <Skeleton className="h-4 w-1/2" />
                        </div>
                      )}
 
-                    {!isLoadingReasoning && reasoning && (
+                    {reasoning && (
                        <div className="space-y-3 text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg">
                         <p>
                           <strong>Deeper Analysis:</strong> {reasoning.reasoning}
@@ -206,48 +218,60 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                     )}
                   </div>
                 </div>
-
-                <div className="md:col-span-2 space-y-4">
-                  <Separator />
-                   <h3 className="font-headline text-xl font-semibold text-foreground flex items-center"><ImageIcon className="w-5 h-5 mr-2 text-primary" />Visual Concept</h3>
-                  
-                   {!visualConcept && (
-                      <Button variant="outline" size="sm" onClick={handleVisualConceptClick} disabled={isLoadingVisualConcept}>
-                        {isLoadingVisualConcept ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                        {isLoadingVisualConcept ? 'Generating...' : 'Generate Visual Idea'}
-                      </Button>
+              </div>
+              <Separator className="my-6" />
+                <div className="space-y-4">
+                    <h3 className="font-headline text-xl font-semibold text-foreground flex items-center"><ImageIcon className="w-5 h-5 mr-2 text-primary" />Visual Concept</h3>
+                    
+                    {!visualConcept && (
+                        <div className="flex flex-col items-start gap-4">
+                            <p className="text-sm text-muted-foreground">Want to see what this trend could look like? Let AI generate a visual concept for you.</p>
+                            <Button onClick={handleVisualConceptClick} disabled={isLoadingVisual}>
+                                {isLoadingVisual ? (
+                                    <>
+                                        <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                                        Generating...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Wand2 className="mr-2 h-4 w-4" />
+                                        Generate Visual
+                                    </>
+                                )}
+                            </Button>
+                        </div>
                     )}
 
-                    {isLoadingVisualConcept && (
-                      <div className="aspect-video w-full max-w-sm">
-                        <Skeleton className="w-full h-full rounded-lg" />
-                      </div>
+                    {isLoadingVisual && (
+                         <div className="aspect-video w-full max-w-lg mx-auto flex items-center justify-center bg-muted rounded-lg">
+                            <div className="text-center space-y-2">
+                                <LoaderCircle className="mx-auto h-8 w-8 animate-spin text-primary" />
+                                <p className="text-muted-foreground font-medium">Painting with pixels...</p>
+                            </div>
+                        </div>
                     )}
 
-                    {visualConcept?.imageUrl && (
-                      <div className="aspect-video w-full max-w-sm relative group">
-                        <Image
-                          src={visualConcept.imageUrl}
-                          alt={`AI concept for ${trend.trendName}`}
-                          layout="fill"
-                          objectFit="cover"
-                          className="rounded-lg border"
-                        />
-                        <Button 
-                          asChild
-                          variant="secondary"
-                          size="icon"
-                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                           <a href={visualConcept.imageUrl} download={`${trend.trendName.replace(/\s+/g, '-').toLowerCase()}-concept.png`}>
-                             <Download className="h-5 w-5" />
-                             <span className="sr-only">Download image</span>
-                           </a>
-                        </Button>
-                      </div>
+                    {visualConcept && (
+                        <div className="w-full max-w-lg mx-auto space-y-4">
+                           <Image
+                                src={visualConcept.imageUrl}
+                                alt={`AI concept for ${trend.trendName}`}
+                                width={1024}
+                                height={576}
+                                className="w-full h-auto rounded-lg border-2 border-primary shadow-lg"
+                            />
+                            <a
+                              href={visualConcept.imageUrl}
+                              download={`uptrend-visual-${slugify(trend.trendName)}.png`}
+                              className="inline-block"
+                            >
+                                <Button variant="outline">
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Download Image
+                                </Button>
+                            </a>
+                        </div>
                     )}
-                </div>
-
               </div>
             </div>
           </AccordionContent>

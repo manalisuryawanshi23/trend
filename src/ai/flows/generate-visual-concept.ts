@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -31,12 +32,12 @@ export async function generateVisualConcept(input: GenerateVisualConceptInput): 
 function getAspectRatio(format: string): string {
     const lowerFormat = format.toLowerCase();
     if (lowerFormat.includes('reel') || lowerFormat.includes('short') || lowerFormat.includes('tiktok') || lowerFormat.includes('story')) {
-        return 'portrait 9:16';
+        return '9:16';
     }
     if (lowerFormat.includes('instagram post') || lowerFormat.includes('facebook post')) {
-        return 'square 1:1';
+        return '1:1';
     }
-    return 'landscape 16:9';
+    return '16:9';
 }
 
 const generateVisualConceptFlow = ai.defineFlow(
@@ -55,12 +56,12 @@ Hook: "${hook}"
 Caption: "${caption}"
 
 Create an eye-catching, high-quality image that captures the essence of this idea.
-The image must have a ${aspectRatio} aspect ratio.
 The style should be modern, photographic, and suitable for social media.`;
     
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-preview-image-generation',
       prompt: prompt,
+      aspectRatio: aspectRatio,
       config: {
         responseModalities: ['TEXT', 'IMAGE'],
       },

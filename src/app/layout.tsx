@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Nav } from '@/components/nav';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import './globals.css';
 
 const fontInter = Inter({
   subsets: ['latin'],
@@ -15,9 +16,8 @@ const fontSpaceGrotesk = Space_Grotesk({
   variable: '--font-space-grotesk',
 });
 
-
 export const metadata: Metadata = {
-  title: 'Trend Seer',
+  title: 'Up Trend Finder',
   description: 'Uncover tomorrow\'s viral trends today.',
 };
 
@@ -30,10 +30,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn("font-body antialiased", fontInter.variable, fontSpaceGrotesk.variable)}>
         <div className="min-h-screen bg-background">
-           <header className="container mx-auto px-4 py-6">
-            <div className="flex items-center justify-between">
+           <header className="container mx-auto px-4 sm:px-6 py-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <h1 className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                  Trend Seer
+                  Up Trend Finder
                 </h1>
                 <Nav />
             </div>
@@ -46,4 +46,5 @@ export default function RootLayout({
       </body>
     </html>
   );
+
 }

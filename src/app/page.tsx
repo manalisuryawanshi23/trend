@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -38,7 +39,6 @@ const LOCAL_STORAGE_KEY = 'trendseer_prefs';
 export default function TrendsPage() {
   const [trends, setTrends] = useState<Trend[]>([]);
   const [isLoadingTrends, setIsLoadingTrends] = useState(false);
-  const [isDetectingLocation, setIsDetectingLocation] = useState(true);
   const { toast } = useToast();
 
   const trendForm = useForm<TrendFormValues>({
@@ -49,7 +49,7 @@ export default function TrendsPage() {
       otherNiche: '',
       microNiche: 'Streetwear',
       otherMicroNiche: '',
-      region: '',
+      region: 'United States',
       userType: 'Content Creator / Influencer',
       otherUserType: '',
       model: aiModels[0].name,
@@ -57,40 +57,16 @@ export default function TrendsPage() {
   });
 
   useEffect(() => {
+    // Load preferences from localStorage
     const savedPrefsString = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (savedPrefsString) {
       try {
         const savedPrefs = JSON.parse(savedPrefsString);
         trendForm.reset(savedPrefs);
-        setIsDetectingLocation(false); 
-        return;
       } catch (e) {
         console.error("Failed to parse saved preferences", e);
       }
     }
-    
-    async function detectLocation() {
-      setIsDetectingLocation(true);
-      try {
-        const response = await fetch('https://ipapi.co/json/');
-        if (!response.ok) throw new Error("Could not fetch location");
-        const data = await response.json();
-        const countryName = data.country_name;
-
-        if (countryName && countries.includes(countryName as any)) {
-          trendForm.setValue('region', countryName);
-        } else {
-          trendForm.setValue('region', 'United States');
-        }
-      } catch (error) {
-        console.error("Location detection error:", error);
-        trendForm.setValue('region', 'United States');
-      } finally {
-        setIsDetectingLocation(false);
-      }
-    }
-    
-    detectLocation();
   }, [trendForm]);
 
   const selectedNiche = trendForm.watch("niche");
@@ -98,7 +74,8 @@ export default function TrendsPage() {
   const selectedRegion = trendForm.watch("region");
   const selectedUserType = trendForm.watch("userType");
 
-  useEffect(() => {
+   useEffect(() => {
+    // When region changes, update platform options and reset selected platform if it's not available
     if (selectedRegion) {
         const availablePlatforms = getPlatformsForCountry(selectedRegion);
         const currentPlatform = trendForm.getValues("platform");
@@ -106,7 +83,7 @@ export default function TrendsPage() {
              trendForm.setValue('platform', availablePlatforms[0]?.name || '');
         }
     }
-  }, [selectedRegion, trendForm]);
+   }, [selectedRegion, trendForm]);
 
 
   async function onTrendSubmit(values: TrendFormValues) {
@@ -172,10 +149,10 @@ export default function TrendsPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <header className="text-center mb-12">
-        <h2 className="font-headline text-5xl md:text-6xl font-bold tracking-tighter">
+        <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
           Find Your Next Viral Hit
         </h2>
-        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
           Tell us about your content, and we'll predict the next big thing for you.
         </p>
       </header>
@@ -198,11 +175,10 @@ export default function TrendsPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Region</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value} disabled={isDetectingLocation}>
+                        <Select onValueChange={field.onChange} value={field.value}>
                            <FormControl>
                             <SelectTrigger>
-                              {isDetectingLocation && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-                              <SelectValue placeholder={isDetectingLocation ? "Detecting location..." : "Select a region"} />
+                              <SelectValue placeholder={"Select a region"} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="max-h-60">
@@ -393,12 +369,12 @@ export default function TrendsPage() {
                     />
                    </div>
                 </div>
-                <div className="flex flex-col md:flex-row gap-4">
-                    <Button type="submit" disabled={isLoadingTrends} className="w-full md:w-auto font-bold text-lg py-6 px-8 flex-grow" size="lg">
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <Button type="submit" disabled={isLoadingTrends} className="w-full sm:w-auto font-bold text-lg py-6 px-8 flex-grow" size="lg">
                         {isLoadingTrends && <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />}
                         {isLoadingTrends ? 'Conjuring Trends...' : 'Forecast Trends'}
                     </Button>
-                    <Button type="button" variant="outline" onClick={savePreferences} className="w-full md:w-auto">
+                    <Button type="button" variant="outline" onClick={savePreferences} className="w-full sm:w-auto">
                         <Save className="mr-2 h-4 w-4" />
                         Save Preferences
                     </Button>
