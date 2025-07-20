@@ -1,0 +1,35 @@
+diff --git a/node_modules/genkit/lib/telemetry.js b/node_modules/genkit/lib/telemetry.js
+index 45143a598c227448888b1fcb4a83350325d97e70..59ef3f10114f0ea6e0331070ff2a7e7161f516a7 100644
+--- a/node_modules/genkit/lib/telemetry.js
++++ b/node_modules/genkit/lib/telemetry.js
+@@ -37,13 +37,18 @@ async function getJaegerExporter() {
+     return new opentelemetry_exporter_jaeger_1.JaegerExporter();
+ }
+ async function getOtlpExporter() {
+-    const { OTLPTraceExporter } = await Promise.resolve().then(() => __importStar(require('@opentelemetry/exporter-trace-otlp-http')));
+-    return new OTLPTraceExporter();
++    try {
++        const { OTLPTraceExporter } = await Promise.resolve().then(() => __importStar(require('@opentelemetry/exporter-trace-otlp-http')));
++        return new OTLPTraceExporter();
++    }
++    catch (e) {
++        return undefined;
++    }
+ }
+ // By default, only export traces if the user has configured an exporter.
+ // This is to avoid sending empty traces to the void.
+ async function configureTracing(options) {
+-    let exporter;
++    let exporter = undefined;
+     if (options.tracer) {
+         switch (options.tracer.exporter) {
+             case 'jaeger':
+@@ -58,7 +63,7 @@ async function configureTracing(options) {
+                 exporter = await getOtlpExporter();
+                 break;
+         }
+-        if (exporter) {
++        if (exporter !== undefined) {
+             const provider = new opentelemetry_sdk_trace_node_1.NodeTracerProvider({
+                 resource: new opentelemetry_resources_1.Resource({
+                     [semantic_conventions_1.SemanticResourceAttributes.SERVICE_NAME]: 'genkit',
