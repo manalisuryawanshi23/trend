@@ -30,8 +30,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn("font-body antialiased", fontInter.variable, fontSpaceGrotesk.variable)}>
         <div className="min-h-screen bg-background">
-           <header className="container mx-auto px-4 sm:px-6 py-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+           <header className="container mx-auto px-4 sm:px-6 py-4">
+            <div className="flex items-center justify-between gap-4">
                 <h1 className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
                   Up Trend Finder
                 </h1>
