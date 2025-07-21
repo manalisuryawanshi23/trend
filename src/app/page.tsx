@@ -47,7 +47,7 @@ export default function TrendsPage() {
       platform: '',
       niche: 'Fashion',
       otherNiche: '',
-      microNiche: 'Streetwear',
+      microNiche: '',
       otherMicroNiche: '',
       region: 'United States',
       userType: 'Content Creator / Influencer',
