@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -9,7 +10,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle, SheetHeader 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy } from 'lucide-react';
+import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
@@ -21,25 +22,101 @@ const navItems = [
 const helpGuide = [
     {
         tool: "Forecast",
-        description: "Predicts emerging social media trends 24-72 hours before they go viral. Best for finding your next viral video idea before anyone else."
+        description: "Predicts emerging social media trends 24-72 hours before they go viral.",
+        useCase: "Best for finding your next viral video idea before anyone else.",
+        steps: [
+            "Select your region and platform.",
+            "Choose your content niche and, optionally, a micro-niche.",
+            "Select the AI model (Flash is faster, Pro is more powerful).",
+            "Click 'Forecast Trends' to see the top 5 emerging trends."
+        ],
+        proTip: "Check back daily! New trends surface all the time. Saving your preferences makes this even faster."
     },
     {
         tool: "Repurpose",
-        description: "Transforms any URL (like a blog post or news article) into a ready-to-post social media update. Best for quickly turning existing content into fresh social media updates."
+        description: "Transforms any URL (like a blog post or news article) into a ready-to-post social media update.",
+        useCase: "Best for quickly turning existing content into fresh social media updates.",
+        steps: [
+            "Find an article, blog, or any web page with interesting content.",
+            "Paste the URL into the 'Content URL' field.",
+            "Select the social media platform you want to post to.",
+            "Click 'Generate Post' to get a new hook, caption, and hashtags."
+        ],
+        proTip: "Use this to breathe new life into your old blog posts or share interesting articles you've read."
     },
     {
         tool: "Analyze",
-        description: "Deconstructs the success (or failure) of any social media post. Best for understanding the mechanics of viral content in your niche."
+        description: "Deconstructs the success (or failure) of any social media post.",
+        useCase: "Best for understanding the mechanics of viral content in your niche.",
+        steps: [
+            "Find a social media post (e.g., on TikTok, Instagram, Twitter).",
+            "Copy the public URL of the post.",
+            "Paste it into the 'Post URL' field.",
+            "Click 'Analyze Post' for a detailed breakdown and virality score."
+        ],
+        proTip: "Analyze your competitors' most successful posts to learn what strategies work best in your niche."
     },
     {
         tool: "Visualize",
-        description: "Turns your post ideas into AI-generated visual concepts. Best for brainstorming a unique look and feel for your next post."
+        description: "Turns your post ideas into AI-generated visual concepts.",
+        useCase: "Best for brainstorming a unique look and feel for your next post.",
+        steps: [
+            "Enter your trend or theme (e.g., 'Cottagecore Aesthetic').",
+            "Select the post format to get the right aspect ratio.",
+            "Write a compelling hook and caption for your ideal post.",
+            "Click 'Generate Visual' to see your idea come to life as an image."
+        ],
+        proTip: "Be descriptive in your caption! The more detail you provide, the better the AI can match your vision."
     }
 ]
 
 export function Nav() {
   const pathname = usePathname();
   const activePath = pathname === '/trends' ? '/' : pathname;
+
+  const helpDialogContent = (
+    <>
+      <DialogHeader>
+          <DialogTitle className="font-headline text-2xl flex items-center gap-2"> <LifeBuoy className="h-6 w-6 text-primary"/> How to Use Up Trend Finder</DialogTitle>
+          <DialogDescription>
+              Here’s a quick guide to the tools available in your dashboard.
+          </DialogDescription>
+      </DialogHeader>
+      <Accordion type="single" collapsible className="w-full">
+          {helpGuide.map((item) => (
+              <AccordionItem value={item.tool} key={item.tool}>
+                  <AccordionTrigger className="font-semibold text-lg">{item.tool}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground space-y-4">
+                      <p>{item.description}</p>
+                      
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground flex items-center gap-2"><Rocket className="h-4 w-4 text-primary" />How to Use</h4>
+                        <ul className="space-y-1.5 pl-2">
+                           {item.steps.map((step, i) => (
+                             <li key={i} className="flex items-start gap-2">
+                               <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0 text-green-500" />
+                               <span>{step}</span>
+                             </li>
+                           ))}
+                        </ul>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Best For:</h4>
+                        <p>{item.useCase}</p>
+                      </div>
+                      
+                       <div className="space-y-2 bg-primary/10 p-3 rounded-md">
+                        <h4 className="font-semibold text-primary flex items-center gap-2"><Star className="h-4 w-4" />Pro Tip</h4>
+                        <p>{item.proTip}</p>
+                      </div>
+
+                  </AccordionContent>
+              </AccordionItem>
+          ))}
+      </Accordion>
+    </>
+  );
 
   const helpDialog = (
     <Dialog>
@@ -48,23 +125,8 @@ export function Nav() {
                 <LifeBuoy className="h-5 w-5" />
             </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-                <DialogTitle className="font-headline text-2xl flex items-center gap-2"> <LifeBuoy className="h-6 w-6 text-primary"/> How to Use Up Trend Finder</DialogTitle>
-                <DialogDescription>
-                    Here’s a quick guide to the tools available in your dashboard.
-                </DialogDescription>
-            </DialogHeader>
-            <Accordion type="single" collapsible className="w-full">
-                {helpGuide.map((item) => (
-                    <AccordionItem value={item.tool} key={item.tool}>
-                        <AccordionTrigger className="font-semibold text-lg">{item.tool}</AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground">
-                            {item.description}
-                        </AccordionContent>
-                    </AccordionItem>
-                ))}
-            </Accordion>
+        <DialogContent className="sm:max-w-md max-h-[90svh] overflow-y-auto">
+            {helpDialogContent}
         </DialogContent>
     </Dialog>
   );
@@ -145,23 +207,8 @@ export function Nav() {
                             Help
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle className="font-headline text-2xl flex items-center gap-2"> <LifeBuoy className="h-6 w-6 text-primary"/> How to Use Up Trend Finder</DialogTitle>
-                            <DialogDescription>
-                                Here’s a quick guide to the tools available in your dashboard.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <Accordion type="single" collapsible className="w-full">
-                            {helpGuide.map((item) => (
-                                <AccordionItem value={item.tool} key={item.tool}>
-                                    <AccordionTrigger className="font-semibold text-lg">{item.tool}</AccordionTrigger>
-                                    <AccordionContent className="text-muted-foreground">
-                                        {item.description}
-                                    </AccordionContent>
-                                </AccordionItem>
-                            ))}
-                        </Accordion>
+                    <DialogContent className="sm:max-w-md max-h-[90svh] overflow-y-auto">
+                        {helpDialogContent}
                     </DialogContent>
                 </Dialog>
               </nav>
