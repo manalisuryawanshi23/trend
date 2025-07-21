@@ -57,7 +57,6 @@ export default function TrendsPage() {
   });
 
   useEffect(() => {
-    // Load preferences from localStorage
     const savedPrefsString = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (savedPrefsString) {
       try {
@@ -65,26 +64,28 @@ export default function TrendsPage() {
         trendForm.reset(savedPrefs);
       } catch (e) {
         console.error("Failed to parse saved preferences", e);
+        // If parsing fails, fetch location as a fallback
+        fetchUserLocation();
       }
     } else {
-      // If no saved prefs, try to fetch user location
-      const fetchUserLocation = async () => {
-        try {
-          const response = await fetch('https://ipapi.co/json/');
-          if (!response.ok) throw new Error('Failed to fetch location');
-          const data = await response.json();
-          const countryName = data.country_name;
-
-          // Check if the fetched country is in our list of countries
-          if (countryName && countries.find(c => c === countryName)) {
-            trendForm.setValue('region', countryName);
-          }
-        } catch (error) {
-          console.error("Could not fetch user location:", error);
-          // Silently fail and default to 'United States'
-        }
-      };
       fetchUserLocation();
+    }
+    
+    async function fetchUserLocation() {
+      try {
+        // A simple, privacy-friendly API to get country code
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) throw new Error('Failed to fetch location');
+        const data = await response.json();
+        const countryName = data.country_name;
+
+        if (countryName && countries.find(c => c === countryName)) {
+          trendForm.setValue('region', countryName, { shouldValidate: true });
+        }
+      } catch (error) {
+        console.error("Could not fetch user location:", error);
+        // Silently fail and keep the default 'United States'
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trendForm.reset]);
@@ -95,7 +96,6 @@ export default function TrendsPage() {
   const selectedUserType = trendForm.watch("userType");
 
    useEffect(() => {
-    // When region changes, update platform options and reset selected platform if it's not available
     if (selectedRegion) {
         const availablePlatforms = getPlatformsForCountry(selectedRegion);
         const currentPlatform = trendForm.getValues("platform");
@@ -443,5 +443,3 @@ export default function TrendsPage() {
     </div>
   );
 }
-
-    
