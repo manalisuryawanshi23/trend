@@ -66,8 +66,28 @@ export default function TrendsPage() {
       } catch (e) {
         console.error("Failed to parse saved preferences", e);
       }
+    } else {
+      // If no saved prefs, try to fetch user location
+      const fetchUserLocation = async () => {
+        try {
+          const response = await fetch('https://ipapi.co/json/');
+          if (!response.ok) throw new Error('Failed to fetch location');
+          const data = await response.json();
+          const countryName = data.country_name;
+
+          // Check if the fetched country is in our list of countries
+          if (countryName && countries.find(c => c === countryName)) {
+            trendForm.setValue('region', countryName);
+          }
+        } catch (error) {
+          console.error("Could not fetch user location:", error);
+          // Silently fail and default to 'United States'
+        }
+      };
+      fetchUserLocation();
     }
-  }, [trendForm]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trendForm.reset]);
 
   const selectedNiche = trendForm.watch("niche");
   const selectedMicroNiche = trendForm.watch("microNiche");
@@ -423,3 +443,5 @@ export default function TrendsPage() {
     </div>
   );
 }
+
+    
