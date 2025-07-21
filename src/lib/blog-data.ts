@@ -619,7 +619,7 @@ What do you want the user to do after reading your post?
 *   "Save this post for later."
 *   "Tag a friend who needs to see this."
 *   "Click the link in my bio to learn more."
-*   "Follow me for more daily tips."
+*   "Follow me for more daily tips on [your niche]."
 
 > **The AIDA Formula for Captions:**
 > A classic marketing framework that works perfectly for captions:
@@ -835,7 +835,7 @@ Lo-fi (low-fidelity) content is characterized by its raw, unpolished, and sponta
 ## Why is Lo-Fi Content So Effective?
 
 ### 1. It Breaks Through the Noise
-In a feed full of polished ads, a raw, authentic video feels like a breath of air. It feels more like a FaceTime call with a friend than an advertisement, which makes it more likely to stop the scroll.
+In a feed full of polished ads, a raw, authentic video feels like a breath of fresh air. It feels more like a FaceTime call with a friend than an advertisement, which makes it more likely to stop the scroll.
 
 ### 2. It Builds Trust and Relatability
 Perfection can be intimidating. Imperfection is relatable. When a creator or brand is willing to show up without a full face of makeup or a perfect script, it signals a level of confidence and authenticity that builds trust. It makes the creator feel more like a real person.
