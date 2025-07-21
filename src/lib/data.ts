@@ -40,100 +40,112 @@ export const allPlatforms = [
   
   export const niches = [
       { 
-          name: 'Fashion', 
-          microNiches: ['Streetwear', 'Luxury Fashion', 'Thrift & Vintage', 'Sustainable Fashion', 'Plus-Size Fashion', 'Fashion History', 'DIY Fashion'] 
+          name: 'AI & Future Tech', 
+          microNiches: ['AI Tools & Reviews', 'Generative Art', 'AI News & Ethics', 'Robotics', 'Virtual & Augmented Reality', 'Future of Work', 'Prompt Engineering'] 
+      },
+      { 
+          name: 'Automotive',
+          microNiches: ['Car Reviews', 'Classic Cars', 'EVs (Electric Vehicles)', 'Car Modding / Tuning', 'Motorsports', 'Supercars', 'Off-roading & Overlanding']
       },
       { 
           name: 'Beauty', 
-          microNiches: ['Skincare', 'Makeup Tutorials', 'Clean Beauty', 'Haircare', 'Fragrance', 'Nail Art', 'Cosplay Makeup'] 
-      },
-      { 
-          name: 'Food & Cooking', 
-          microNiches: ['Quick Recipes', 'Vegan Cooking', 'Baking', 'Gourmet', 'Street Food Reviews', 'Meal Prep', 'ASMR Eating'] 
-      },
-      { 
-          name: 'Health & Wellness', 
-          microNiches: ['Fitness Routines', 'Mental Health', 'Nutrition', 'Yoga & Meditation', 'Biohacking', 'Sober Living', 'Holistic Health'] 
-      },
-      { 
-          name: 'Gaming', 
-          microNiches: ['Indie Games', 'eSports', 'Retro Gaming', 'Mobile Gaming', 'Game Development', 'Let\'s Play', 'Speedrunning'] 
-      },
-      { 
-          name: 'Tech', 
-          microNiches: ['AI Tools', 'Gadget Reviews', 'Productivity Hacks', 'Smart Home', 'Coding', 'Cybersecurity', 'Web3 & Crypto'] 
-      },
-      { 
-          name: 'Travel', 
-          microNiches: ['Budget Travel', 'Luxury Travel', 'Adventure Travel', 'Cultural Immersion', 'Digital Nomad Life', 'Staycations', 'Van Life'] 
-      },
-      { 
-          name: 'Finance & Investing', 
-          microNiches: ['Personal Finance', 'Cryptocurrency', 'Stock Market', 'Real Estate', 'Side Hustles', 'FIRE Movement', 'Robo-advising'] 
-      },
-      {
-          name: 'DIY & Crafts',
-          microNiches: ['Home Decor', 'Woodworking', 'Knitting & Crochet', 'Upcycling', 'Pottery', '3D Printing', 'Candle Making']
-      },
-      {
-          name: 'Education',
-          microNiches: ['Language Learning', 'Science Explainers', 'History Facts', 'Study Tips', 'Book summaries (BookTok)', 'Math Tricks', 'Philosophy']
-      },
-      {
-          name: 'Comedy',
-          microNiches: ['Skits', 'Memes', 'Stand-up clips', 'Relatable humor', 'Parody', 'Improv', 'Dark Humor']
-      },
-      {
-          name: 'Parenting',
-          microNiches: ['Newborn tips', 'Toddler activities', 'Teen parenting', 'Family travel', 'Montessori', 'Homeschooling', 'Dad Jokes']
-      },
-      {
-          name: 'Sports',
-          microNiches: ['Football analysis', 'Basketball highlights', 'Fantasy Sports', 'Extreme Sports', 'Athlete interviews', 'Sports betting', 'Calisthenics']
-      },
-      {
-          name: 'Automotive',
-          microNiches: ['Car reviews', 'Classic cars', 'EVs (Electric Vehicles)', 'Car modding', 'Motorsports', 'Supercars', 'Off-roading']
-      },
-      {
-          name: 'Pets',
-          microNiches: ['Dog training', 'Cat videos', 'Exotic pets', 'Pet care tips', 'Animal rescue stories', 'Funny pet moments']
-      },
-      {
-          name: 'Movies & TV',
-          microNiches: ['Film analysis', 'Fan theories', 'TV show reviews', 'Behind-the-scenes', 'Movie news', 'Anime', 'K-Drama']
-      },
-      {
-          name: 'Music',
-          microNiches: ['Live performance clips', 'Music production tutorials', 'Song covers', 'Artist interviews', 'Vinyl collecting', 'Music theory']
-      },
-      {
-          name: 'Real Estate',
-          microNiches: ['House tours', 'Investment properties', 'Interior design', 'Market analysis', 'First-time home buying', 'Tiny homes']
-      },
-      {
-          name: 'ASMR',
-          microNiches: ['Tapping', 'Whispering', 'Crinkling', 'Roleplays', 'Unintentional ASMR', 'No-talking ASMR']
+          microNiches: ['Skincare & Routines', 'Makeup Tutorials', 'Clean & Sustainable Beauty', 'Haircare & Styling', 'Fragrance Reviews', 'Nail Art', 'Cosplay & SFX Makeup'] 
       },
       {
         name: 'Books & Literature',
-        microNiches: ['Book Reviews (#BookTok)', 'Author Interviews', 'Fantasy Books', 'Sci-Fi Books', 'Young Adult (YA)', 'Classic Literature', 'Poetry']
+        microNiches: ['Book Reviews (#BookTok)', 'Author Interviews', 'Fantasy & Sci-Fi Books', 'Young Adult (YA)', 'Classic Literature', 'Poetry Readings', 'Book Hauls']
       },
       {
         name: 'Business & Entrepreneurship',
-        microNiches: ['Startup Life', 'Marketing Tips', 'Side Hustles', 'E-commerce', 'Productivity', 'Leadership', 'Small Business']
+        microNiches: ['Startup Life & Vlogs', 'Marketing & Growth Hacks', 'Side Hustles & Passive Income', 'E-commerce Tips', 'Productivity Systems', 'Leadership Advice', 'Small Business Stories']
+      },
+      { 
+          name: 'Comedy',
+          microNiches: ['Skits & Sketches', 'Memes & Viral Sounds', 'Stand-up Clips', 'Relatable Humor', 'Parody & Satire', 'Improv', 'Character Comedy']
+      },
+      {
+          name: 'Dance',
+          microNiches: ['Dance Challenges', 'Choreography', 'Dance Tutorials', 'Specific Styles (e.g., Hip Hop, Ballet)', 'Live Performance', 'Dance History', 'Freestyle']
+      },
+      {
+          name: 'DIY & Crafts',
+          microNiches: ['Home Decor Projects', 'Woodworking', 'Knitting & Crochet', 'Upcycling & Thrifting Flips', 'Pottery & Ceramics', '3D Printing', 'Candle & Soap Making']
+      },
+      {
+          name: 'Education',
+          microNiches: ['Language Learning', 'History Facts', 'Study Tips & Hacks', 'Book Summaries', 'Math Tricks', 'Software Tutorials', 'General Knowledge']
+      },
+      { 
+          name: 'Fashion', 
+          microNiches: ['Streetwear & Sneakers', 'Luxury Fashion', 'Thrift & Vintage Hauls', 'Sustainable & Ethical Fashion', 'Plus-Size Fashion', 'Fashion History', 'DIY & Sewing'] 
+      },
+      { 
+          name: 'Finance & Investing', 
+          microNiches: ['Personal Finance & Budgeting', 'Cryptocurrency & Web3', 'Stock Market Analysis', 'Real Estate Investing', 'Side Hustles', 'FIRE Movement', 'Fintech & Robo-advising'] 
+      },
+      { 
+          name: 'Food & Cooking', 
+          microNiches: ['Quick Recipes (Under 30 mins)', 'Vegan & Plant-Based', 'Baking & Desserts', 'Gourmet & Fine Dining', 'Street Food Reviews', 'Meal Prep & Planning', 'ASMR Eating'] 
+      },
+      { 
+          name: 'Gaming', 
+          microNiches: ['Indie Game Discoveries', 'eSports & Competitive Gaming', 'Retro Gaming', 'Mobile Gaming', 'Game Development Logs', 'Let\'s Play & Walkthroughs', 'Gaming News & Rumors'] 
+      },
+      { 
+          name: 'Health & Wellness', 
+          microNiches: ['Fitness Routines & Challenges', 'Mental Health & Mindfulness', 'Nutrition & Healthy Eating', 'Yoga & Meditation', 'Biohacking', 'Sober & Mindful Drinking', 'Holistic & Alternative Health'] 
       },
       {
         name: 'Home & Garden',
-        microNiches: ['Interior Design', 'Gardening', 'Home Organization', 'Renovation & DIY', 'House Plants', 'Sustainable Living', 'Smart Home']
+        microNiches: ['Interior Design Trends', 'Gardening & Plant Care', 'Home Organization & Cleaning Hacks', 'Renovation & DIY Projects', 'House Plants', 'Sustainable Living', 'Smart Home Tech']
+      },
+      { 
+          name: 'Movies & TV', 
+          microNiches: ['Film & TV Show Analysis', 'Fan Theories', 'TV Show Reviews', 'Behind-the-Scenes Facts', 'Movie News & Trailers', 'Anime & Manga', 'K-Drama & J-Drama']
+      },
+      {
+          name: 'Music',
+          microNiches: ['Live Performance Clips', 'Music Production Tutorials', 'Song Covers', 'Artist Interviews', 'Vinyl & Record Collecting', 'Music Theory Lessons', 'New Music Discovery']
+      },
+      {
+          name: 'Parenting',
+          microNiches: ['Newborn Tips', 'Toddler Activities', 'Teen Parenting Advice', 'Family Travel', 'Montessori & Gentle Parenting', 'Homeschooling Life', 'Dad Jokes & Family Humor']
+      },
+      {
+          name: 'Pets',
+          microNiches: ['Dog Training Tips', 'Funny Cat Videos', 'Exotic Pets Care', 'Pet Product Reviews', 'Animal Rescue Stories', 'Pet Health & Nutrition', 'Obedience & Agility Training']
+      },
+      {
+          name: 'Real Estate',
+          microNiches: ['Luxury House Tours', 'Investment Properties', 'Interior Design Inspiration', 'Real Estate Market Analysis', 'First-Time Home Buying Guide', 'Tiny Homes & Alternative Living']
       },
       {
         name: 'Relationships & Dating',
-        microNiches: ['Dating Advice', 'Relationship Goals', 'Friendship', 'Self-Love', 'Storytime', 'Marriage Humor']
+        microNiches: ['Dating App Advice', 'Relationship Goals & Skits', 'Friendship & Social Life', 'Self-Love & Personal Growth', 'Storytime: Dating Disasters', 'Marriage Humor']
+      },
+      {
+          name: 'Science & Nature',
+          microNiches: ['Science Experiments', 'Nature Documentaries', 'Space & Astronomy', 'Biology & Animal Facts', 'Environmental Science', 'Cool Science Explained', 'Weather Phenomena']
+      },
+      {
+          name: 'Sports',
+          microNiches: ['Football (Soccer) Analysis', 'Basketball Highlights & Breakdowns', 'Fantasy Sports Strategy', 'Extreme Sports', 'Athlete Interviews & Documentaries', 'Sports Betting Tips', 'Calisthenics & Bodyweight Fitness']
       },
       {
         name: 'Spirituality & Mindfulness',
-        microNiches: ['Astrology', 'Tarot', 'Manifestation', 'Meditation', 'Crystal Healing', 'Modern Witchcraft']
+        microNiches: ['Astrology & Horoscopes', 'Tarot & Oracle Readings', 'Manifestation Techniques', 'Guided Meditations', 'Crystal Healing', 'Modern Witchcraft (#WitchTok)', 'Mindful Living']
+      },
+      { 
+          name: 'Tech', 
+          microNiches: ['Gadget Reviews', 'Productivity Hacks & Apps', 'Smart Home Setups', 'PC Building & Modding', 'Cybersecurity Tips', 'Web Development'] 
+      },
+      { 
+          name: 'Travel', 
+          microNiches: ['Budget Travel & Backpacking', 'Luxury & 5-Star Travel', 'Adventure & Extreme Travel', 'Cultural Immersion & Slow Travel', 'Digital Nomad Lifestyle', 'Unique Stays (AirBnb, etc.)', 'Van Life'] 
+      },
+      {
+          name: 'ASMR',
+          microNiches: ['Tapping & Scratching', 'Whispering & Soft Speaking', 'Crinkling & Packaging Sounds', 'Roleplays', 'Unintentional ASMR', 'No-talking ASMR']
       }
   ];
   
@@ -168,3 +180,5 @@ export const allPlatforms = [
       { name: 'gemini-1.0-pro-latest', label: 'Gemini 1.0 Pro (Legacy)', description: 'A stable and reliable previous generation model.' },
   ] as const;
   
+
+    
