@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper } from 'lucide-react';
+import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
   { href: '/', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
@@ -154,12 +155,14 @@ export function Nav() {
         ))}
       </nav>
       <div className="hidden md:flex items-center gap-2">
+        <ThemeToggle />
         {helpDialog}
       </div>
 
 
       {/* Mobile Navigation */}
-      <div className="md:hidden">
+      <div className="md:hidden flex items-center gap-2">
+        <ThemeToggle />
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon">
