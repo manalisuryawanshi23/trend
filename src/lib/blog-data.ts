@@ -5,8 +5,6 @@ export type Post = {
     slug: string;
     date: string;
     readTime: number; // in minutes
-    image: string;
-    imageAiHint: string;
     content: string;
   };
   
@@ -17,8 +15,6 @@ export type Post = {
       description: 'Stop scrolling for hours. Learn the data-driven method for finding viral trends and trending topics on TikTok and Instagram before they go mainstream. Your guide to trend forecasting.',
       date: '2024-07-22',
       readTime: 9,
-      image: 'https://placehold.co/1200x630.png',
-      imageAiHint: 'data graph rocket',
       content: `
 You see it every day. A creator posts a video with a seemingly random sound or a weird new format, and overnight, they gain 100,000 followers. A week later, everyone is doing it, but the wave has already crested. You're left feeling like you're always one step behind.
 
@@ -129,8 +125,6 @@ Are you ready to stop guessing and start forecasting?
       description: 'TikTok isn\'t just for dance challenges. Learn how to strategically leverage emerging trends to grow your business, reach new customers, and build a powerful brand presence.',
       date: '2024-07-20',
       readTime: 6,
-      image: 'https://placehold.co/1200x630.png',
-      imageAiHint: 'mobile phone business',
       content: `
 TikTok has evolved from a teenage dance app into a global marketing powerhouse. For businesses, it's a goldmine of opportunity—if you know how to use it. Ignoring TikTok trends means leaving potential customers and massive brand reach on the table. Here's how to harness them for growth.
 
@@ -160,8 +154,6 @@ Not every video needs to be a high-production masterpiece. Trends provide a read
         description: 'Feeling lost in the ever-changing world of the Instagram algorithm? We break down what matters most for Reels, Posts, and Stories to help you maximize your reach.',
         date: '2024-07-19',
         readTime: 8,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'social media connections',
         content: `
 The Instagram algorithm can feel like a mysterious black box. One day your reach is soaring, the next it plummets. While Instagram keeps the exact formula under wraps, its leaders have shared key insights into how it works. Here's what you need to know to succeed in 2024.
 
@@ -195,8 +187,6 @@ Stories are for sharing moments with your closest followers. Reach is primarily 
         description: 'Don\'t let your best ideas die after one post. Learn how to strategically repurpose a single piece of content into a dozen different formats for maximum impact.',
         date: '2024-07-18',
         readTime: 6,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'content creation process',
         content: `
 Content creation is hard work. So why would you only use a great idea once? Content repurposing is the secret weapon of smart creators. It's about working smarter, not harder, to get the most mileage out of every piece of content you produce.
 
@@ -227,8 +217,6 @@ Let's say you wrote a blog post titled "5 Tips for Sustainable Living." Here's h
         description: 'Being a generalist is a recipe for getting lost in the noise. Discover the power of niching down to attract a dedicated audience and become a go-to expert in your field.',
         date: '2024-07-17',
         readTime: 7,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'target audience dartboard',
         content: `
 "Find your niche" is one of the most common pieces of advice for new creators, but what does it actually mean? A niche is simply a specialized segment of the market for a particular kind of product or service. On social media, it's the specific topic you're known for.
 
@@ -264,8 +252,6 @@ The more specific you are, the less competition you have and the more dedicated 
         description: 'Creator\'s block is real. Break through it with our 7-day content challenge, packed with proven ideas that work for any niche.',
         date: '2024-07-16',
         readTime: 5,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'calendar ideas inspiration',
         content: `
 Every creator hits a wall. You open up your app, stare at the blank screen, and have absolutely no idea what to post. Here’s a simple 7-day challenge to break your creator's block and get your content flowing again.
 
@@ -304,8 +290,6 @@ Engagement is a two-way street. End the week by asking your audience a question.
         description: 'Colors evoke emotions and influence decisions. Learn how to use color psychology to create a stronger brand identity and drive engagement on social media.',
         date: '2024-07-15',
         readTime: 6,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'color wheel marketing',
         content: `
 Color is more than just a visual element; it's a powerful communication tool. The colors you choose for your brand and social media posts can subconsciously influence how your audience perceives you. Understanding basic color psychology can give you a significant marketing edge.
 
@@ -346,8 +330,6 @@ Orange is a vibrant and energetic color that feels fun and friendly. It's less i
         description: 'SEO isn\'t just for Google. People are searching on TikTok, Instagram, and YouTube more than ever. Learn the basics of Social SEO to make sure your content gets found.',
         date: '2024-07-14',
         readTime: 7,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'magnifying glass social media',
         content: `
 When you think of SEO (Search Engine Optimization), you probably think of Google. But social media platforms are rapidly becoming powerful search engines in their own right. If your content isn't optimized for search, you're missing out on a massive source of discovery.
 
@@ -387,8 +369,6 @@ Your username and bio are searchable!
         description: 'Jumping on every trend can dilute your brand message. Here’s a simple framework for deciding which trends to embrace and which to ignore.',
         date: '2024-07-13',
         readTime: 5,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'brand strategy crossroads',
         content: `
 In the fast-paced world of social media, it's tempting to jump on every emerging trend. But is it always the right move? Participating in the wrong trend can confuse your audience, dilute your brand message, and even damage your credibility. Before you hit "record," ask yourself these four questions.
 
@@ -415,8 +395,6 @@ Some trends can be edgy or controversial. Before participating, consider the pot
         description: 'You have 3 seconds to stop the scroll. A powerful hook is non-negotiable. Here are over 15 plug-and-play hook ideas to make your videos irresistible.',
         date: '2024-07-12',
         readTime: 7,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'fishing hook ideas',
         content: `
 The success or failure of your short-form video is often decided in the first three seconds. If your hook doesn't immediately grab the viewer, they're gone. Here are over 15 battle-tested hook ideas you can adapt for your niche.
 
@@ -456,8 +434,6 @@ The success or failure of your short-form video is often decided in the first th
         description: 'Stop scrambling for last-minute post ideas. A well-structured content calendar brings consistency and strategy to your social media efforts. Here’s how to build one.',
         date: '2024-07-11',
         readTime: 6,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'strategic planning calendar',
         content: `
 A content calendar is a creator's best friend. It's a schedule that outlines what you're going to post and when. It turns your content creation from a reactive, chaotic scramble into a proactive, strategic process.
 
@@ -502,8 +478,6 @@ Your content calendar is a guide, not a rigid set of rules. It's crucial to leav
         description: 'They may all be short-form videos, but the platforms are not the same. We break down the key differences to help you decide where to focus your energy.',
         date: '2024-07-10',
         readTime: 8,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'social media platform icons',
         content: `
 Short-form video is king, but with so many platforms, where should you invest your time? While you can (and often should) post on all three, understanding their unique nuances can help you tailor your content for maximum impact.
 
@@ -543,8 +517,6 @@ YouTube Shorts benefits from being part of the world's second-largest search eng
         description: 'From generating ideas to editing videos, AI is no longer a futuristic concept—it\'s a creator\'s new best friend. Here are 5 ways AI is revolutionizing content creation.',
         date: '2024-07-09',
         readTime: 6,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'robot human collaboration',
         content: `
 Artificial intelligence (AI) is transforming industries, and content creation is no exception. Far from replacing human creativity, AI is becoming a powerful co-pilot, helping creators work faster, smarter, and more strategically. Here are five game-changing ways AI is being used today.
 
@@ -580,8 +552,6 @@ AI can analyze your comments and audience data to give you deeper insights than 
         description: 'Vanity metrics like follower count can be misleading. If you want real growth, you need to focus on the data that matters. Here are 5 key metrics for success.',
         date: '2024-07-08',
         readTime: 7,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'data analytics dashboard',
         content: `
 It's easy to get obsessed with follower count and likes. These "vanity metrics" feel good, but they don't tell the whole story. A data-driven creator looks deeper to understand what truly drives growth and engagement. Here are five metrics you should be tracking religiously.
 
@@ -621,8 +591,6 @@ Don't just count your comments; read them.
         description: 'A great visual can stop the scroll, but a great caption can build a community. Learn the art of writing captions that spark conversation and create loyal fans.',
         date: '2024-07-07',
         readTime: 6,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'writing storytelling keyboard',
         content: `
 On visually-driven platforms like Instagram, it's easy to treat the caption as an afterthought. That's a huge mistake. Your caption is your opportunity to add context, inject personality, and build a deeper connection with your audience. Here's how to write captions that work.
 
@@ -667,8 +635,6 @@ What do you want the user to do after reading your post?
         description: 'In a world of filters and curated perfection, authenticity has become a superpower. Discover why audiences are craving realness and how you can be more authentic in your content.',
         date: '2024-07-06',
         readTime: 5,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'person reflection mirror',
         content: `
 For years, social media was dominated by perfectly polished, aspirational content. But the tide is turning. Today's audiences are tired of perfection; they're craving authenticity. Being real, relatable, and even a little bit messy is no longer a weakness—it's your greatest strength.
 
@@ -703,8 +669,6 @@ Your video doesn't need to be perfect. Your lighting doesn't need to be flawless
         description: 'From Lil Miquela to AI news anchors, virtual influencers are here. We explore the rise of synthetic media and what it means for the future of content creation.',
         date: '2024-07-05',
         readTime: 7,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'virtual reality avatar',
         content: `
 The line between the real and the digital is blurring. While human creators still dominate social media, a new wave of virtual influencers and AI avatars is beginning to emerge. Is this a passing fad, or are we looking at the future of content?
 
@@ -735,8 +699,6 @@ While the technology is impressive, it also raises important questions.
         description: 'Analyzing your competitors is smart. Obsessing over them is destructive. Learn how to conduct a healthy competitive analysis to find inspiration and identify opportunities.',
         date: '2024-07-04',
         readTime: 6,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'magnifying glass chess',
         content: `
 Competitive analysis is a crucial part of any marketing strategy. By understanding what your competitors are doing, you can identify gaps in the market, get inspiration for your own content, and avoid making the same mistakes. However, there's a fine line between healthy analysis and unhealthy obsession.
 
@@ -782,8 +744,6 @@ After analyzing your competitors, the most important step is to ask: **"What are
         description: 'A great post without a Call-to-Action (CTA) is a missed opportunity. Learn how to craft compelling CTAs that guide your audience to take the next step.',
         date: '2024-07-03',
         readTime: 5,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'arrow hitting target',
         content: `
 You've created an amazing piece of content. It's valuable, engaging, and visually stunning. But if you don't tell your audience what to do next, you're leaving a huge amount of potential engagement on the table. A Call-to-Action (CTA) is a simple instruction that guides your audience and dramatically increases the chances they'll take a desired action.
 
@@ -825,8 +785,6 @@ These CTAs are designed to get people to leave the platform and go to your websi
         description: 'Creator burnout is real. The pressure to be constantly "on" can be draining. Here are five practical strategies to help you stay consistent and motivated on your journey.',
         date: '2024-07-02',
         readTime: 6,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'person climbing mountain',
         content: `
 Consistency is the holy grail of content creation. Algorithms reward it, and audiences crave it. But staying consistent when you're not seeing immediate results can be incredibly challenging. Here's how to stay motivated for the long haul.
 
@@ -864,8 +822,6 @@ Sharing your struggles and successes with people who understand can be a powerfu
         description: 'Overly produced content is losing its charm. Audiences are now flocking to "lo-fi," authentic content that feels real and relatable. Here\'s why and how to embrace it.',
         date: '2024-07-01',
         readTime: 5,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'person talking phone',
         content: `
 For a long time, the standard for "good" content was a high-production value: perfect lighting, professional cameras, and flawless editing. But a major shift is happening. Audiences, particularly on platforms like TikTok and Instagram Reels, are increasingly drawn to "lo-fi" content that feels more authentic and less produced.
 
@@ -903,8 +859,6 @@ One of the biggest advantages of the lo-fi trend is that it lowers the barrier t
         description: 'Keep your brand looking fresh and modern. From AI-generated art to bold, retro fonts, here are the top 5 social media design trends you need to know about.',
         date: '2024-06-30',
         readTime: 6,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'modern design collage',
         content: `
 Strong visual design is essential for capturing attention on social media. As a brand, you want to look current and relevant, not dated. Here are five key design trends that are dominating social feeds in 2024.
 
@@ -937,8 +891,6 @@ As audiences become more data-savvy, simple charts and graphs are becoming a pow
         description: 'Views from the "For You" page are fleeting. Views from search can last for years. Master the art of YouTube SEO to build a sustainable channel that grows on autopilot.',
         date: '2024-06-29',
         readTime: 8,
-        image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'youtube search bar',
         content: `
 YouTube is not just a social media platform; it's the second-largest search engine in the world after Google. This is its superpower. While a viral TikTok might have a lifespan of 48 hours, a well-optimized YouTube video can attract views from search for years, creating a powerful, long-term growth engine for your brand.
 
@@ -978,5 +930,6 @@ YouTube automatically transcribes your videos. When you verbally say your keywor
       }
   ];
   
+
 
 

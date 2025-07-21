@@ -1,8 +1,6 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { allPosts } from '@/lib/blog-data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 
@@ -29,16 +27,6 @@ export default function BlogPage() {
         {sortedPosts.map((post) => (
           <Link href={`/blog/${post.slug}`} key={post.slug} className="group flex flex-col">
             <Card className="flex flex-col flex-grow overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-              <div className="relative">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  width={600}
-                  height={400}
-                  data-ai-hint={post.imageAiHint}
-                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
               <CardHeader className="flex-grow">
                 <CardTitle className="font-headline text-xl font-bold group-hover:text-primary transition-colors">
                   {post.title}

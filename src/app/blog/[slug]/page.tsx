@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import { allPosts } from '@/lib/blog-data';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
@@ -28,20 +27,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.description,
       type: 'article',
       url: `https://uptrendfinder.com/blog/${post.slug}`, // Replace with your actual domain
-      images: [
-        {
-          url: post.image,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.description,
-      images: [post.image],
     },
   };
 }
@@ -114,17 +104,6 @@ export default async function BlogPostPage({ params }: Props) {
             <span>{post.readTime} min read</span>
           </div>
         </header>
-
-        <div className="relative w-full aspect-video mb-8 rounded-lg overflow-hidden border">
-          <Image
-            src={post.image}
-            alt={post.title}
-            fill
-            data-ai-hint={post.imageAiHint}
-            className="object-cover"
-            priority
-          />
-        </div>
 
         <div className="prose prose-lg dark:prose-invert mx-auto">
           {renderMarkdown(post.content)}
