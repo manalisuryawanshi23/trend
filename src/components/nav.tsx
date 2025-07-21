@@ -21,19 +21,19 @@ const navItems = [
 const helpGuide = [
     {
         tool: "Forecast",
-        description: "Predicts emerging social media trends 24-72 hours before they go viral. Just select your platform, niche, and region, and let the AI find your next hit."
+        description: "Predicts emerging social media trends 24-72 hours before they go viral. Best for finding your next viral video idea before anyone else."
     },
     {
         tool: "Repurpose",
-        description: "Transforms any URL (like a blog post or news article) into a ready-to-post social media update. Paste a link, choose your platform, and get a complete post plan."
+        description: "Transforms any URL (like a blog post or news article) into a ready-to-post social media update. Best for quickly turning existing content into fresh social media updates."
     },
     {
         tool: "Analyze",
-        description: "Deconstructs the success (or failure) of any social media post. Paste the post's URL to get a virality score and a detailed breakdown of its strengths and weaknesses."
+        description: "Deconstructs the success (or failure) of any social media post. Best for understanding the mechanics of viral content in your niche."
     },
     {
         tool: "Visualize",
-        description: "Turns your post ideas into AI-generated visual concepts. Describe your theme, hook, and caption to see a unique image that brings your vision to life."
+        description: "Turns your post ideas into AI-generated visual concepts. Best for brainstorming a unique look and feel for your next post."
     }
 ]
 
