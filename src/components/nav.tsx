@@ -56,7 +56,7 @@ export function Nav() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between p-4 border-b">
                  <h2 className="font-headline text-2xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                    Trend Seer
+                    Up Trend Finder
                   </h2>
                 <SheetClose asChild>
                    <Button variant="ghost" size="icon">
