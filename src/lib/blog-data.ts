@@ -816,7 +816,7 @@ These CTAs are designed to get people to leave the platform and go to your websi
 *   **"Want to work with me? Head to the link in my bio to apply for coaching."**
 
 > **Pro Tip: One CTA per Post**
-> Don't overwhelm your audience. Choose one primary action you want them to take for each post. If you ask them to comment, share, and click the link in your bio all at once, they're likely to do none of them. Be clear, be direct, and focus on one goal per piece of content.
+> Don't overwhelm your audience. Choose one primary action you want them to take for each post. If you ask them to comment, share, and click the link in my bio all at once, they're likely to do none of them. Be clear, be direct, and focus on one goal per piece of content.
         `,
       },
       {
@@ -865,7 +865,7 @@ Sharing your struggles and successes with people who understand can be a powerfu
         date: '2024-07-01',
         readTime: 5,
         image: 'https://placehold.co/1200x630.png',
-        imageAiHint: 'person talking to phone',
+        imageAiHint: 'person talking phone',
         content: `
 For a long time, the standard for "good" content was a high-production value: perfect lighting, professional cameras, and flawless editing. But a major shift is happening. Audiences, particularly on platforms like TikTok and Instagram Reels, are increasingly drawn to "lo-fi" content that feels more authentic and less produced.
 
@@ -978,4 +978,5 @@ YouTube automatically transcribes your videos. When you verbally say your keywor
       }
   ];
   
+
 
