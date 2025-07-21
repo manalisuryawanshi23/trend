@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Wand2, Search, Sparkles, Image, Menu, X } from 'lucide-react';
 
@@ -51,11 +51,12 @@ export function Nav() {
               <span className="sr-only">Open navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left">
+          <SheetContent side="left" className="p-0">
+             <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between p-4 border-b">
                  <h2 className="font-headline text-2xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                    Up Trend Finder
+                    Trend Seer
                   </h2>
                 <SheetClose asChild>
                    <Button variant="ghost" size="icon">
