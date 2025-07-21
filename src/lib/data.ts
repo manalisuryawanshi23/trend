@@ -114,6 +114,26 @@ export const allPlatforms = [
       {
           name: 'ASMR',
           microNiches: ['Tapping', 'Whispering', 'Crinkling', 'Roleplays', 'Unintentional ASMR', 'No-talking ASMR']
+      },
+      {
+        name: 'Books & Literature',
+        microNiches: ['Book Reviews (#BookTok)', 'Author Interviews', 'Fantasy Books', 'Sci-Fi Books', 'Young Adult (YA)', 'Classic Literature', 'Poetry']
+      },
+      {
+        name: 'Business & Entrepreneurship',
+        microNiches: ['Startup Life', 'Marketing Tips', 'Side Hustles', 'E-commerce', 'Productivity', 'Leadership', 'Small Business']
+      },
+      {
+        name: 'Home & Garden',
+        microNiches: ['Interior Design', 'Gardening', 'Home Organization', 'Renovation & DIY', 'House Plants', 'Sustainable Living', 'Smart Home']
+      },
+      {
+        name: 'Relationships & Dating',
+        microNiches: ['Dating Advice', 'Relationship Goals', 'Friendship', 'Self-Love', 'Storytime', 'Marriage Humor']
+      },
+      {
+        name: 'Spirituality & Mindfulness',
+        microNiches: ['Astrology', 'Tarot', 'Manifestation', 'Meditation', 'Crystal Healing', 'Modern Witchcraft']
       }
   ];
   
