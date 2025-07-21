@@ -1,4 +1,6 @@
 import type {Metadata} from 'next';
+import Link from 'next/link';
+import React from 'react';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Nav } from '@/components/nav';
@@ -20,6 +22,14 @@ export const metadata: Metadata = {
   title: 'Up Trend Finder',
   description: 'Uncover tomorrow\'s viral trends today.',
 };
+
+const footerLinks = [
+    { href: '/about', label: 'About Us' },
+    { href: '/contact', label: 'Contact Us' },
+    { href: '/privacy-policy', label: 'Privacy Policy' },
+    { href: '/terms-and-conditions', label: 'Terms & Conditions' },
+    { href: '/disclaimer', label: 'Disclaimer' },
+];
 
 export default function RootLayout({
   children,
@@ -43,11 +53,19 @@ export default function RootLayout({
           <main className="flex-grow">
             {children}
           </main>
-          <footer className="py-6 md:px-8 md:py-0 border-t">
-              <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
-                  <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
-                      © {new Date().getFullYear()} Up Trend Finder. All Rights Reserved.
-                  </p>
+          <footer className="py-8 md:py-6 border-t bg-muted/50">
+              <div className="container flex flex-col items-center justify-center gap-4 text-center">
+                  <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+                     <span>© {new Date().getFullYear()} Up Trend Finder.</span>
+                     {footerLinks.map((link) => (
+                        <React.Fragment key={link.href}>
+                            <span className="hidden md:inline">|</span>
+                            <Link href={link.href} className="hover:text-primary hover:underline underline-offset-4">
+                                {link.label}
+                            </Link>
+                        </React.Fragment>
+                     ))}
+                  </div>
               </div>
           </footer>
         </div>
