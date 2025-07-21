@@ -8,7 +8,7 @@ import { Wand2, Search, Sparkles, Image } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'Forecast', icon: <Wand2 className="h-4 w-4 sm:mr-2" /> },
-  { href: '/repurpose', label: 'Repurpose', icon: <Sparkles className="h-4 w-4 sm:mr-2" /> },
+  { href: '/repurpose', label: 'Repurpose2', icon: <Sparkles className="h-4 w-4 sm:mr-2" /> },
   { href: '/analyze', label: 'Analyze', icon: <Search className="h-4 w-4 sm:mr-2" /> },
   { href: '/visualize', label: 'Visualize', icon: <Image className="h-4 w-4 sm:mr-2" /> },
 ];
