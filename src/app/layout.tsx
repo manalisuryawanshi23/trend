@@ -17,7 +17,7 @@ const fontSpaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'Trend Seer',
+  title: 'Up Trend Finder',
   description: 'Uncover tomorrow\'s viral trends today.',
 };
 
@@ -34,7 +34,7 @@ export default function RootLayout({
             <div className="container mx-auto px-4 sm:px-6 py-3">
               <div className="flex items-center justify-between gap-4">
                   <h1 className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                    Trend Seer
+                    Up Trend Finder
                   </h1>
                   <Nav />
               </div>
@@ -46,7 +46,7 @@ export default function RootLayout({
           <footer className="py-6 md:px-8 md:py-0 border-t">
               <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
                   <p className="text-balance text-center text-sm leading-loose text-muted-foreground">
-                      © {new Date().getFullYear()} Trend Seer. All Rights Reserved.
+                      © {new Date().getFullYear()} Up Trend Finder. All Rights Reserved.
                   </p>
               </div>
           </footer>

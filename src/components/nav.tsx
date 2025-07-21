@@ -50,7 +50,7 @@ export function Nav() {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-                <DialogTitle className="font-headline text-2xl flex items-center gap-2"> <LifeBuoy className="h-6 w-6 text-primary"/> How to Use Trend Seer</DialogTitle>
+                <DialogTitle className="font-headline text-2xl flex items-center gap-2"> <LifeBuoy className="h-6 w-6 text-primary"/> How to Use Up Trend Finder</DialogTitle>
                 <DialogDescription>
                     Here’s a quick guide to the tools available in your dashboard.
                 </DialogDescription>
@@ -110,7 +110,7 @@ export function Nav() {
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <div className="flex items-center justify-between">
                     <h2 className="font-headline text-2xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                        Trend Seer
+                        Up Trend Finder
                     </h2>
                     <SheetClose asChild>
                        <Button variant="ghost" size="icon">
@@ -147,7 +147,7 @@ export function Nav() {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
-                            <DialogTitle className="font-headline text-2xl flex items-center gap-2"> <LifeBuoy className="h-6 w-6 text-primary"/> How to Use Trend Seer</DialogTitle>
+                            <DialogTitle className="font-headline text-2xl flex items-center gap-2"> <LifeBuoy className="h-6 w-6 text-primary"/> How to Use Up Trend Finder</DialogTitle>
                             <DialogDescription>
                                 Here’s a quick guide to the tools available in your dashboard.
                             </DialogDescription>
