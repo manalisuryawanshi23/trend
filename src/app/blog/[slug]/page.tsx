@@ -51,7 +51,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function BlogPostPage({ params }: Props) {
+export default async function BlogPostPage({ params }: Props) {
   const post = allPosts.find((p) => p.slug === params.slug);
 
   if (!post) {
