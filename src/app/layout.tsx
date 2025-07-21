@@ -29,6 +29,7 @@ const footerLinks = [
     { href: '/privacy-policy', label: 'Privacy Policy' },
     { href: '/terms-and-conditions', label: 'Terms & Conditions' },
     { href: '/disclaimer', label: 'Disclaimer' },
+    { href: '/blog', label: 'Blog' },
 ];
 
 export default function RootLayout({
@@ -43,9 +44,9 @@ export default function RootLayout({
           <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container mx-auto px-4 sm:px-6 py-3">
               <div className="flex items-center justify-between gap-4">
-                  <h1 className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                  <Link href="/" className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
                     Up Trend Finder
-                  </h1>
+                  </Link>
                   <Nav />
               </div>
             </div>

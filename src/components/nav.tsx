@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -10,13 +9,14 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle, SheetHeader 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket } from 'lucide-react';
+import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
   { href: '/repurpose', label: 'Repurpose', icon: <Sparkles className="h-5 w-5" /> },
   { href: '/analyze', label: 'Analyze', icon: <Search className="h-5 w-5" /> },
   { href: '/visualize', label: 'Visualize', icon: <Image className="h-5 w-5" /> },
+  { href: '/blog', label: 'Blog', icon: <Newspaper className="h-5 w-5" /> },
 ];
 
 const helpGuide = [
@@ -72,7 +72,7 @@ const helpGuide = [
 
 export function Nav() {
   const pathname = usePathname();
-  const activePath = pathname === '/trends' ? '/' : pathname;
+  const activePath = pathname;
 
   const helpDialogContent = (
     <>
@@ -171,9 +171,9 @@ export function Nav() {
              <SheetHeader className="p-4 border-b">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <div className="flex items-center justify-between">
-                    <h2 className="font-headline text-2xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                    <Link href="/" className="font-headline text-2xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
                         Up Trend Finder
-                    </h2>
+                    </Link>
                     <SheetClose asChild>
                        <Button variant="ghost" size="icon">
                           <X className="h-6 w-6" />
