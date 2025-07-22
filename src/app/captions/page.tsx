@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LoaderCircle, Image as ImageIcon, Sparkles, Wand2, Copy, Check } from "lucide-react";
+import { LoaderCircle, Image as ImageIcon, Sparkles, Wand2, Copy, Check, Hash } from "lucide-react";
 import Image from "next/image";
 
 import { generateCaptions } from "@/ai/flows/generate-captions";
@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 const platforms = ['Instagram', 'TikTok', 'Twitter / X', 'Facebook', 'LinkedIn', 'Pinterest'];
@@ -39,13 +40,18 @@ const captionsFormSchema = z.object({
 });
 
 function CaptionCard({ vibe, caption, hashtags }: { vibe: string; caption: string; hashtags: string; }) {
-    const [copied, setCopied] = useState(false);
+    const [copiedCaption, setCopiedCaption] = useState(false);
+    const [copiedHashtags, setCopiedHashtags] = useState(false);
 
-    const handleCopy = () => {
-        const textToCopy = `Caption:\n${caption}\n\nHashtags:\n${hashtags}`;
-        navigator.clipboard.writeText(textToCopy);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+    const handleCopy = (text: string, type: 'caption' | 'hashtags') => {
+        navigator.clipboard.writeText(text);
+        if (type === 'caption') {
+            setCopiedCaption(true);
+            setTimeout(() => setCopiedCaption(false), 2000);
+        } else {
+            setCopiedHashtags(true);
+            setTimeout(() => setCopiedHashtags(false), 2000);
+        }
     };
 
     return (
@@ -53,15 +59,46 @@ function CaptionCard({ vibe, caption, hashtags }: { vibe: string; caption: strin
             <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                     <Badge variant="secondary">{vibe}</Badge>
-                    <Button variant="ghost" size="icon" onClick={handleCopy} aria-label="Copy caption and hashtags">
-                        {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                    </Button>
                 </CardTitle>
             </CardHeader>
-            <CardContent className="flex-grow space-y-2">
-                <p className="text-muted-foreground">{caption}</p>
-                <Separator />
-                <p className="text-sm font-mono text-primary/80 break-words">{hashtags}</p>
+            <CardContent className="flex-grow space-y-4">
+                 <div>
+                    <div className="flex justify-between items-center mb-1">
+                        <p className="text-sm font-semibold">Caption</p>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button variant="ghost" size="icon" onClick={() => handleCopy(caption, 'caption')} aria-label="Copy caption">
+                                        {copiedCaption ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Copy Caption</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                    <p className="text-muted-foreground text-sm">{caption}</p>
+                 </div>
+                 <Separator />
+                 <div>
+                     <div className="flex justify-between items-center mb-1">
+                        <p className="text-sm font-semibold">Hashtags</p>
+                         <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                     <Button variant="ghost" size="icon" onClick={() => handleCopy(hashtags, 'hashtags')} aria-label="Copy hashtags">
+                                        {copiedHashtags ? <Check className="h-4 w-4 text-green-500" /> : <Hash className="h-4 w-4" />}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Copy Hashtags</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                    <p className="text-sm font-mono text-primary/80 break-words">{hashtags}</p>
+                 </div>
             </CardContent>
         </Card>
     );
@@ -142,7 +179,7 @@ export default function CaptionsPage() {
                 AI Caption Generator
             </h2>
             <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Upload an image, and our AI will write 5 unique caption options for you in seconds.
+              Upload an image, and our AI will write 8 unique caption options for you in seconds.
             </p>
         </header>
 
@@ -243,8 +280,8 @@ export default function CaptionsPage() {
           {isLoading && (
              <div className="space-y-6">
                 <h2 className="font-headline text-3xl font-bold text-center animate-pulse">✨ AI is writing...</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {[...Array(5)].map((_, i) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[...Array(8)].map((_, i) => (
                         <Card key={i} className="animate-pulse">
                             <CardHeader><div className="h-6 w-20 bg-muted rounded-md"></div></CardHeader>
                             <CardContent className="space-y-2">
@@ -261,7 +298,7 @@ export default function CaptionsPage() {
           {!isLoading && result && (
              <div className="space-y-6">
                 <h2 className="font-headline text-3xl font-bold text-center">Your AI-Generated Captions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {result.captions.map((caption, index) => (
                        <CaptionCard key={index} {...caption} />
                     ))}

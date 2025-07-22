@@ -22,7 +22,7 @@ const GenerateCaptionsInputSchema = z.object({
   niche: z.string().optional().describe('The content niche (e.g., fashion, food, memes).'),
   userInput: z.string().optional().describe('Optional user instructions or context.'),
 });
-export type GenerateCaptionsInput = z.infer<typeof GenerateCaptionsInputSchema>;
+type GenerateCaptionsInput = z.infer<typeof GenerateCaptionsInputSchema>;
 
 const CaptionOptionSchema = z.object({
     vibe: z.string().describe("The overall tone or vibe of this caption option (e.g., 'Funny', 'Inspirational', 'Witty')."),
@@ -31,9 +31,9 @@ const CaptionOptionSchema = z.object({
 });
 
 const GenerateCaptionsOutputSchema = z.object({
-  captions: z.array(CaptionOptionSchema).describe('An array of exactly 5 caption and hashtag options.'),
+  captions: z.array(CaptionOptionSchema).describe('An array of exactly 8 caption and hashtag options.'),
 });
-export type GenerateCaptionsOutput = z.infer<typeof GenerateCaptionsOutputSchema>;
+type GenerateCaptionsOutput = z.infer<typeof GenerateCaptionsOutputSchema>;
 
 
 export async function generateCaptions(input: GenerateCaptionsInput): Promise<GenerateCaptionsOutput> {
@@ -45,7 +45,7 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateCaptionsInputSchema},
   output: {schema: GenerateCaptionsOutputSchema},
   templateFormat: 'handlebars',
-  prompt: `You are a social media expert and a brilliant copywriter. Your task is to analyze the provided image/video and generate 5 distinct and creative caption options for a social media post.
+  prompt: `You are a social media expert and a brilliant copywriter. Your task is to analyze the provided image/video and generate 8 distinct and creative caption options for a social media post.
 
 **Analysis Context:**
 - **Platform:** {{platform}}
@@ -53,7 +53,7 @@ const prompt = ai.definePrompt({
 {{#if userInput}}- **User Instructions:** {{userInput}}{{/if}}
 
 **Your Task:**
-Based on the visual content of the media, generate exactly 5 unique options. Each option must have a different "vibe" or "angle". For each option, provide:
+Based on the visual content of the media, generate exactly 8 unique options. Each option must have a different "vibe" or "angle". For each option, provide:
 1.  A one-word "vibe" (e.g., 'Funny', 'Inspirational', 'Witty', 'Minimalist', 'Storytelling').
 2.  A compelling caption that matches the vibe.
 3.  A relevant, comma-separated string of hashtags.
