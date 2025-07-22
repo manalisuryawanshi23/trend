@@ -44,6 +44,7 @@ const prompt = ai.definePrompt({
   name: 'generateCaptionsPrompt',
   input: {schema: GenerateCaptionsInputSchema},
   output: {schema: GenerateCaptionsOutputSchema},
+  templateFormat: 'handlebars',
   prompt: `You are a social media expert and a brilliant copywriter. Your task is to analyze the provided image/video and generate 5 distinct and creative caption options for a social media post.
 
 **Analysis Context:**
