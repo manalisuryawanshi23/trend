@@ -8,6 +8,7 @@ import { Nav } from '@/components/nav';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from "@/components/theme-provider";
+import { VisitorCounter } from '@/components/visitor-counter';
 import './globals.css';
 
 const fontInter = Inter({
@@ -78,6 +79,7 @@ export default function RootLayout({
                           </React.Fragment>
                        ))}
                     </div>
+                    <VisitorCounter />
                 </div>
             </footer>
           </div>
