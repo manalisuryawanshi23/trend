@@ -55,7 +55,7 @@ Format: ${suggestedPostFormat}
 Hook: "${hook}"
 Caption: "${caption}"
 
-Create an eye-catching, high-quality image that captures the essence of this idea.
+Create an eye-catching, high-quality image suitable for web and social media that captures the essence of this idea.
 The style should be modern, photographic, and suitable for social media.`;
     
     const {media} = await ai.generate({
