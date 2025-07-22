@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -60,7 +61,7 @@ export default function AnalyzePage() {
     <div className="container mx-auto px-4 py-8 md:py-12">
         <header className="text-center mb-12">
             <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
-                Deconstruct Any Post
+                Decode Any Post
             </h2>
             <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Paste a link to any social media post to get an AI-powered breakdown of what made it work (or what didn't).
@@ -108,7 +109,7 @@ export default function AnalyzePage() {
         <section className="mt-12 max-w-4xl mx-auto">
           {isLoading && (
             <div className="space-y-4">
-              <h2 className="font-headline text-3xl font-bold mb-6 text-center animate-pulse">Deconstructing Viral DNA...</h2>
+              <h2 className="font-headline text-3xl font-bold mb-6 text-center animate-pulse">Decoding Viral DNA...</h2>
                 <Card className="p-6">
                     <Skeleton className="h-8 w-3/5 mb-4" />
                     <Skeleton className="h-20 w-full" />
