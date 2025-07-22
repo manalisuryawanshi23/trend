@@ -21,6 +21,8 @@ const GenerateCaptionsInputSchema = z.object({
   platform: z.string().describe('The social media platform (e.g., Instagram, TikTok, Twitter).'),
   niche: z.string().optional().describe('The content niche (e.g., fashion, food, memes).'),
   userInput: z.string().optional().describe('Optional user instructions or context.'),
+  vibe: z.string().optional().describe("The desired tone or vibe for the captions (e.g., 'Funny', 'Inspirational')."),
+  callToAction: z.string().optional().describe('A specific call-to-action goal for the post (e.g., "Ask a question", "Encourage shares").')
 });
 export type GenerateCaptionsInput = z.infer<typeof GenerateCaptionsInputSchema>;
 
@@ -51,9 +53,15 @@ const prompt = ai.definePrompt({
 - **Platform:** {{platform}}
 {{#if niche}}- **Niche:** {{niche}}{{/if}}
 {{#if userInput}}- **User Instructions:** {{userInput}}{{/if}}
+{{#if vibe}}- **Desired Vibe:** {{vibe}}{{/if}}
+{{#if callToAction}}- **Call-to-Action Goal:** {{callToAction}}{{/if}}
+
 
 **Your Task:**
-Based on the visual content of the media, generate exactly 8 unique options. Each option must have a different "vibe" or "angle". For each option, provide:
+Based on the visual content and the provided context, generate exactly 8 unique options. 
+- Each option must have a different "vibe" or "angle". If a specific vibe was requested, ensure some options match it while still offering creative alternatives.
+- If a call-to-action was requested, seamlessly integrate it into the captions.
+- For each option, provide:
 1.  A one-word "vibe" (e.g., 'Funny', 'Inspirational', 'Witty', 'Minimalist', 'Storytelling').
 2.  A compelling caption that matches the vibe.
 3.  A relevant, comma-separated string of hashtags.

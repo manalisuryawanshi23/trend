@@ -24,6 +24,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 
 const platforms = ['Instagram', 'TikTok', 'Twitter / X', 'Facebook', 'LinkedIn', 'Pinterest'];
+const vibes = ['Funny', 'Inspirational', 'Witty', 'Professional', 'Casual', 'Storytelling', 'Minimalist', 'Bold'];
 
 const MAX_FILE_SIZE_MB = 100;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -41,6 +42,8 @@ const ACCEPTED_MEDIA_TYPES = [
 const captionsFormSchema = z.object({
   platform: z.string({ required_error: "Please select a platform." }),
   userInput: z.string().optional(),
+  vibe: z.string().optional(),
+  callToAction: z.string().optional(),
   media: z.any()
     .refine(files => files?.length === 1, "An image or video file is required.")
     .refine(files => files?.[0]?.size <= MAX_FILE_SIZE_BYTES, `Max file size is ${MAX_FILE_SIZE_MB}MB.`)
@@ -127,6 +130,8 @@ export default function CaptionsPage() {
     defaultValues: {
       platform: "Instagram",
       userInput: "",
+      vibe: "",
+      callToAction: ""
     }
   });
 
@@ -165,7 +170,9 @@ export default function CaptionsPage() {
       const input: GenerateCaptionsInput = {
         media: mediaDataUri,
         platform: values.platform,
-        userInput: values.userInput
+        userInput: values.userInput,
+        vibe: values.vibe,
+        callToAction: values.callToAction,
       };
 
       const output = await generateCaptions(input);
@@ -193,7 +200,7 @@ export default function CaptionsPage() {
                 AI Caption Generator
             </h2>
             <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Upload an image or video, and our AI will write 8 unique caption options for you in seconds.
+              Upload media, add some direction, and our AI will write 8 unique caption options for you in seconds.
             </p>
         </header>
 
@@ -253,7 +260,7 @@ export default function CaptionsPage() {
                                     )}
                                 />
                             </div>
-                            <FormField
+                             <FormField
                             control={form.control}
                             name="platform"
                             render={({ field }) => (
@@ -278,9 +285,44 @@ export default function CaptionsPage() {
                             name="userInput"
                             render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>Optional Context</FormLabel>
+                                <FormLabel>Optional Context / Instructions</FormLabel>
                                 <FormControl>
                                     <Input placeholder="e.g., 'A funny take for my foodie followers'" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+
+                            <FormField
+                            control={form.control}
+                            name="vibe"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Vibe / Tone (Optional)</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a vibe" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      <SelectItem value="">None</SelectItem>
+                                      {vibes.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name="callToAction"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Call to Action Goal (Optional)</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g., 'Ask an engaging question'" {...field} />
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>
