@@ -24,13 +24,14 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/comp
 
 
 const platforms = ['Instagram', 'TikTok', 'Twitter / X', 'Facebook', 'LinkedIn', 'Pinterest'];
-const vibes = ['Funny', 'Inspirational', 'Witty', 'Professional', 'Casual', 'Storytelling', 'Minimalist', 'Bold'];
+const vibes = ['Funny', 'Inspirational', 'Witty', 'Professional', 'Casual', 'Storytelling', 'Minimalist', 'Bold', 'Other'];
 const ctaGoals = [
     'Ask an engaging question',
     'Encourage comments',
     'Encourage shares',
     'Drive profile visits',
-    'Promote a link in bio'
+    'Promote a link in bio',
+    'Other'
 ];
 
 
@@ -51,7 +52,9 @@ const captionsFormSchema = z.object({
   platform: z.string({ required_error: "Please select a platform." }),
   userInput: z.string().optional(),
   vibe: z.string().optional(),
+  otherVibe: z.string().optional(),
   callToAction: z.string().optional(),
+  otherCallToAction: z.string().optional(),
   media: z.any()
     .refine(files => files?.length === 1, "An image or video file is required.")
     .refine(files => files?.[0]?.size <= MAX_FILE_SIZE_BYTES, `Max file size is ${MAX_FILE_SIZE_MB}MB.`)
@@ -139,9 +142,14 @@ export default function CaptionsPage() {
       platform: "Instagram",
       userInput: "",
       vibe: "",
-      callToAction: ""
+      otherVibe: "",
+      callToAction: "",
+      otherCallToAction: "",
     }
   });
+
+  const selectedVibe = form.watch("vibe");
+  const selectedCta = form.watch("callToAction");
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -179,8 +187,8 @@ export default function CaptionsPage() {
         media: mediaDataUri,
         platform: values.platform,
         userInput: values.userInput,
-        vibe: values.vibe,
-        callToAction: values.callToAction,
+        vibe: values.vibe === 'Other' ? values.otherVibe : values.vibe,
+        callToAction: values.callToAction === 'Other' ? values.otherCallToAction : values.callToAction,
       };
 
       const output = await generateCaptions(input);
@@ -322,6 +330,21 @@ export default function CaptionsPage() {
                                 </FormItem>
                             )}
                             />
+                             {selectedVibe === 'Other' && (
+                               <FormField
+                                control={form.control}
+                                name="otherVibe"
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Your Vibe</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g., 'Nostalgic and dreamy'" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                                />
+                            )}
                             <FormField
                             control={form.control}
                             name="callToAction"
@@ -342,6 +365,21 @@ export default function CaptionsPage() {
                                 </FormItem>
                             )}
                             />
+                             {selectedCta === 'Other' && (
+                                <FormField
+                                 control={form.control}
+                                 name="otherCallToAction"
+                                 render={({ field }) => (
+                                     <FormItem>
+                                     <FormLabel>Your CTA</FormLabel>
+                                     <FormControl>
+                                         <Input placeholder="e.g., 'Check out my new song'" {...field} />
+                                     </FormControl>
+                                     <FormMessage />
+                                     </FormItem>
+                                 )}
+                                 />
+                             )}
                         </div>
                         <Button type="submit" disabled={isLoading} className="w-full md:w-auto font-bold text-lg py-6 px-8" size="lg">
                             {isLoading && <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />}
