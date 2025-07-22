@@ -25,6 +25,14 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/comp
 
 const platforms = ['Instagram', 'TikTok', 'Twitter / X', 'Facebook', 'LinkedIn', 'Pinterest'];
 const vibes = ['Funny', 'Inspirational', 'Witty', 'Professional', 'Casual', 'Storytelling', 'Minimalist', 'Bold'];
+const ctaGoals = [
+    'Ask an engaging question',
+    'Encourage comments',
+    'Encourage shares',
+    'Drive profile visits',
+    'Promote a link in bio'
+];
+
 
 const MAX_FILE_SIZE_MB = 100;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -320,9 +328,16 @@ export default function CaptionsPage() {
                             render={({ field }) => (
                                 <FormItem>
                                 <FormLabel>Call to Action Goal (Optional)</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="e.g., 'Ask an engaging question'" {...field} />
-                                </FormControl>
+                                 <Select onValueChange={field.onChange} value={field.value}>
+                                    <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a CTA goal (optional)" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      {ctaGoals.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                                 </FormItem>
                             )}

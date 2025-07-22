@@ -60,7 +60,7 @@ const prompt = ai.definePrompt({
 **Your Task:**
 Based on the visual content and the provided context, generate exactly 8 unique options. 
 - Each option must have a different "vibe" or "angle". If a specific vibe was requested, ensure some options match it while still offering creative alternatives.
-- If a call-to-action was requested, seamlessly integrate it into the captions.
+- If a call-to-action was requested, seamlessly integrate it into the captions. For example, if the goal is "Ask an engaging question," end the caption with a relevant question. If the goal is "Promote a link in bio," naturally guide users to check it out.
 - For each option, provide:
 1.  A one-word "vibe" (e.g., 'Funny', 'Inspirational', 'Witty', 'Minimalist', 'Storytelling').
 2.  A compelling caption that matches the vibe.
