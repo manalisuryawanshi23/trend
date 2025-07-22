@@ -1,6 +1,12 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Briefcase, MessageSquare } from "lucide-react";
+import { type Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Contact Us',
+  description: 'Get in touch with the Up Trend Finder team. We welcome your questions, feedback, and partnership inquiries.',
+};
 
 export default function ContactPage() {
   return (

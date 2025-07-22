@@ -21,6 +21,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { type Metadata } from 'next';
+
+// export const metadata: Metadata = {
+//   title: 'AI Caption Generator',
+//   description: 'Generate 8 unique, creative caption and hashtag ideas for your social media posts. Upload an image or video and let our AI do the writing for you.',
+// };
 
 
 const platforms = ['Instagram', 'TikTok', 'Twitter / X', 'Facebook', 'LinkedIn', 'Pinterest'];
@@ -212,9 +218,9 @@ export default function CaptionsPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
         <header className="text-center mb-12">
-            <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
+            <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
                 AI Caption Generator
-            </h2>
+            </h1>
             <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Upload media, add some direction, and our AI will write 8 unique caption options for you in seconds.
             </p>

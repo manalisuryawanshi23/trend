@@ -1,4 +1,11 @@
 
+import { type Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Terms and Conditions',
+  description: 'Read the terms and conditions for using Up Trend Finder. This includes our license to use, user account responsibilities, and limitation of liability.',
+};
+
 export default function TermsAndConditionsPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">

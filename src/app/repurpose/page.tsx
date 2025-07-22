@@ -18,6 +18,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { AiPostCard } from "@/components/ai-post-card";
 import { useToast } from "@/hooks/use-toast";
+import { type Metadata } from 'next';
+
+// export const metadata: Metadata = {
+//   title: 'AI Content Repurposing Tool',
+//   description: 'Magically repurpose any blog post, article, or URL into a ready-to-use social media post for platforms like Instagram, TikTok, and Twitter.',
+// };
 
 const urlFormSchema = z.object({
   url: z.string().url({ message: "Please enter a valid URL." }),
@@ -66,9 +72,9 @@ export default function RepurposePage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
         <header className="text-center mb-12">
-            <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
+            <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
                 Repurpose Content with AI
-            </h2>
+            </h1>
             <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Paste any URL (blog post, news article) to magically turn it into a social media post.
             </p>

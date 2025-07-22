@@ -793,7 +793,7 @@ Motivation that is based on external results (like views and followers) is fragi
 Ask yourself: Why did you start this in the first place? Is it to help people? To share your passion? To build something you're proud of? Write down your "why" and put it somewhere you can see it every day. When you feel unmotivated, reconnect with your purpose.
 
 ## 2. Set Realistic Goals and Celebrate Small Wins
-If your only goal is "get 1 million followers," you're setting yourself up for disappointment. Break down your large goals into smaller, achievable milestones.
+If your only goal is "get 1 million followers," you're setti_ng yourself up for disappointment. Break down your large goals into smaller, achievable milestones.
 *   **Bad Goal:** "Go viral."
 *   **Good Goal:** "Post 3 times a week for a month." or "Get 10 comments on a post."
 When you achieve a small goal, celebrate it! This creates a positive feedback loop that builds momentum.
@@ -1139,10 +1139,3 @@ A video that loops perfectly can trick viewers into watching it multiple times w
         `,
       },
   ];
-  
-
-
-
-
-
-    

@@ -1,4 +1,11 @@
 
+import { type Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Disclaimer',
+  description: 'Read the disclaimer for Up Trend Finder. Understand the terms of use, limitations of liability, and the nature of the AI-generated information provided.',
+};
+
 export default function DisclaimerPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">

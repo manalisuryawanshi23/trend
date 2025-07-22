@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { allPosts } from '@/lib/blog-data';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -5,8 +6,8 @@ import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Blog | Up Trend Finder',
-  description: 'Explore the latest insights, strategies, and tips on social media trends, content creation, and viral marketing.',
+  title: 'Blog | Social Media Marketing & Content Strategy',
+  description: 'Explore the latest insights, strategies, and tips on social media trends, content creation, and viral marketing from the Up Trend Finder team.',
 };
 
 export default function BlogPage() {

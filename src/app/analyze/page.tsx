@@ -18,6 +18,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { type Metadata } from 'next';
+
+// export const metadata: Metadata = {
+//   title: 'Analyze Post Performance',
+//   description: 'Get an AI-powered breakdown of any social media post. Paste a URL to understand its virality score, hook effectiveness, and content strategy.',
+// };
 
 const analysisFormSchema = z.object({
   url: z.string().url({ message: "Please enter a valid URL." }),
@@ -45,8 +51,7 @@ export default function AnalyzePage() {
       } else {
         throw new Error("Invalid response from AI");
       }
-    } catch(e) {
-       console.error(e);
+    } catch(e: any) {
       toast({
         variant: "destructive",
         title: "Error Analyzing Post",
@@ -60,9 +65,9 @@ export default function AnalyzePage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
         <header className="text-center mb-12">
-            <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
+            <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
                 Decode Any Post
-            </h2>
+            </h1>
             <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Paste a link to any social media post to get an AI-powered breakdown of what made it work (or what didn't).
             </p>

@@ -1,4 +1,11 @@
 
+import { type Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'Learn about the mission, vision, and team behind Up Trend Finder. Discover how we use AI to empower content creators and social media managers.',
+};
+
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">

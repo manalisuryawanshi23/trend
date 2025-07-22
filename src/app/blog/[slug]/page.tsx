@@ -1,3 +1,4 @@
+
 import { notFound } from 'next/navigation';
 import { allPosts } from '@/lib/blog-data';
 import { Badge } from '@/components/ui/badge';
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${post.title} | Up Trend Finder`,
+    title: post.title,
     description: post.description,
     openGraph: {
       title: post.title,

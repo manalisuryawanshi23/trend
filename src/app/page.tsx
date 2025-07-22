@@ -169,11 +169,11 @@ export default function TrendsPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <header className="text-center mb-12">
-        <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
+        <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
           Find Your Next Viral Hit
-        </h2>
+        </h1>
         <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
-          Tell us about your content, and we'll predict the next big thing for you.
+          Our AI forecasts emerging social media trends 24-72 hours before they go mainstream. Find your next viral video idea now.
         </p>
       </header>
 

@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import React from 'react';
@@ -20,8 +21,11 @@ const fontSpaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'Up Trend Finder',
-  description: 'Uncover tomorrow\'s viral trends today.',
+  title: {
+    default: 'Up Trend Finder | AI-Powered Social Media Trend Forecasting',
+    template: '%s | Up Trend Finder',
+  },
+  description: 'Forecast viral trends 24-72 hours before they explode. Up Trend Finder uses AI to analyze social media data, giving you the insights to go viral.',
 };
 
 const footerLinks = [

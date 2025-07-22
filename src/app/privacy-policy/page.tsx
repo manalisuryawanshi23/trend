@@ -1,4 +1,11 @@
 
+import { type Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description: 'Your privacy is important to us. Read the Up Trend Finder privacy policy to learn how we collect, use, and protect your personal information and data.',
+};
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">

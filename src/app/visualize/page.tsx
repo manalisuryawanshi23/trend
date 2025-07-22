@@ -20,6 +20,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { VisualConceptCard } from "@/components/visual-concept-card";
+import { type Metadata } from 'next';
+
+// export const metadata: Metadata = {
+//   title: 'AI Visual Concept Generator',
+//   description: 'Turn your post ideas into compelling, AI-generated images. Describe your concept and let our visualizer bring your vision to life in seconds.',
+// };
+
 
 const visualizeFormSchema = z.object({
   trendName: z.string().min(3, "Please enter a trend name."),
@@ -77,9 +84,9 @@ export default function VisualizePage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
         <header className="text-center mb-12">
-            <h2 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
+            <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
                 Visualize Your Post
-            </h2>
+            </h1>
             <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Turn your post idea into an AI-generated visual concept. See your vision come to life.
             </p>
