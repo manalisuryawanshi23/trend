@@ -2,9 +2,9 @@
 'use server';
 
 /**
- * @fileOverview An AI-powered caption generator that creates multiple options from an image.
+ * @fileOverview An AI-powered caption generator that creates multiple options from an image or video.
  *
- * - generateCaptions - A function that generates caption and hashtag options from an image.
+ * - generateCaptions - A function that generates caption and hashtag options from media.
  * - GenerateCaptionsInput - The input type for the generateCaptions function.
  * - GenerateCaptionsOutput - The return type for the generateCaptions function.
  */
@@ -22,7 +22,7 @@ const GenerateCaptionsInputSchema = z.object({
   niche: z.string().optional().describe('The content niche (e.g., fashion, food, memes).'),
   userInput: z.string().optional().describe('Optional user instructions or context.'),
 });
-type GenerateCaptionsInput = z.infer<typeof GenerateCaptionsInputSchema>;
+export type GenerateCaptionsInput = z.infer<typeof GenerateCaptionsInputSchema>;
 
 const CaptionOptionSchema = z.object({
     vibe: z.string().describe("The overall tone or vibe of this caption option (e.g., 'Funny', 'Inspirational', 'Witty')."),
@@ -33,7 +33,7 @@ const CaptionOptionSchema = z.object({
 const GenerateCaptionsOutputSchema = z.object({
   captions: z.array(CaptionOptionSchema).describe('An array of exactly 8 caption and hashtag options.'),
 });
-type GenerateCaptionsOutput = z.infer<typeof GenerateCaptionsOutputSchema>;
+export type GenerateCaptionsOutput = z.infer<typeof GenerateCaptionsOutputSchema>;
 
 
 export async function generateCaptions(input: GenerateCaptionsInput): Promise<GenerateCaptionsOutput> {

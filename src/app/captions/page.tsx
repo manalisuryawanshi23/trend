@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LoaderCircle, Image as ImageIcon, Sparkles, Wand2, Copy, Check, Hash } from "lucide-react";
+import { LoaderCircle, Image as ImageIcon, Sparkles, Wand2, Copy, Check, Hash, Video } from "lucide-react";
 import Image from "next/image";
 
 import { generateCaptions } from "@/ai/flows/generate-captions";
@@ -24,18 +25,28 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 const platforms = ['Instagram', 'TikTok', 'Twitter / X', 'Facebook', 'LinkedIn', 'Pinterest'];
 
-const MAX_FILE_SIZE_MB = 10;
+const MAX_FILE_SIZE_MB = 50;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+const ACCEPTED_MEDIA_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+    "video/mp4",
+    "video/webm",
+    "video/quicktime", // .mov
+];
+
 
 const captionsFormSchema = z.object({
   platform: z.string({ required_error: "Please select a platform." }),
   userInput: z.string().optional(),
   media: z.any()
-    .refine(files => files?.length === 1, "Image is required.")
+    .refine(files => files?.length === 1, "An image or video file is required.")
     .refine(files => files?.[0]?.size <= MAX_FILE_SIZE_BYTES, `Max file size is ${MAX_FILE_SIZE_MB}MB.`)
     .refine(
-      files => ["image/jpeg", "image/png", "image/webp", "image/gif"].includes(files?.[0]?.type),
-      "Only .jpg, .png, .webp, and .gif formats are supported."
+      files => ACCEPTED_MEDIA_TYPES.includes(files?.[0]?.type),
+      "Only JPG, PNG, GIF, WEBP, MP4, MOV, and WEBM formats are supported."
     ),
 });
 
@@ -107,7 +118,7 @@ function CaptionCard({ vibe, caption, hashtags }: { vibe: string; caption: strin
 export default function CaptionsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<GenerateCaptionsOutput | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<{url: string, type: string} | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -125,7 +136,10 @@ export default function CaptionsPage() {
       form.setValue("media", event.target.files);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result as string);
+        setPreview({
+            url: reader.result as string,
+            type: file.type
+        });
       };
       reader.readAsDataURL(file);
     } else {
@@ -165,7 +179,7 @@ export default function CaptionsPage() {
       toast({
         variant: "destructive",
         title: "Error Generating Captions",
-        description: "Could not generate captions. The AI may be overloaded or the image could not be processed.",
+        description: "Could not generate captions. The AI may be overloaded or the media file could not be processed.",
       });
     } finally {
       setIsLoading(false);
@@ -179,7 +193,7 @@ export default function CaptionsPage() {
                 AI Caption Generator
             </h2>
             <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Upload an image, and our AI will write 8 unique caption options for you in seconds.
+              Upload an image or video, and our AI will write 8 unique caption options for you in seconds.
             </p>
         </header>
 
@@ -190,7 +204,7 @@ export default function CaptionsPage() {
                     <Sparkles className="text-primary" /> Create Captions from Media
                 </CardTitle>
                 <CardDescription>
-                    Upload an image to get started. Optionally, provide some context for better results.
+                    Upload an image or video to get started. Optionally, provide some context for better results.
                 </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -203,7 +217,7 @@ export default function CaptionsPage() {
                                     name="media"
                                     render={() => (
                                     <FormItem>
-                                        <FormLabel>Image</FormLabel>
+                                        <FormLabel>Image or Video</FormLabel>
                                         <FormControl>
                                             <div 
                                                 className="w-full aspect-video border-2 border-dashed border-muted-foreground/50 rounded-lg flex flex-col items-center justify-center text-center p-4 cursor-pointer hover:bg-muted/50 transition-colors"
@@ -214,15 +228,22 @@ export default function CaptionsPage() {
                                                     ref={fileInputRef}
                                                     className="hidden"
                                                     onChange={handleFileChange}
-                                                    accept="image/jpeg,image/png,image/webp,image/gif"
+                                                    accept={ACCEPTED_MEDIA_TYPES.join(',')}
                                                 />
                                                 {preview ? (
-                                                    <Image src={preview} alt="Image preview" width={300} height={168} className="max-h-full w-auto object-contain rounded-md" />
+                                                    preview.type.startsWith('image/') ? (
+                                                        <Image src={preview.url} alt="Image preview" width={300} height={168} className="max-h-full w-auto object-contain rounded-md" />
+                                                    ) : (
+                                                        <video src={preview.url} controls className="max-h-full w-auto object-contain rounded-md" />
+                                                    )
                                                 ) : (
                                                     <div className="space-y-2">
-                                                        <ImageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                                                        <p className="font-semibold">Click to upload an image</p>
-                                                        <p className="text-xs text-muted-foreground">PNG, JPG, GIF, WEBP up to {MAX_FILE_SIZE_MB}MB</p>
+                                                        <div className="flex gap-4">
+                                                            <ImageIcon className="h-12 w-12 text-muted-foreground" />
+                                                            <Video className="h-12 w-12 text-muted-foreground" />
+                                                        </div>
+                                                        <p className="font-semibold">Click to upload an image or video</p>
+                                                        <p className="text-xs text-muted-foreground">MP4, MOV, GIF, etc up to {MAX_FILE_SIZE_MB}MB</p>
                                                     </div>
                                                 )}
                                             </div>
