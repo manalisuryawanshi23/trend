@@ -12,11 +12,11 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const GenerateCaptionsInputSchema = z.object({
+const GenerateCaptionsInputSchema = z.object({
   media: z
     .string()
     .describe(
-      "A photo or video, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+      "A photo or video, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
     ),
   platform: z.string().describe('The social media platform (e.g., Instagram, TikTok, Twitter).'),
   niche: z.string().optional().describe('The content niche (e.g., fashion, food, memes).'),
@@ -30,7 +30,7 @@ const CaptionOptionSchema = z.object({
     hashtags: z.string().describe('A string of relevant hashtags, separated by commas.'),
 });
 
-export const GenerateCaptionsOutputSchema = z.object({
+const GenerateCaptionsOutputSchema = z.object({
   captions: z.array(CaptionOptionSchema).describe('An array of exactly 5 caption and hashtag options.'),
 });
 export type GenerateCaptionsOutput = z.infer<typeof GenerateCaptionsOutputSchema>;
