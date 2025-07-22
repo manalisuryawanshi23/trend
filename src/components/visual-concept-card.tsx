@@ -28,6 +28,8 @@ export function VisualConceptCard({ result }: VisualConceptCardProps) {
     return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
   }
 
+  const altText = `AI-generated visual for the theme: "${input.trendName}". Concept: a visual representation of the hook "${input.hook}" and caption.`;
+
   return (
     <Card className="shadow-md border">
         <CardHeader>
@@ -44,7 +46,7 @@ export function VisualConceptCard({ result }: VisualConceptCardProps) {
                 <div className="border rounded-lg overflow-hidden">
                     <Image
                         src={output.imageUrl}
-                        alt={input.trendName}
+                        alt={altText}
                         width={1024}
                         height={576}
                         className="w-full object-cover"

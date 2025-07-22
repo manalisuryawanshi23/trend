@@ -109,6 +109,8 @@ export function TrendCard({ trend, context }: TrendCardProps) {
   const slugify = (text: string) => {
     return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
   }
+  
+  const altText = `AI-generated visual concept for the trend: ${trend.trendName}. Idea: ${trend.postPlan.hook}.`;
 
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
@@ -255,7 +257,7 @@ export function TrendCard({ trend, context }: TrendCardProps) {
                         <div className="w-full max-w-lg mx-auto space-y-4">
                            <Image
                                 src={visualConcept.imageUrl}
-                                alt={`AI concept for ${trend.trendName}`}
+                                alt={altText}
                                 width={1024}
                                 height={576}
                                 className="w-full h-auto rounded-lg border-2 border-primary shadow-lg"
