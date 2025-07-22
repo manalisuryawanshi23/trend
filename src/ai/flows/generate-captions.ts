@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -30,7 +31,7 @@ const CaptionOptionSchema = z.object({
 });
 
 export const GenerateCaptionsOutputSchema = z.object({
-  captions: z.array(CaptionOptionSchema).length(5).describe('An array of exactly 5 caption and hashtag options.'),
+  captions: z.array(CaptionOptionSchema).describe('An array of exactly 5 caption and hashtag options.'),
 });
 export type GenerateCaptionsOutput = z.infer<typeof GenerateCaptionsOutputSchema>;
 
