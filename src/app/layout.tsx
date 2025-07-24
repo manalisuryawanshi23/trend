@@ -79,7 +79,6 @@ export default function RootLayout({
                           </React.Fragment>
                        ))}
                     </div>
-                    <VisitorCounter />
                 </div>
             </footer>
           </div>

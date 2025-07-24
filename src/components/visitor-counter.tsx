@@ -1,10 +1,11 @@
 
+'use server';
+
 import { getVisitorCount, incrementVisitorCount } from '@/lib/visitor-count';
 import { Users } from 'lucide-react';
 
 export async function VisitorCounter() {
-  await incrementVisitorCount();
-  const count = await getVisitorCount();
+  const count = await incrementVisitorCount();
 
   return (
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
