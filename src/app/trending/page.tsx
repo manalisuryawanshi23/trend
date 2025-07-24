@@ -13,12 +13,6 @@ import { Hash, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TrendDetailDialog } from '@/components/trend-detail-dialog';
-import { type Metadata } from 'next';
-
-// export const metadata: Metadata = {
-//   title: 'Trending Now | Real-Time Social Media Trends',
-//   description: 'Explore a real-time snapshot of the top emerging trends across the internet, powered by AI. Filter by niche and platform to discover what\'s buzzing right now.',
-// };
 
 export default function TrendingPage() {
   const [trendsData, setTrendsData] = useState<TopTrendsOutput | null>(null);
@@ -43,19 +37,23 @@ export default function TrendingPage() {
   }, []);
 
   const { uniqueNiches, uniquePlatforms, filteredAndGroupedTrends } = useMemo(() => {
-    if (!trendsData) return { uniqueNiches: [], uniquePlatforms: [], filteredAndGroupedTrends: [] };
+    if (!trendsData) {
+      return { uniqueNiches: [], uniquePlatforms: [], filteredAndGroupedTrends: [] };
+    }
 
     const trends = trendsData.trends;
     const uniqueNiches = ['all', ...Array.from(new Set(trends.map(t => t.niche)))];
     const uniquePlatforms = ['all', ...Array.from(new Set(trends.map(t => t.platform)))];
 
-    const filtered = trends.filter(trend => {
+    // 1. Filter the trends based on user selection
+    const filteredTrends = trends.filter(trend => {
       const nicheMatch = selectedNiche === 'all' || trend.niche === selectedNiche;
       const platformMatch = selectedPlatform === 'all' || trend.platform === selectedPlatform;
       return nicheMatch && platformMatch;
     });
 
-    const grouped = filtered.reduce((acc, trend) => {
+    // 2. Group the filtered trends by niche
+    const groupedByNiche = filteredTrends.reduce((acc, trend) => {
       const { niche } = trend;
       if (!acc[niche]) {
         acc[niche] = [];
@@ -63,12 +61,15 @@ export default function TrendingPage() {
       acc[niche].push(trend);
       return acc;
     }, {} as Record<string, typeof trendsData.trends>);
+    
+    // 3. Convert the grouped object into an array and sort it
+    const sortedGroupedTrends = Object.entries(groupedByNiche)
+        .sort(([, trendsA], [, trendsB]) => trendsB.length - trendsA.length);
 
-    const sortedAndGrouped = Object.entries(grouped).sort(([, a], [, b]) => b.length - a.length);
-
-    return { uniqueNiches, uniquePlatforms, filteredAndGroupedTrends: sortedAndGrouped };
+    return { uniqueNiches, uniquePlatforms, filteredAndGroupedTrends: sortedGroupedTrends };
 
   }, [trendsData, selectedNiche, selectedPlatform]);
+
 
   if (isLoading) {
     return (
