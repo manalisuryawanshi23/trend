@@ -42,7 +42,7 @@ export default async function TrendingPage() {
           <section key={niche}>
             <h2 className="font-headline text-3xl font-bold mb-6 border-b pb-2">{niche}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {nicheTrends.map((trend) => (
+              {nicheTrends.slice(0, 3).map((trend) => (
                 <Card key={trend.trendName} className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
                   <CardHeader>
                       <div className="flex items-center gap-3">
