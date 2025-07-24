@@ -43,10 +43,10 @@ export default async function TrendingPage() {
       <div className="space-y-12">
         {sortedNiches.map(([niche, nicheTrends]) => (
           <section key={niche}>
-            <h2 className="font-headline text-3xl font-bold mb-6 border-b pb-2">{niche}</h2>
+            <h2 className="font-headline text-2xl font-bold mb-6 inline-block rounded-md bg-muted px-4 py-2">{niche}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {nicheTrends.slice(0, 3).map((trend) => (
-                <Card key={trend.trendName} className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+                <Card key={trend.trendName} className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border hover:border-primary/50">
                   <CardHeader>
                       <div className="flex items-center gap-3">
                          <PlatformIcon platform={trend.platform} className="w-4 h-4 text-muted-foreground" />
@@ -55,7 +55,7 @@ export default async function TrendingPage() {
                       <h3 className="font-headline text-xl font-bold pt-2">{trend.trendName}</h3>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <p className="text-sm text-muted-foreground">{trend.description}</p>
+                    <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">{trend.description}</p>
                   </CardContent>
                   <CardFooter className="flex flex-col items-start gap-4 p-4 pt-0">
                       <div className="flex flex-wrap gap-2 items-center w-full">
@@ -84,3 +84,4 @@ export default async function TrendingPage() {
 
 // Enable dynamic rendering for this page
 export const revalidate = 0;
+
