@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getTopTrends } from '@/ai/flows/top-trends';
 import type { TopTrendsOutput } from '@/ai/flows/top-trends';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -32,6 +32,22 @@ export default function TrendingPage() {
     }
     fetchTrends();
   }, []);
+
+  const sortedNiches = useMemo(() => {
+    if (!trendsData) return [];
+
+    const trendsByNiche = trendsData.trends.reduce((acc, trend) => {
+      const { niche } = trend;
+      if (!acc[niche]) {
+        acc[niche] = [];
+      }
+      acc[niche].push(trend);
+      return acc;
+    }, {} as Record<string, typeof trendsData.trends>);
+
+    return Object.entries(trendsByNiche).sort(([, a], [, b]) => b.length - a.length);
+  }, [trendsData]);
+
 
   const toggleNicheExpansion = (niche: string) => {
     setExpandedNiches(prev => 
@@ -83,19 +99,6 @@ export default function TrendingPage() {
       </div>
     );
   }
-
-  // Group trends by niche
-  const trendsByNiche = trendsData.trends.reduce((acc, trend) => {
-    const { niche } = trend;
-    if (!acc[niche]) {
-      acc[niche] = [];
-    }
-    acc[niche].push(trend);
-    return acc;
-  }, {} as Record<string, typeof trendsData.trends>);
-
-  // Sort niches by the number of trends in descending order
-  const sortedNiches = Object.entries(trendsByNiche).sort(([, a], [, b]) => b.length - a.length);
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
