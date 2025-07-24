@@ -9,10 +9,11 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle, SheetHeader 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper, Captions } from 'lucide-react';
+import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper, Captions, Flame } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
+  { href: '/trending', label: 'Trending', icon: <Flame className="h-5 w-5" /> },
   { href: '/', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
   { href: '/captions', label: 'Captions', icon: <Captions className="h-5 w-5" /> },
   { href: '/repurpose', label: 'Repurpose', icon: <Sparkles className="h-5 w-5" /> },
