@@ -33,10 +33,10 @@ export default function TrendingPage() {
     fetchTrends();
   }, []);
 
-  const sortedNiches = useMemo(() => {
+  const trendsByNiche = useMemo(() => {
     if (!trendsData) return [];
 
-    const trendsByNiche = trendsData.trends.reduce((acc, trend) => {
+    const grouped = trendsData.trends.reduce((acc, trend) => {
       const { niche } = trend;
       if (!acc[niche]) {
         acc[niche] = [];
@@ -45,7 +45,8 @@ export default function TrendingPage() {
       return acc;
     }, {} as Record<string, typeof trendsData.trends>);
 
-    return Object.entries(trendsByNiche).sort(([, a], [, b]) => b.length - a.length);
+    return Object.entries(grouped).sort(([, a], [, b]) => b.length - a.length);
+
   }, [trendsData]);
 
 
@@ -112,7 +113,7 @@ export default function TrendingPage() {
       </header>
 
       <div className="space-y-12">
-        {sortedNiches.map(([niche, nicheTrends]) => {
+        {trendsByNiche.map(([niche, nicheTrends]) => {
           const isExpanded = expandedNiches.includes(niche);
           const trendsToShow = isExpanded ? nicheTrends : nicheTrends.slice(0, 3);
           
