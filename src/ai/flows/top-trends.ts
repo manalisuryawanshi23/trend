@@ -17,7 +17,7 @@ const TrendSchema = z.object({
     description: z.string().describe('A brief, one-sentence description of the trend and why it\'s popular.'),
     platform: z.string().describe('The primary social media platform where this trend is popular (e.g., TikTok, Instagram).'),
     viralityScore: z.number().min(0).max(100).describe('A score from 0-100 indicating the trend\'s current virality.'),
-    visualHint: z.string().describe('A one or two-word hint for generating a representative image for this trend (e.g., "neon cityscape", "vintage camera").'),
+    hashtags: z.string().describe('A string of 3-5 relevant hashtags, separated by commas (e.g., #AIart, #generativeart, #digitalart).'),
 });
 
 const TopTrendsOutputSchema = z.object({
@@ -33,7 +33,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Creators are using AI to generate surreal and stunning visuals, pushing the boundaries of creativity.',
             platform: 'Instagram',
             viralityScore: 92,
-            visualHint: 'surrealist painting',
+            hashtags: '#AIart, #generativeart, #digitalart',
         },
         {
             trendName: 'The "One-Pan" Dinner',
@@ -41,7 +41,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Simple, delicious recipes that only require a single pan, tapping into the demand for low-effort meals.',
             platform: 'TikTok',
             viralityScore: 88,
-            visualHint: 'cast iron skillet',
+            hashtags: '#onepanmeal, #easyrecipe, #tiktokfood',
         },
         {
             trendName: 'Vintage Streetwear Finds',
@@ -49,7 +49,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Thrift hauls and styling videos focused on 90s and Y2K streetwear are dominating fashion feeds.',
             platform: 'Instagram Reels',
             viralityScore: 85,
-            visualHint: 'vintage clothing rack',
+            hashtags: '#vintagefashion, #thrifthaul, #90sstyle',
         },
         {
             trendName: 'Cozy Gaming Setups',
@@ -57,7 +57,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Gamers are sharing their cozy, aesthetic gaming setups, focusing on comfort and ambiance over raw power.',
             platform: 'YouTube Shorts',
             viralityScore: 82,
-            visualHint: 'cozy gaming room',
+            hashtags: '#gamingsetup, #cozygaming, #desksetup',
         },
         {
             trendName: '"Main Character Energy" Clips',
@@ -65,7 +65,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Using cinematic audio to turn mundane daily activities into epic, main-character moments.',
             platform: 'TikTok',
             viralityScore: 95,
-            visualHint: 'cinematic sunset',
+            hashtags: '#maincharacter, #cinematic, #pov',
         },
         {
             trendName: 'Silent Vlogs',
@@ -73,7 +73,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Day-in-the-life vlogs with no talking, focusing on calming sounds (ASMR) and aesthetic visuals.',
             platform: 'YouTube',
             viralityScore: 78,
-            visualHint: 'aesthetic coffee shop',
+            hashtags: '#silentvlog, #asmr, #dayinthelife',
         },
         {
             trendName: 'Sustainable DIY Projects',
@@ -81,7 +81,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Upcycling and DIY projects that focus on sustainability and reducing waste are highly popular.',
             platform: 'Pinterest',
             viralityScore: 75,
-            visualHint: 'DIY home decor',
+            hashtags: '#sustainableliving, #diycrafts, #upcycling',
         },
         {
             trendName: 'Budget Travel Hacks',
@@ -89,7 +89,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Creators share clever tips and tricks for traveling the world on a tight budget.',
             platform: 'Instagram',
             viralityScore: 89,
-            visualHint: 'world map passport',
+            hashtags: '#budgettravel, #travelhacks, #cheaptravel',
         }
     ]
 };
@@ -112,7 +112,7 @@ For each trend, you must provide:
 3.  **description**: A short, compelling one-sentence explanation of the trend.
 4.  **platform**: The main platform where it is currently trending.
 5.  **viralityScore**: A 0-100 score of its current viral potential.
-6.  **visualHint**: A 1-2 word hint for a background image (e.g., "scandinavian kitchen", "cyberpunk aesthetic").
+6.  **hashtags**: A comma-separated string of 3-5 relevant hashtags.
 
 Your response must be in JSON format.`,
 });
@@ -131,7 +131,7 @@ const topTrendsFlow = ai.defineFlow(
         }
         return output;
     } catch (error) {
-        console.error('Error fetching top trends from AI, using fallback:', error);
+        console.warn('Error fetching top trends from AI, using fallback:', error);
         return fallbackTrends;
     }
   }
