@@ -41,30 +41,26 @@ export default async function TrendingPage() {
         {Object.entries(trendsByNiche).map(([niche, nicheTrends]) => (
           <section key={niche}>
             <h2 className="font-headline text-3xl font-bold mb-6 border-b pb-2">{niche}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {nicheTrends.map((trend) => (
                 <Card key={trend.trendName} className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
                   <CardHeader>
-                      <div className="flex justify-between items-start">
-                          <Badge variant="secondary" className="flex items-center gap-1.5 bg-background/60 backdrop-blur-sm">
-                              <PlatformIcon platform={trend.platform} className="w-3.5 h-3.5" />
-                              {trend.platform}
-                          </Badge>
+                      <div className="flex items-center gap-3">
+                         <PlatformIcon platform={trend.platform} className="w-4 h-4 text-muted-foreground" />
+                         <Badge variant="outline">{trend.platform}</Badge>
                       </div>
-                      <h3 className="font-headline text-lg font-bold pt-2">{trend.trendName}</h3>
+                      <h3 className="font-headline text-xl font-bold pt-2">{trend.trendName}</h3>
                   </CardHeader>
-                  <CardContent className="flex-grow space-y-3">
+                  <CardContent className="flex-grow">
                     <p className="text-sm text-muted-foreground">{trend.description}</p>
-                    
-                    <div className="flex flex-wrap gap-2 items-center">
+                  </CardContent>
+                  <CardFooter className="flex flex-col items-start gap-4 p-4 pt-0">
+                      <div className="flex flex-wrap gap-2 items-center w-full">
                         <Hash className="w-4 h-4 text-muted-foreground"/>
                         {trend.hashtags.split(',').map(tag => (
-                            <Badge key={tag.trim()} variant="outline" className="font-mono text-xs">{tag.trim()}</Badge>
+                            <Badge key={tag.trim()} variant="secondary" className="font-mono text-xs">{tag.trim()}</Badge>
                         ))}
-                    </div>
-
-                  </CardContent>
-                  <CardFooter className="p-4 pt-0">
+                      </div>
                       <div className="w-full">
                           <div className="flex justify-between items-center mb-1 text-xs font-medium">
                               <span className="text-muted-foreground">Virality Score</span>
