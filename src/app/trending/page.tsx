@@ -101,7 +101,7 @@ export default function TrendingPage() {
     <div className="container mx-auto px-4 py-8 md:py-12">
       <header className="text-center mb-12">
         <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
-          What&apos;s Trending Now
+          What's Trending Now
         </h1>
         <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
           A real-time snapshot of the top emerging trends across the internet, powered by AI.
