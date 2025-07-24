@@ -9,13 +9,17 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PlatformIcon } from '@/components/platform-icon';
-import { Hash, ChevronDown, ChevronUp } from 'lucide-react';
+import { Hash, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { TrendDetailDialog } from '@/components/trend-detail-dialog';
 
 export default function TrendingPage() {
   const [trendsData, setTrendsData] = useState<TopTrendsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [expandedNiches, setExpandedNiches] = useState<string[]>([]);
+  
+  const [selectedNiche, setSelectedNiche] = useState('all');
+  const [selectedPlatform, setSelectedPlatform] = useState('all');
 
   useEffect(() => {
     async function fetchTrends() {
@@ -25,7 +29,6 @@ export default function TrendingPage() {
         setTrendsData(data);
       } catch (error) {
         console.error("Failed to fetch trends", error);
-        // Optionally, set an error state to show a message to the user
       } finally {
         setIsLoading(false);
       }
@@ -33,10 +36,20 @@ export default function TrendingPage() {
     fetchTrends();
   }, []);
 
-  const trendsByNiche = useMemo(() => {
-    if (!trendsData) return [];
+  const { uniqueNiches, uniquePlatforms, filteredTrends } = useMemo(() => {
+    if (!trendsData) return { uniqueNiches: [], uniquePlatforms: [], filteredTrends: [] };
 
-    const grouped = trendsData.trends.reduce((acc, trend) => {
+    const trends = trendsData.trends;
+    const uniqueNiches = ['all', ...Array.from(new Set(trends.map(t => t.niche)))];
+    const uniquePlatforms = ['all', ...Array.from(new Set(trends.map(t => t.platform)))];
+
+    const filtered = trends.filter(trend => {
+      const nicheMatch = selectedNiche === 'all' || trend.niche === selectedNiche;
+      const platformMatch = selectedPlatform === 'all' || trend.platform === selectedPlatform;
+      return nicheMatch && platformMatch;
+    });
+
+    const grouped = filtered.reduce((acc, trend) => {
       const { niche } = trend;
       if (!acc[niche]) {
         acc[niche] = [];
@@ -45,18 +58,11 @@ export default function TrendingPage() {
       return acc;
     }, {} as Record<string, typeof trendsData.trends>);
 
-    return Object.entries(grouped).sort(([, a], [, b]) => b.length - a.length);
+    const sortedAndGrouped = Object.entries(grouped).sort(([, a], [, b]) => b.length - a.length);
 
-  }, [trendsData]);
+    return { uniqueNiches, uniquePlatforms, filteredTrends: sortedAndGrouped };
 
-
-  const toggleNicheExpansion = (niche: string) => {
-    setExpandedNiches(prev => 
-      prev.includes(niche) 
-        ? prev.filter(n => n !== niche)
-        : [...prev, niche]
-    );
-  };
+  }, [trendsData, selectedNiche, selectedPlatform]);
 
   if (isLoading) {
     return (
@@ -112,59 +118,78 @@ export default function TrendingPage() {
         </p>
       </header>
 
+      <Card className="p-4 sm:p-6 mb-8 max-w-4xl mx-auto shadow-lg border-2 border-primary/10">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+            <h3 className="font-headline text-lg font-semibold sm:col-span-1 flex items-center gap-2"><Search className="w-5 h-5"/>Filter Trends</h3>
+            <div className="sm:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Select value={selectedNiche} onValueChange={setSelectedNiche}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter by Niche" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {uniqueNiches.map(niche => (
+                            <SelectItem key={niche} value={niche}>{niche === 'all' ? 'All Niches' : niche}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter by Platform" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {uniquePlatforms.map(platform => (
+                            <SelectItem key={platform} value={platform}>{platform === 'all' ? 'All Platforms' : platform}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+        </div>
+      </Card>
+
       <div className="space-y-12">
-        {trendsByNiche.map(([niche, nicheTrends]) => {
-          const isExpanded = expandedNiches.includes(niche);
-          const trendsToShow = isExpanded ? nicheTrends : nicheTrends.slice(0, 3);
-          
-          return (
-            <section key={niche}>
-              <h2 className="font-headline text-2xl font-bold mb-6 inline-block rounded-md bg-muted px-4 py-2">{niche}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {trendsToShow.map((trend) => (
-                  <Card key={trend.trendName} className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border hover:border-primary/50">
-                    <CardHeader>
-                        <div className="flex items-center gap-3">
-                           <PlatformIcon platform={trend.platform} className="w-4 h-4 text-muted-foreground" />
-                           <Badge variant="outline">{trend.platform}</Badge>
-                        </div>
-                        <h3 className="font-headline text-xl font-bold pt-2">{trend.trendName}</h3>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                      <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">{trend.description}</div>
-                    </CardContent>
-                    <CardFooter className="flex flex-col items-start gap-4 p-4 pt-0">
-                        <div className="flex flex-wrap gap-2 items-center w-full">
-                          <Hash className="w-4 h-4 text-muted-foreground"/>
-                          {trend.hashtags.split(',').map(tag => (
-                              <Badge key={tag.trim()} variant="secondary" className="font-mono text-xs">{tag.trim()}</Badge>
-                          ))}
-                        </div>
-                        <div className="w-full">
-                            <div className="flex justify-between items-center mb-1 text-xs font-medium">
-                                <span className="text-muted-foreground">Virality Score</span>
-                                <span className="text-primary">{trend.viralityScore}</span>
+        {filteredTrends.length > 0 ? filteredTrends.map(([niche, nicheTrends]) => (
+          <section key={niche}>
+            <h2 className="font-headline text-2xl font-bold mb-6 inline-block rounded-md bg-muted px-4 py-2">{niche}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {nicheTrends.map((trend) => (
+                 <TrendDetailDialog key={trend.trendName} trend={trend}>
+                    <Card className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border hover:border-primary/50 h-full cursor-pointer">
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                               <PlatformIcon platform={trend.platform} className="w-4 h-4 text-muted-foreground" />
+                               <Badge variant="outline">{trend.platform}</Badge>
                             </div>
-                            <Progress value={trend.viralityScore} className="h-2" />
-                        </div>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
-              {nicheTrends.length > 3 && (
-                <div className="text-center mt-6">
-                  <Button variant="outline" onClick={() => toggleNicheExpansion(niche)}>
-                    {isExpanded ? "Show Less" : "Show More"}
-                    {isExpanded 
-                        ? <ChevronUp className="w-4 h-4 ml-2" /> 
-                        : <ChevronDown className="w-4 h-4 ml-2" />
-                    }
-                  </Button>
-                </div>
-              )}
-            </section>
-          )
-        })}
+                            <h3 className="font-headline text-xl font-bold pt-2">{trend.trendName}</h3>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                          <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">{trend.description}</div>
+                        </CardContent>
+                        <CardFooter className="flex flex-col items-start gap-4 p-4 pt-0">
+                            <div className="flex flex-wrap gap-2 items-center w-full">
+                              <Hash className="w-4 h-4 text-muted-foreground"/>
+                              {trend.hashtags.split(',').map(tag => (
+                                  <Badge key={tag.trim()} variant="secondary" className="font-mono text-xs">{tag.trim()}</Badge>
+                              ))}
+                            </div>
+                            <div className="w-full">
+                                <div className="flex justify-between items-center mb-1 text-xs font-medium">
+                                    <span className="text-muted-foreground">Virality Score</span>
+                                    <span className="text-primary">{trend.viralityScore}</span>
+                                </div>
+                                <Progress value={trend.viralityScore} className="h-2" />
+                            </div>
+                        </CardFooter>
+                    </Card>
+                 </TrendDetailDialog>
+              ))}
+            </div>
+          </section>
+        )) : (
+            <div className="text-center py-12">
+                <p className="text-lg font-semibold">No trends found for the selected filters.</p>
+                <p className="text-muted-foreground">Try adjusting your filter criteria.</p>
+            </div>
+        )}
       </div>
     </div>
   );
