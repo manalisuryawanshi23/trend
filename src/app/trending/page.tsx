@@ -1,13 +1,12 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getTopTrends } from '@/ai/flows/top-trends';
-import type { TopTrendsOutput } from '@/ai/flows/top-trends';
+import type { TopTrendsOutput, Trend } from '@/ai/flows/top-trends';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { PlatformIcon } from '@/components/platform-icon';
 import { Hash, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -45,14 +44,12 @@ export default function TrendingPage() {
     const uniqueNiches = ['all', ...Array.from(new Set(trends.map(t => t.niche)))];
     const uniquePlatforms = ['all', ...Array.from(new Set(trends.map(t => t.platform)))];
 
-    // 1. Filter the trends based on user selection
     const filteredTrends = trends.filter(trend => {
       const nicheMatch = selectedNiche === 'all' || trend.niche === selectedNiche;
       const platformMatch = selectedPlatform === 'all' || trend.platform === selectedPlatform;
       return nicheMatch && platformMatch;
     });
 
-    // 2. Group the filtered trends by niche
     const groupedByNiche = filteredTrends.reduce((acc, trend) => {
       const { niche } = trend;
       if (!acc[niche]) {
@@ -60,11 +57,13 @@ export default function TrendingPage() {
       }
       acc[niche].push(trend);
       return acc;
-    }, {} as Record<string, typeof trendsData.trends>);
+    }, {} as Record<string, Trend[]>);
     
-    // 3. Convert the grouped object into an array and sort it
-    const sortedGroupedTrends = Object.entries(groupedByNiche)
-        .sort(([, trendsA], [, trendsB]) => trendsB.length - trendsA.length);
+    const sortedGroupedTrends = Object.entries(groupedByNiche).sort(([nicheA, trendsA], [nicheB, trendsB]) => {
+        const avgScoreA = trendsA.reduce((sum, t) => sum + t.viralityScore, 0) / trendsA.length;
+        const avgScoreB = trendsB.reduce((sum, t) => sum + t.viralityScore, 0) / trendsB.length;
+        return avgScoreB - avgScoreA;
+    });
 
     return { uniqueNiches, uniquePlatforms, filteredAndGroupedTrends: sortedGroupedTrends };
 
