@@ -16,6 +16,16 @@ export const metadata: Metadata = {
 export default async function TrendingPage() {
   const { trends } = await getTopTrends();
 
+  // Group trends by niche
+  const trendsByNiche = trends.reduce((acc, trend) => {
+    const { niche } = trend;
+    if (!acc[niche]) {
+      acc[niche] = [];
+    }
+    acc[niche].push(trend);
+    return acc;
+  }, {} as Record<string, typeof trends>);
+
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <header className="text-center mb-12">
@@ -27,38 +37,46 @@ export default async function TrendingPage() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {trends.map((trend) => (
-          <Card key={trend.trendName} className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-            <CardContent className="flex-grow p-4 space-y-3">
-              <div className="flex justify-between items-start">
-                  <p className="text-sm font-semibold text-primary">{trend.niche}</p>
-                  <Badge variant="secondary" className="flex items-center gap-1.5 bg-background/60 backdrop-blur-sm">
-                      <PlatformIcon platform={trend.platform} className="w-3.5 h-3.5" />
-                      {trend.platform}
-                  </Badge>
-              </div>
-              <h2 className="font-headline text-lg font-bold">{trend.trendName}</h2>
-              <p className="text-sm text-muted-foreground">{trend.description}</p>
-              
-              <div className="flex flex-wrap gap-2 items-center">
-                  <Hash className="w-4 h-4 text-muted-foreground"/>
-                  {trend.hashtags.split(',').map(tag => (
-                      <Badge key={tag.trim()} variant="outline" className="font-mono text-xs">{tag.trim()}</Badge>
-                  ))}
-              </div>
-
-            </CardContent>
-            <CardFooter className="p-4 pt-0">
-                <div className="w-full">
-                    <div className="flex justify-between items-center mb-1 text-xs font-medium">
-                        <span className="text-muted-foreground">Virality Score</span>
-                        <span className="text-primary">{trend.viralityScore}</span>
+      <div className="space-y-12">
+        {Object.entries(trendsByNiche).map(([niche, nicheTrends]) => (
+          <section key={niche}>
+            <h2 className="font-headline text-3xl font-bold mb-6 border-b pb-2">{niche}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {nicheTrends.map((trend) => (
+                <Card key={trend.trendName} className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+                  <CardHeader>
+                      <div className="flex justify-between items-start">
+                          <Badge variant="secondary" className="flex items-center gap-1.5 bg-background/60 backdrop-blur-sm">
+                              <PlatformIcon platform={trend.platform} className="w-3.5 h-3.5" />
+                              {trend.platform}
+                          </Badge>
+                      </div>
+                      <h3 className="font-headline text-lg font-bold pt-2">{trend.trendName}</h3>
+                  </CardHeader>
+                  <CardContent className="flex-grow space-y-3">
+                    <p className="text-sm text-muted-foreground">{trend.description}</p>
+                    
+                    <div className="flex flex-wrap gap-2 items-center">
+                        <Hash className="w-4 h-4 text-muted-foreground"/>
+                        {trend.hashtags.split(',').map(tag => (
+                            <Badge key={tag.trim()} variant="outline" className="font-mono text-xs">{tag.trim()}</Badge>
+                        ))}
                     </div>
-                    <Progress value={trend.viralityScore} className="h-2" />
-                </div>
-            </CardFooter>
-          </Card>
+
+                  </CardContent>
+                  <CardFooter className="p-4 pt-0">
+                      <div className="w-full">
+                          <div className="flex justify-between items-center mb-1 text-xs font-medium">
+                              <span className="text-muted-foreground">Virality Score</span>
+                              <span className="text-primary">{trend.viralityScore}</span>
+                          </div>
+                          <Progress value={trend.viralityScore} className="h-2" />
+                      </div>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          </section>
         ))}
       </div>
     </div>
