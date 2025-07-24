@@ -13,6 +13,12 @@ import { Hash, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TrendDetailDialog } from '@/components/trend-detail-dialog';
+import { type Metadata } from 'next';
+
+// export const metadata: Metadata = {
+//   title: 'Trending Now | Real-Time Social Media Trends',
+//   description: 'Explore a real-time snapshot of the top emerging trends across the internet, powered by AI. Filter by niche and platform to discover what\'s buzzing right now.',
+// };
 
 export default function TrendingPage() {
   const [trendsData, setTrendsData] = useState<TopTrendsOutput | null>(null);
@@ -36,8 +42,8 @@ export default function TrendingPage() {
     fetchTrends();
   }, []);
 
-  const { uniqueNiches, uniquePlatforms, filteredTrends } = useMemo(() => {
-    if (!trendsData) return { uniqueNiches: [], uniquePlatforms: [], filteredTrends: [] };
+  const { uniqueNiches, uniquePlatforms, filteredAndGroupedTrends } = useMemo(() => {
+    if (!trendsData) return { uniqueNiches: [], uniquePlatforms: [], filteredAndGroupedTrends: [] };
 
     const trends = trendsData.trends;
     const uniqueNiches = ['all', ...Array.from(new Set(trends.map(t => t.niche)))];
@@ -60,7 +66,7 @@ export default function TrendingPage() {
 
     const sortedAndGrouped = Object.entries(grouped).sort(([, a], [, b]) => b.length - a.length);
 
-    return { uniqueNiches, uniquePlatforms, filteredTrends: sortedAndGrouped };
+    return { uniqueNiches, uniquePlatforms, filteredAndGroupedTrends: sortedAndGrouped };
 
   }, [trendsData, selectedNiche, selectedPlatform]);
 
@@ -147,7 +153,7 @@ export default function TrendingPage() {
       </Card>
 
       <div className="space-y-12">
-        {filteredTrends.length > 0 ? filteredTrends.map(([niche, nicheTrends]) => (
+        {filteredAndGroupedTrends.length > 0 ? filteredAndGroupedTrends.map(([niche, nicheTrends]) => (
           <section key={niche}>
             <h2 className="font-headline text-2xl font-bold mb-6 inline-block rounded-md bg-muted px-4 py-2">{niche}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
