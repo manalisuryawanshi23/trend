@@ -25,6 +25,76 @@ const TopTrendsOutputSchema = z.object({
 });
 export type TopTrendsOutput = z.infer<typeof TopTrendsOutputSchema>;
 
+const fallbackTrends: TopTrendsOutput = {
+    trends: [
+        {
+            trendName: 'AI-Generated Art',
+            niche: 'AI & Future Tech',
+            description: 'Creators are using AI to generate surreal and stunning visuals, pushing the boundaries of creativity.',
+            platform: 'Instagram',
+            viralityScore: 92,
+            visualHint: 'surrealist painting',
+        },
+        {
+            trendName: 'The "One-Pan" Dinner',
+            niche: 'Food & Cooking',
+            description: 'Simple, delicious recipes that only require a single pan, tapping into the demand for low-effort meals.',
+            platform: 'TikTok',
+            viralityScore: 88,
+            visualHint: 'cast iron skillet',
+        },
+        {
+            trendName: 'Vintage Streetwear Finds',
+            niche: 'Fashion',
+            description: 'Thrift hauls and styling videos focused on 90s and Y2K streetwear are dominating fashion feeds.',
+            platform: 'Instagram Reels',
+            viralityScore: 85,
+            visualHint: 'vintage clothing rack',
+        },
+        {
+            trendName: 'Cozy Gaming Setups',
+            niche: 'Gaming',
+            description: 'Gamers are sharing their cozy, aesthetic gaming setups, focusing on comfort and ambiance over raw power.',
+            platform: 'YouTube Shorts',
+            viralityScore: 82,
+            visualHint: 'cozy gaming room',
+        },
+        {
+            trendName: '"Main Character Energy" Clips',
+            niche: 'Comedy',
+            description: 'Using cinematic audio to turn mundane daily activities into epic, main-character moments.',
+            platform: 'TikTok',
+            viralityScore: 95,
+            visualHint: 'cinematic sunset',
+        },
+        {
+            trendName: 'Silent Vlogs',
+            niche: 'Lifestyle',
+            description: 'Day-in-the-life vlogs with no talking, focusing on calming sounds (ASMR) and aesthetic visuals.',
+            platform: 'YouTube',
+            viralityScore: 78,
+            visualHint: 'aesthetic coffee shop',
+        },
+        {
+            trendName: 'Sustainable DIY Projects',
+            niche: 'DIY & Crafts',
+            description: 'Upcycling and DIY projects that focus on sustainability and reducing waste are highly popular.',
+            platform: 'Pinterest',
+            viralityScore: 75,
+            visualHint: 'DIY home decor',
+        },
+        {
+            trendName: 'Budget Travel Hacks',
+            niche: 'Travel',
+            description: 'Creators share clever tips and tricks for traveling the world on a tight budget.',
+            platform: 'Instagram',
+            viralityScore: 89,
+            visualHint: 'world map passport',
+        }
+    ]
+};
+
+
 export async function getTopTrends(): Promise<TopTrendsOutput> {
   return topTrendsFlow();
 }
@@ -53,7 +123,16 @@ const topTrendsFlow = ai.defineFlow(
     outputSchema: TopTrendsOutputSchema,
   },
   async () => {
-    const {output} = await prompt();
-    return output!;
+    try {
+        const {output} = await prompt();
+        if (!output || !output.trends || output.trends.length === 0) {
+            console.warn('AI returned no trends, using fallback.');
+            return fallbackTrends;
+        }
+        return output;
+    } catch (error) {
+        console.error('Error fetching top trends from AI, using fallback:', error);
+        return fallbackTrends;
+    }
   }
 );
