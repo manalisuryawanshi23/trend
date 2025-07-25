@@ -89,6 +89,91 @@ const fallbackTrends: TopTrendsOutput = {
                 suggestedPostFormat: 'Instagram Reel',
             }
         },
+        {
+            trendName: 'Cozy Gaming Setups',
+            niche: 'Gaming',
+            description: 'Gamers are showcasing their aesthetic and cozy gaming setups, focusing on ambiance, lighting, and comfort.',
+            platform: 'TikTok',
+            viralityScore: 82,
+            hashtags: '#cozygaming, #gamingsetup, #desksetup',
+            reasoning: 'As gaming becomes more mainstream, the focus is shifting from pure performance to creating a personalized and comfortable environment.',
+            googleTrendsLink: 'https://trends.google.com/trends/explore?q=cozy%20gaming%20setup',
+            viralAudioSound: 'Lofi Girl - A Place to Study',
+            postPlan: {
+                hook: 'My gaming setup is my happy place.',
+                caption: 'Come build my new cozy gaming setup with me! Let me know what you think of the final result.',
+                emojiCombo: '🎮💖🌙',
+                suggestedPostFormat: 'TikTok Video',
+            }
+        },
+        {
+            trendName: '"BookTok" Made Me Buy It',
+            niche: 'Books & Literature',
+            description: 'Readers are sharing their book hauls and reviews, driven by recommendations from the #BookTok community.',
+            platform: 'TikTok',
+            viralityScore: 90,
+            hashtags: '#booktok, #bookhaul, #tbr',
+            reasoning: 'The #BookTok community has become a powerful force in the publishing industry, driving massive sales for recommended titles.',
+            googleTrendsLink: 'https://trends.google.com/trends/explore?q=booktok',
+            viralAudioSound: 'original audio - book reviews',
+            postPlan: {
+                hook: '5 books BookTok convinced me to buy.',
+                caption: 'My latest book haul is 100% influenced by BookTok. Have you read any of these? No spoilers!',
+                emojiCombo: '📚🛒❤️',
+                suggestedPostFormat: 'TikTok Video',
+            }
+        },
+        {
+            trendName: 'The 30-Day DIY Challenge',
+            niche: 'DIY & Crafts',
+            description: 'Creators are challenging themselves to complete a new DIY project every day for 30 days, showing the process.',
+            platform: 'YouTube Shorts',
+            viralityScore: 78,
+            hashtags: '#diychallenge, #30daychallenge, #crafting',
+            reasoning: 'This trend combines the satisfaction of a challenge with the appeal of before-and-after transformations, making it highly engaging.',
+            googleTrendsLink: 'https://trends.google.com/trends/explore?q=diy%20challenge',
+            viralAudioSound: 'Upbeat and motivational instrumental music',
+            postPlan: {
+                hook: 'I decided to do one DIY project every day for a month.',
+                caption: 'Day 1 of my 30-day DIY challenge! Today, we\'re making... Follow along to see if I can do it!',
+                emojiCombo: '🛠️🗓️💪',
+                suggestedPostFormat: 'YouTube Short',
+            }
+        },
+        {
+            trendName: 'Mindful Morning Routines',
+            niche: 'Health & Wellness',
+            description: 'Instead of hustle culture, creators are sharing slow, mindful morning routines focusing on journaling, meditation, and gratitude.',
+            platform: 'Instagram Reels',
+            viralityScore: 84,
+            hashtags: '#mindfulmorning, #slowliving, #wellnessroutine',
+            reasoning: 'There is a growing counter-movement against "hustle culture," with people seeking more balance and mental peace.',
+            googleTrendsLink: 'https://trends.google.com/trends/explore?q=mindful%20morning%20routine',
+            viralAudioSound: 'Peaceful acoustic music',
+            postPlan: {
+                hook: 'My 5 AM morning routine that isn\'t about productivity.',
+                caption: 'Starting the day with intention, not pressure. My mindful morning routine has changed everything.',
+                emojiCombo: '☀️🧘‍♀️📓',
+                suggestedPostFormat: 'Instagram Reel',
+            }
+        },
+        {
+            trendName: 'EV Road Trips',
+            niche: 'Automotive',
+            description: 'Showcasing the experience of a long-distance road trip in an electric vehicle, addressing range anxiety and charging.',
+            platform: 'YouTube',
+            viralityScore: 75,
+            hashtags: '#evroadtrip, #electricvehicle, #roadtrip',
+            reasoning: 'As electric vehicles become more common, potential buyers are curious about their real-world long-distance capabilities.',
+            googleTrendsLink: 'https://trends.google.com/trends/explore?q=ev%20road%20trip',
+            viralAudioSound: 'Upbeat travel vlogging music',
+            postPlan: {
+                hook: 'We drove a Tesla 1,000 miles. Here\'s what happened.',
+                caption: 'Can you really road trip in an EV? We put it to the test on a cross-country adventure.',
+                emojiCombo: '🚗⚡️🗺️',
+                suggestedPostFormat: 'YouTube Video',
+            }
+        }
     ]
 };
 
