@@ -102,7 +102,7 @@ const prompt = ai.definePrompt({
   output: {schema: TopTrendsOutputSchema},
   prompt: `You are a social media trend expert and data analyst with access to real-time social data.
 
-Your task is to identify the top 12-15 emerging trends across a wide variety of popular niches (e.g., Fashion, Food, Gaming, Tech, Comedy, Beauty, AI, Sports, etc.). Do not focus on just one niche; provide a diverse and interesting mix.
+Your task is to identify the top 12-15 emerging trends across a wide variety of popular niches. Ensure you provide a diverse mix from categories like: AI & Future Tech, Automotive, Beauty, Books & Literature, Business & Entrepreneurship, Comedy, Dance, DIY & Crafts, Education, Fashion, Finance & Investing, Food & Cooking, Gaming, Health & Wellness, Home & Garden, Movies & TV, Music, Parenting, Pets, Real Estate, Relationships & Dating, Science & Nature, Sports, Spirituality & Mindfulness, Tech, Travel, and ASMR.
 
 For each trend, you must provide a comprehensive analysis. Your output must be a JSON object containing a list of trends, and each trend object must include:
 1.  **trendName**: The name of the trend.
