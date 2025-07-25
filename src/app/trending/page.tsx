@@ -7,7 +7,6 @@ import type { TopTrendsOutput } from '@/ai/flows/top-trends';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { PlatformIcon } from '@/components/platform-icon';
 import { Hash, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
