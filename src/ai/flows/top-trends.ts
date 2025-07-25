@@ -2,16 +2,22 @@
 'use server';
 
 /**
- * @fileOverview An AI agent that identifies the top trending topics across various niches,
+ * @fileOverview An AI agent that identifies the top trending topics across various niches for a specific region,
  * including a full post plan for each.
  *
- * - getTopTrends - A function that returns a list of top trends with all details.
+ * - getTopTrends - A function that returns a list of top trends with all details for a given region.
+ * - TopTrendsInput - The input type for the getTopTrends function.
  * - TopTrendsOutput - The return type for the getTopTrends function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 import { niches } from '@/lib/data';
+
+const TopTrendsInputSchema = z.object({
+  region: z.string().describe('The geographical region or country to get trends for.'),
+});
+export type TopTrendsInput = z.infer<typeof TopTrendsInputSchema>;
 
 const TrendSchema = z.object({
     trendName: z.string().describe('The name of the emerging trend.'),
@@ -178,25 +184,25 @@ const fallbackTrends: TopTrendsOutput = {
     ]
 };
 
-let cache: {
+const cache = new Map<string, {
     timestamp: number;
     data: TopTrendsOutput;
-} | null = null;
+}>();
 
 const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 
-export async function getTopTrends(): Promise<TopTrendsOutput> {
-  return topTrendsFlow();
+export async function getTopTrends(input: TopTrendsInput): Promise<TopTrendsOutput> {
+  return topTrendsFlow(input);
 }
 
 const prompt = ai.definePrompt({
   name: 'topTrendsPrompt',
-  input: { schema: z.object({ nicheList: z.array(z.string()) }) },
+  input: { schema: z.object({ nicheList: z.array(z.string()), region: z.string() }) },
   output: { schema: TopTrendsOutputSchema },
   templateFormat: 'handlebars',
-  prompt: `You are a social media trend expert and data analyst with access to real-time social data.
+  prompt: `You are a social media trend expert and data analyst with access to real-time social data for the specified region.
 
-Your task is to identify emerging trends for each of the following niches. You MUST return at least TWO trends for each niche provided.
+Your task is to identify emerging trends for the **{{region}}** region for each of the following niches. You MUST return at least TWO trends for each niche provided.
 
 Niches:
 {{#each nicheList}}
@@ -208,11 +214,11 @@ For each trend, you must provide a comprehensive analysis. Your output must be a
 1.  **trendName**: The name of the trend.
 2.  **niche**: The niche it belongs to (must be one of the provided niches).
 3.  **description**: A short, compelling one-sentence explanation of the trend.
-4.  **platform**: The main platform where it is currently trending.
-5.  **viralityScore**: A 0-100 score of its current viral potential.
+4.  **platform**: The main platform where it is currently trending in {{region}}.
+5.  **viralityScore**: A 0-100 score of its current viral potential in {{region}}.
 6.  **hashtags**: A comma-separated string of 3-5 relevant hashtags.
 7.  **reasoning**: A detailed explanation for why the trend is rising (cultural context, events, etc.).
-8.  **googleTrendsLink**: A full, working Google Trends URL for a relevant keyword.
+8.  **googleTrendsLink**: A full, working Google Trends URL for a relevant keyword, ideally localized for {{region}}.
 9.  **viralAudioSound**: If applicable, the name of a viral audio associated with the trend.
 10. **postPlan**: A complete AI-powered post plan including a hook, caption, emoji combo, and suggested format.
 
@@ -222,33 +228,36 @@ Your response must be in JSON format.`,
 const topTrendsFlow = ai.defineFlow(
   {
     name: 'topTrendsFlow',
+    inputSchema: TopTrendsInputSchema,
     outputSchema: TopTrendsOutputSchema,
   },
-  async () => {
+  async ({ region }) => {
     const now = Date.now();
-    if (cache && (now - cache.timestamp < CACHE_DURATION_MS)) {
-        console.log('Returning cached top trends.');
-        return cache.data;
+    const cachedEntry = cache.get(region);
+
+    if (cachedEntry && (now - cachedEntry.timestamp < CACHE_DURATION_MS)) {
+        console.log(`Returning cached top trends for ${region}.`);
+        return cachedEntry.data;
     }
 
     try {
         const nicheList = niches.map(n => n.name);
-        const {output} = await prompt({ nicheList });
+        const {output} = await prompt({ nicheList, region });
         
         if (!output || !output.trends || output.trends.length === 0) {
-            console.warn('AI returned no trends, using fallback.');
+            console.warn(`AI returned no trends for ${region}, using fallback.`);
             return fallbackTrends;
         }
 
-        console.log('Fetched new top trends, updating cache.');
-        cache = {
+        console.log(`Fetched new top trends for ${region}, updating cache.`);
+        cache.set(region, {
             timestamp: now,
             data: output,
-        };
+        });
 
         return output;
     } catch (error) {
-        console.warn('Error fetching top trends from AI, using fallback:', error);
+        console.warn(`Error fetching top trends from AI for ${region}, using fallback:`, error);
         return fallbackTrends;
     }
   }

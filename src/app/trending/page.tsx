@@ -8,10 +8,11 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { PlatformIcon } from '@/components/platform-icon';
-import { Hash, Search, LoaderCircle } from 'lucide-react';
+import { Hash, Search, LoaderCircle, Globe } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TrendDetailDialog } from '@/components/trend-detail-dialog';
+import { countries } from '@/lib/data';
 
 export default function TrendingPage() {
   const [trendsData, setTrendsData] = useState<TopTrendsOutput | null>(null);
@@ -19,21 +20,49 @@ export default function TrendingPage() {
   
   const [selectedNiche, setSelectedNiche] = useState('all');
   const [selectedPlatform, setSelectedPlatform] = useState('all');
+  const [selectedCountry, setSelectedCountry] = useState('United States');
 
   useEffect(() => {
-    async function fetchTrends() {
-      try {
-        setIsLoading(true);
-        const data = await getTopTrends();
-        setTrendsData(data);
-      } catch (error) {
-        console.error("Failed to fetch trends", error);
-      } finally {
-        setIsLoading(false);
-      }
+    async function fetchUserLocation() {
+        try {
+            const response = await fetch('https://ipapi.co/json/');
+            if (!response.ok) throw new Error('Failed to fetch location');
+            const data = await response.json();
+            const countryName = data.country_name;
+
+            if (countryName && countries.find(c => c === countryName)) {
+                setSelectedCountry(countryName);
+            }
+        } catch (error) {
+            console.error("Could not fetch user location:", error);
+        } finally {
+            // Trigger initial trend fetch even if location fetch fails
+            fetchTrends(selectedCountry);
+        }
     }
-    fetchTrends();
-  }, []);
+    fetchUserLocation();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
+
+  useEffect(() => {
+    if (selectedCountry) {
+        fetchTrends(selectedCountry);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCountry]); // Re-fetch when country changes
+
+  async function fetchTrends(region: string) {
+    try {
+      setIsLoading(true);
+      const data = await getTopTrends({ region });
+      setTrendsData(data);
+    } catch (error) {
+      console.error("Failed to fetch trends", error);
+      // Optionally, show a toast notification here
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const { uniqueNiches, uniquePlatforms, filteredTrends } = useMemo(() => {
     if (!trendsData) return { uniqueNiches: [], uniquePlatforms: [], filteredTrends: [] };
@@ -123,15 +152,25 @@ export default function TrendingPage() {
         </p>
       </header>
 
-      <Card className="p-4 sm:p-6 mb-8 max-w-4xl mx-auto shadow-lg border-2 border-primary/10">
+      <Card className="p-4 sm:p-6 mb-8 max-w-6xl mx-auto shadow-lg border-2 border-primary/10">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
             <h3 className="font-headline text-lg font-semibold sm:col-span-1 flex items-center gap-2"><Search className="w-5 h-5"/>Filter Trends</h3>
-            <div className="sm:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="sm:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a Country" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-60">
+                        {countries.map(country => (
+                            <SelectItem key={country} value={country}>{country}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
                 <Select value={selectedNiche} onValueChange={setSelectedNiche}>
                     <SelectTrigger>
                         <SelectValue placeholder="Filter by Niche" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="max-h-60">
                         {uniqueNiches.map(niche => (
                             <SelectItem key={niche} value={niche}>{niche === 'all' ? 'All Niches' : niche}</SelectItem>
                         ))}
@@ -199,5 +238,3 @@ export default function TrendingPage() {
     </div>
   );
 }
-
-    
