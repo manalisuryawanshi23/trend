@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LoaderCircle, Wand2, Save } from "lucide-react";
+import { LoaderCircle, Wand2, Save, Users } from "lucide-react";
 
 import { trendForecasting } from "@/ai/flows/trend-forecasting";
 import type { Trend } from "@/lib/types";
@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendCard } from "@/components/trend-card";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 const trendFormSchema = z.object({
   platform: z.string({ required_error: "Please select a platform." }),
