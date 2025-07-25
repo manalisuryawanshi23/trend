@@ -409,15 +409,17 @@ export default function ForecastPage() {
         {isLoadingTrends && (
           <div className="space-y-4">
             <h2 className="font-headline text-3xl font-bold mb-6 text-center animate-pulse">Scanning the Socialverse...</h2>
-            {[...Array(3)].map((_, i) => (
-              <Card key={i} className="p-6 max-w-4xl mx-auto">
-                <div className="flex justify-between items-center">
-                  <Skeleton className="h-7 w-3/5" />
-                  <Skeleton className="h-4 w-1/5" />
-                </div>
-                 <Skeleton className="h-5 w-4/5 mt-4" />
-              </Card>
-            ))}
+            <div className="space-y-4 max-w-4xl mx-auto">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="p-6">
+                  <div className="flex justify-between items-center">
+                    <Skeleton className="h-7 w-3/5" />
+                    <Skeleton className="h-4 w-1/5" />
+                  </div>
+                  <Skeleton className="h-5 w-4/5 mt-4" />
+                </Card>
+              ))}
+            </div>
           </div>
         )}
 
