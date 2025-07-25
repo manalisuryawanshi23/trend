@@ -11,6 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { niches } from '@/lib/data';
 
 const TrendSchema = z.object({
     trendName: z.string().describe('The name of the emerging trend.'),
@@ -31,7 +32,7 @@ const TrendSchema = z.object({
 });
 
 const TopTrendsOutputSchema = z.object({
-  trends: z.array(TrendSchema).describe('A list of 12-15 diverse, top-trending topics across different popular niches, with full post plans and analysis for each.'),
+  trends: z.array(TrendSchema).describe('A list of top-trending topics. There must be at least 2 trends for each requested niche.'),
 });
 export type TopTrendsOutput = z.infer<typeof TopTrendsOutputSchema>;
 export type Trend = z.infer<typeof TrendSchema>;
@@ -177,6 +178,12 @@ const fallbackTrends: TopTrendsOutput = {
     ]
 };
 
+let cache: {
+    timestamp: number;
+    data: TopTrendsOutput;
+} | null = null;
+
+const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 
 export async function getTopTrends(): Promise<TopTrendsOutput> {
   return topTrendsFlow();
@@ -184,14 +191,22 @@ export async function getTopTrends(): Promise<TopTrendsOutput> {
 
 const prompt = ai.definePrompt({
   name: 'topTrendsPrompt',
-  output: {schema: TopTrendsOutputSchema},
+  input: { schema: z.object({ nicheList: z.array(z.string()) }) },
+  output: { schema: TopTrendsOutputSchema },
+  templateFormat: 'handlebars',
   prompt: `You are a social media trend expert and data analyst with access to real-time social data.
 
-Your task is to identify the top 12-15 emerging trends across a wide variety of popular niches. Ensure you provide a diverse mix from categories like: AI & Future Tech, Automotive, Beauty, Books & Literature, Business & Entrepreneurship, Comedy, Dance, DIY & Crafts, Education, Fashion, Finance & Investing, Food & Cooking, Gaming, Health & Wellness, Home & Garden, Movies & TV, Music, Parenting, Pets, Real Estate, Relationships & Dating, Science & Nature, Sports, Spirituality & Mindfulness, Tech, Travel, and ASMR.
+Your task is to identify emerging trends for each of the following niches. You MUST return at least TWO trends for each niche provided.
+
+Niches:
+{{#each nicheList}}
+- {{this}}
+{{/each}}
+
 
 For each trend, you must provide a comprehensive analysis. Your output must be a JSON object containing a list of trends, and each trend object must include:
 1.  **trendName**: The name of the trend.
-2.  **niche**: The niche it belongs to.
+2.  **niche**: The niche it belongs to (must be one of the provided niches).
 3.  **description**: A short, compelling one-sentence explanation of the trend.
 4.  **platform**: The main platform where it is currently trending.
 5.  **viralityScore**: A 0-100 score of its current viral potential.
@@ -210,12 +225,27 @@ const topTrendsFlow = ai.defineFlow(
     outputSchema: TopTrendsOutputSchema,
   },
   async () => {
+    const now = Date.now();
+    if (cache && (now - cache.timestamp < CACHE_DURATION_MS)) {
+        console.log('Returning cached top trends.');
+        return cache.data;
+    }
+
     try {
-        const {output} = await prompt();
+        const nicheList = niches.map(n => n.name);
+        const {output} = await prompt({ nicheList });
+        
         if (!output || !output.trends || output.trends.length === 0) {
             console.warn('AI returned no trends, using fallback.');
             return fallbackTrends;
         }
+
+        console.log('Fetched new top trends, updating cache.');
+        cache = {
+            timestamp: now,
+            data: output,
+        };
+
         return output;
     } catch (error) {
         console.warn('Error fetching top trends from AI, using fallback:', error);
@@ -223,5 +253,3 @@ const topTrendsFlow = ai.defineFlow(
     }
   }
 );
-
-    
