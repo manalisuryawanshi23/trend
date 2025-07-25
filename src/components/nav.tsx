@@ -14,8 +14,8 @@ import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, 
 import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
-  { href: '/', label: 'Trending', icon: <Flame className="h-5 w-5" /> },
-  { href: '/forecast', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
+  { href: '/', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
+  { href: '/trending', label: 'Trending', icon: <Flame className="h-5 w-5" /> },
   { href: '/captions', label: 'Captions', icon: <Captions className="h-5 w-5" /> },
   { href: '/repurpose', label: 'Repurpose', icon: <Sparkles className="h-5 w-5" /> },
   { href: '/analyze', label: 'Analyze', icon: <Search className="h-5 w-5" /> },

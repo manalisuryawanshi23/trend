@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/captions',
     '/contact',
     '/disclaimer',
-    '/forecast',
+    '/trending',
     '/privacy-policy',
     '/repurpose',
     '/terms-and-conditions',

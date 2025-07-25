@@ -1,192 +1,194 @@
+
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { LoaderCircle, Save } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useState, useEffect, useMemo } from 'react';
+import { getTopTrends } from '@/ai/flows/top-trends';
+import type { TopTrendsOutput } from '@/ai/flows/top-trends';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { PlatformIcon } from '@/components/platform-icon';
+import { Hash, Search } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { TrendDetailDialog } from '@/components/trend-detail-dialog';
 
-const trendFormSchema = z.object({
-  region: z.string(),
-  niche: z.string(),
-  platform: z.string(),
-});
-
-type TrendFormValues = z.infer<typeof trendFormSchema>;
-
-type Trend = {
-  keyword: string;
-  region: string;
-  niche: string;
-  platform: string;
-};
-
-export default function ForecastTrends() {
-  const [trends, setTrends] = useState<Trend[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedRegion, setSelectedRegion] = useState("United States");
-  const [selectedNiche, setSelectedNiche] = useState("all");
-  const [selectedPlatform, setSelectedPlatform] = useState("all");
-
-  const trendForm = useForm<TrendFormValues>({
-    resolver: zodResolver(trendFormSchema),
-    defaultValues: {
-      region: "United States",
-      niche: "all",
-      platform: "all",
-    },
-  });
+export default function TrendingPage() {
+  const [trendsData, setTrendsData] = useState<TopTrendsOutput | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const [selectedNiche, setSelectedNiche] = useState('all');
+  const [selectedPlatform, setSelectedPlatform] = useState('all');
 
   useEffect(() => {
-    setLoading(true);
-    fetch("/trends.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setTrends(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    async function fetchTrends() {
+      try {
+        setIsLoading(true);
+        const data = await getTopTrends();
+        setTrendsData(data);
+      } catch (error) {
+        console.error("Failed to fetch trends", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchTrends();
   }, []);
 
-  const { uniqueNiches, uniquePlatforms, filteredAndGroupedTrends } = useMemo(() => {
-    if (!trends || trends.length === 0) {
-      return {
-        uniqueNiches: [],
-        uniquePlatforms: [],
-        filteredAndGroupedTrends: [],
-      };
-    }
+  const { uniqueNiches, uniquePlatforms, filteredTrends } = useMemo(() => {
+    if (!trendsData) return { uniqueNiches: [], uniquePlatforms: [], filteredTrends: [] };
 
-    const filtered = trends.filter((trend) => {
-      const regionMatch = trend.region === selectedRegion;
-      const nicheMatch = selectedNiche === "all" || trend.niche === selectedNiche;
-      const platformMatch = selectedPlatform === "all" || trend.platform === selectedPlatform;
-      return regionMatch && nicheMatch && platformMatch;
+    const trends = trendsData.trends;
+    const uniqueNiches = ['all', ...Array.from(new Set(trends.map(t => t.niche)))];
+    const uniquePlatforms = ['all', ...Array.from(new Set(trends.map(t => t.platform)))];
+
+    const filtered = trends.filter(trend => {
+      const nicheMatch = selectedNiche === 'all' || trend.niche === selectedNiche;
+      const platformMatch = selectedPlatform === 'all' || trend.platform === selectedPlatform;
+      return nicheMatch && platformMatch;
     });
 
     const grouped = filtered.reduce((acc, trend) => {
-      const existing = acc.find((item: any) => item.keyword === trend.keyword);
-      if (!existing) {
-        acc.push(trend);
+      const { niche } = trend;
+      if (!acc[niche]) {
+        acc[niche] = [];
       }
+      acc[niche].push(trend);
       return acc;
-    }, [] as Trend[]);
+    }, {} as Record<string, typeof trendsData.trends>);
 
-    const niches = Array.from(new Set(trends.map((t) => t.niche)));
-    const platforms = Array.from(new Set(trends.map((t) => t.platform)));
+    const sortedAndGrouped = Object.entries(grouped).sort(([, a], [, b]) => b.length - a.length);
 
-    return {
-      uniqueNiches: niches,
-      uniquePlatforms: platforms,
-      filteredAndGroupedTrends: grouped,
-    };
-  }, [trends, selectedRegion, selectedNiche, selectedPlatform]);
+    return { uniqueNiches, uniquePlatforms, filteredTrends: sortedAndGrouped };
 
-  const onSubmit = (data: TrendFormValues) => {
-    setSelectedRegion(data.region);
-    setSelectedNiche(data.niche);
-    setSelectedPlatform(data.platform);
-    localStorage.setItem("trendPreferences", JSON.stringify(data));
-  };
+  }, [trendsData, selectedNiche, selectedPlatform]);
+
+  if (isLoading) {
+    return (
+        <div className="container mx-auto px-4 py-8 md:py-12">
+             <header className="text-center mb-12">
+                <Skeleton className="h-14 w-3/4 mx-auto" />
+                <Skeleton className="h-6 w-1/2 mx-auto mt-4" />
+            </header>
+            <div className="space-y-12">
+                {[...Array(3)].map((_, i) => (
+                    <section key={i}>
+                        <Skeleton className="h-10 w-48 mb-6" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {[...Array(3)].map((_, j) => (
+                                <Card key={j} className="flex flex-col">
+                                    <CardHeader>
+                                        <Skeleton className="h-5 w-24" />
+                                        <Skeleton className="h-6 w-full mt-2" />
+                                    </CardHeader>
+                                    <CardContent className="flex-grow">
+                                        <Skeleton className="h-16 w-full" />
+                                    </CardContent>
+                                    <CardFooter>
+                                        <Skeleton className="h-8 w-full" />
+                                    </CardFooter>
+                                </Card>
+                            ))}
+                        </div>
+                    </section>
+                ))}
+            </div>
+        </div>
+    );
+  }
+
+  if (!trendsData) {
+    return (
+      <div className="container mx-auto px-4 py-8 md:py-12 text-center">
+        <h1 className="font-headline text-2xl">Could not load trends.</h1>
+        <p className="text-muted-foreground">Please try refreshing the page.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-4 space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Forecast Trends</CardTitle>
-          <CardDescription>Analyze emerging trends by region, niche, and platform</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <form onSubmit={trendForm.handleSubmit(onSubmit)} className="grid gap-4 md:grid-cols-3">
-            <div>
-              <Label>Region</Label>
-              <Input {...trendForm.register("region")} placeholder="Enter region" />
+    <div className="container mx-auto px-4 py-8 md:py-12">
+      <header className="text-center mb-12">
+        <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter">
+          What's Trending Now
+        </h1>
+        <p className="mt-4 text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          A real-time snapshot of the top emerging trends across the internet, powered by AI.
+        </p>
+      </header>
+
+      <Card className="p-4 sm:p-6 mb-8 max-w-4xl mx-auto shadow-lg border-2 border-primary/10">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+            <h3 className="font-headline text-lg font-semibold sm:col-span-1 flex items-center gap-2"><Search className="w-5 h-5"/>Filter Trends</h3>
+            <div className="sm:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Select value={selectedNiche} onValueChange={setSelectedNiche}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter by Niche" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {uniqueNiches.map(niche => (
+                            <SelectItem key={niche} value={niche}>{niche === 'all' ? 'All Niches' : niche}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter by Platform" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {uniquePlatforms.map(platform => (
+                            <SelectItem key={platform} value={platform}>{platform === 'all' ? 'All Platforms' : platform}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
-            <div>
-              <Label>Niche</Label>
-              <Select onValueChange={(val) => trendForm.setValue("niche", val)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select niche" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  {uniqueNiches.map((niche) => (
-                    <SelectItem key={niche} value={niche}>
-                      {niche}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Platform</Label>
-              <Select onValueChange={(val) => trendForm.setValue("platform", val)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select platform" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  {uniquePlatforms.map((platform) => (
-                    <SelectItem key={platform} value={platform}>
-                      {platform}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="md:col-span-3">
-              <Button type="submit" disabled={loading}>
-                {loading ? (
-                  <LoaderCircle className="animate-spin mr-2 h-4 w-4" />
-                ) : (
-                  <Save className="mr-2 h-4 w-4" />
-                )}
-                Save Preferences
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter>
-          <p className="text-sm text-muted-foreground">Your trend preferences will help personalize your insights.</p>
-        </CardFooter>
+        </div>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {loading
-          ? Array.from({ length: 6 }).map((_, i) => (
-              <Card key={i}>
-                <CardHeader>
-                  <Skeleton className="h-6 w-1/2" />
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-5/6" />
-                </CardContent>
-              </Card>
-            ))
-          : filteredAndGroupedTrends.map((trend, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle>{trend.keyword}</CardTitle>
-                  <CardDescription>
-                    {trend.niche} · {trend.platform}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
+      <div className="space-y-12">
+        {filteredTrends.length > 0 ? filteredTrends.map(([niche, nicheTrends]) => (
+          <section key={niche}>
+            <h2 className="font-headline text-2xl font-bold mb-6 inline-block rounded-md bg-muted px-4 py-2">{niche}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {nicheTrends.map((trend) => (
+                 <TrendDetailDialog key={trend.trendName} trend={trend}>
+                    <Card className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border hover:border-primary/50 h-full cursor-pointer">
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                               <PlatformIcon platform={trend.platform} className="w-4 h-4 text-muted-foreground" />
+                               <Badge variant="outline">{trend.platform}</Badge>
+                            </div>
+                            <h3 className="font-headline text-xl font-bold pt-2">{trend.trendName}</h3>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                          <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">{trend.description}</div>
+                        </CardContent>
+                        <CardFooter className="flex flex-col items-start gap-4 p-4 pt-0">
+                            <div className="flex flex-wrap gap-2 items-center w-full">
+                              <Hash className="w-4 h-4 text-muted-foreground"/>
+                              {trend.hashtags.split(',').map(tag => (
+                                  <Badge key={tag.trim()} variant="secondary" className="font-mono text-xs">{tag.trim()}</Badge>
+                              ))}
+                            </div>
+                            <div className="w-full">
+                                <div className="flex justify-between items-center mb-1 text-xs font-medium">
+                                    <span className="text-muted-foreground">Virality Score</span>
+                                    <span className="text-primary">{trend.viralityScore}</span>
+                                </div>
+                                <Progress value={trend.viralityScore} className="h-2" />
+                            </div>
+                        </CardFooter>
+                    </Card>
+                 </TrendDetailDialog>
+              ))}
+            </div>
+          </section>
+        )) : (
+            <div className="text-center py-12">
+                <p className="text-lg font-semibold">No trends found for the selected filters.</p>
+                <p className="text-muted-foreground">Try adjusting your filter criteria.</p>
+            </div>
+        )}
       </div>
     </div>
   );
