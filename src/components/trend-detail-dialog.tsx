@@ -97,3 +97,5 @@ export function TrendDetailDialog({ trend, children }: TrendDetailDialogProps) {
     </Dialog>
   );
 }
+
+    
