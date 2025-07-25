@@ -8,7 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { PlatformIcon } from '@/components/platform-icon';
-import { Hash, Search } from 'lucide-react';
+import { Hash, Search, LoaderCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TrendDetailDialog } from '@/components/trend-detail-dialog';
@@ -70,6 +70,12 @@ export default function TrendingPage() {
                 <Skeleton className="h-14 w-3/4 mx-auto" />
                 <Skeleton className="h-6 w-1/2 mx-auto mt-4" />
             </header>
+            <div className="mb-8 p-4 bg-muted/50 rounded-lg animate-pulse text-center">
+                <div className="flex justify-center items-center gap-2">
+                    <LoaderCircle className="w-5 h-5 animate-spin text-primary" />
+                    <p className="font-semibold text-muted-foreground">Finding the latest trends for you, please wait...</p>
+                </div>
+            </div>
             <div className="space-y-12">
                 {[...Array(3)].map((_, i) => (
                     <section key={i}>
