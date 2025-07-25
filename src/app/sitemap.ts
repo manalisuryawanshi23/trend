@@ -15,10 +15,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/captions',
     '/contact',
     '/disclaimer',
+    '/forecast',
     '/privacy-policy',
     '/repurpose',
     '/terms-and-conditions',
-    '/trending',
     '/visualize',
   ].map((route) => ({
     url: `${siteUrl}${route}`,
