@@ -16,6 +16,7 @@ import {
   Link as LinkIcon, 
   Music,
   Wand2,
+  Flame,
 } from "lucide-react";
 
 type TrendDetailDialogProps = {
@@ -32,7 +33,15 @@ export function TrendDetailDialog({ trend, children }: TrendDetailDialogProps) {
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl md:text-3xl flex items-start gap-3">
             <PlatformIcon platform={trend.platform} className="w-6 h-6 mt-1 text-primary"/>
-            <span>{trend.trendName}</span>
+            <div className="flex flex-col">
+              <span>{trend.trendName}</span>
+              {trend.isBreakoutTrend && (
+                <Badge variant="destructive" className="animate-pulse w-fit mt-1">
+                    <Flame className="w-3 h-3 mr-1"/>
+                    Breakout Trend
+                </Badge>
+              )}
+            </div>
           </DialogTitle>
           <DialogDescription>
             A detailed breakdown of the "{trend.niche}" trend on {trend.platform}.

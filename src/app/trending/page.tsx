@@ -8,7 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { PlatformIcon } from '@/components/platform-icon';
-import { Hash, Search, LoaderCircle, Globe } from 'lucide-react';
+import { Hash, Search, LoaderCircle, Globe, Flame } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TrendDetailDialog } from '@/components/trend-detail-dialog';
@@ -86,7 +86,14 @@ export default function TrendingPage() {
       return acc;
     }, {} as Record<string, typeof trendsData.trends>);
 
-    const sortedAndGrouped = Object.entries(grouped).sort(([, a], [, b]) => b.length - a.length);
+    const sortedAndGrouped = Object.entries(grouped).sort(([, a], [, b]) => {
+      // Prioritize niches with breakout trends
+      const aHasBreakout = a.some(t => t.isBreakoutTrend);
+      const bHasBreakout = b.some(t => t.isBreakoutTrend);
+      if (aHasBreakout && !bHasBreakout) return -1;
+      if (!aHasBreakout && bHasBreakout) return 1;
+      return b.length - a.length;
+    });
 
     return { uniqueNiches, uniquePlatforms, filteredTrends: sortedAndGrouped };
 
@@ -199,9 +206,17 @@ export default function TrendingPage() {
                  <TrendDetailDialog key={trend.trendName} trend={trend}>
                     <Card className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border hover:border-primary/50 h-full cursor-pointer">
                         <CardHeader>
-                            <div className="flex items-center gap-3">
-                               <PlatformIcon platform={trend.platform} className="w-4 h-4 text-muted-foreground" />
-                               <Badge variant="outline">{trend.platform}</Badge>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                   <PlatformIcon platform={trend.platform} className="w-4 h-4 text-muted-foreground" />
+                                   <Badge variant="outline">{trend.platform}</Badge>
+                                </div>
+                                {trend.isBreakoutTrend && (
+                                    <Badge variant="destructive" className="animate-pulse">
+                                        <Flame className="w-3 h-3 mr-1"/>
+                                        Breakout
+                                    </Badge>
+                                )}
                             </div>
                             <h3 className="font-headline text-xl font-bold pt-2">{trend.trendName}</h3>
                         </CardHeader>
@@ -238,3 +253,5 @@ export default function TrendingPage() {
     </div>
   );
 }
+
+    

@@ -6,7 +6,7 @@
  * including a full post plan for each.
  *
  * - getTopTrends - A function that returns a list of top trends with all details for a given region.
- * - TopTrendsInput - The input type for the getTopTrends function.
+ * - TopTrendsInput - The input type for the getToptrends function.
  * - TopTrendsOutput - The return type for the getTopTrends function.
  */
 
@@ -25,6 +25,7 @@ const TrendSchema = z.object({
     description: z.string().describe('A brief, one-sentence description of the trend and why it\'s popular.'),
     platform: z.string().describe('The primary social media platform where this trend is popular (e.g., TikTok, Instagram).'),
     viralityScore: z.number().min(0).max(100).describe('A score from 0-100 indicating the trend\'s current virality.'),
+    isBreakoutTrend: z.boolean().describe('Set to true ONLY if this trend is experiencing explosive, rapid growth in the last 24-48 hours. Use this sparingly for only the most exceptional, fast-moving trends.'),
     hashtags: z.string().describe('A string of 3-5 relevant hashtags, separated by commas (e.g., #AIart, #generativeart, #digitalart).'),
     reasoning: z.string().describe('A detailed explanation of why the trend is rising, citing cultural context, events, or other factors.'),
     googleTrendsLink: z.string().describe('A full, working URL to the Google Trends page for a relevant keyword.'),
@@ -51,6 +52,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Creators are using AI to generate surreal and stunning visuals, pushing the boundaries of creativity.',
             platform: 'Instagram',
             viralityScore: 92,
+            isBreakoutTrend: true,
             hashtags: '#AIart, #generativeart, #digitalart',
             reasoning: 'Advances in text-to-image models have made high-quality AI art accessible to everyone, leading to a Cambrian explosion of creativity.',
             googleTrendsLink: 'https://trends.google.com/trends/explore?q=ai%20art',
@@ -68,6 +70,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Simple, delicious recipes that only require a single pan, tapping into the demand for low-effort meals.',
             platform: 'TikTok',
             viralityScore: 88,
+            isBreakoutTrend: false,
             hashtags: '#onepanmeal, #easyrecipe, #tiktokfood',
             reasoning: 'This trend taps into the universal desire for convenience and minimal cleanup, making it highly relatable and shareable for busy people.',
             googleTrendsLink: 'https://trends.google.com/trends/explore?q=one%20pan%20meals',
@@ -85,6 +88,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Thrift hauls and styling videos focused on 90s and Y2K streetwear are dominating fashion feeds.',
             platform: 'Instagram Reels',
             viralityScore: 85,
+            isBreakoutTrend: false,
             hashtags: '#vintagefashion, #thrifthaul, #90sstyle',
             reasoning: 'A combination of nostalgia for the 90s/Y2K era and a growing interest in sustainable fashion has made thrifting cool again.',
             googleTrendsLink: 'https://trends.google.com/trends/explore?q=vintage%20streetwear',
@@ -102,6 +106,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Gamers are showcasing their aesthetic and cozy gaming setups, focusing on ambiance, lighting, and comfort.',
             platform: 'TikTok',
             viralityScore: 82,
+            isBreakoutTrend: false,
             hashtags: '#cozygaming, #gamingsetup, #desksetup',
             reasoning: 'As gaming becomes more mainstream, the focus is shifting from pure performance to creating a personalized and comfortable environment.',
             googleTrendsLink: 'https://trends.google.com/trends/explore?q=cozy%20gaming%20setup',
@@ -119,6 +124,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Readers are sharing their book hauls and reviews, driven by recommendations from the #BookTok community.',
             platform: 'TikTok',
             viralityScore: 90,
+            isBreakoutTrend: true,
             hashtags: '#booktok, #bookhaul, #tbr',
             reasoning: 'The #BookTok community has become a powerful force in the publishing industry, driving massive sales for recommended titles.',
             googleTrendsLink: 'https://trends.google.com/trends/explore?q=booktok',
@@ -136,6 +142,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Creators are challenging themselves to complete a new DIY project every day for 30 days, showing the process.',
             platform: 'YouTube Shorts',
             viralityScore: 78,
+            isBreakoutTrend: false,
             hashtags: '#diychallenge, #30daychallenge, #crafting',
             reasoning: 'This trend combines the satisfaction of a challenge with the appeal of before-and-after transformations, making it highly engaging.',
             googleTrendsLink: 'https://trends.google.com/trends/explore?q=diy%20challenge',
@@ -153,6 +160,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Instead of hustle culture, creators are sharing slow, mindful morning routines focusing on journaling, meditation, and gratitude.',
             platform: 'Instagram Reels',
             viralityScore: 84,
+            isBreakoutTrend: false,
             hashtags: '#mindfulmorning, #slowliving, #wellnessroutine',
             reasoning: 'There is a growing counter-movement against "hustle culture," with people seeking more balance and mental peace.',
             googleTrendsLink: 'https://trends.google.com/trends/explore?q=mindful%20morning%20routine',
@@ -170,6 +178,7 @@ const fallbackTrends: TopTrendsOutput = {
             description: 'Showcasing the experience of a long-distance road trip in an electric vehicle, addressing range anxiety and charging.',
             platform: 'YouTube',
             viralityScore: 75,
+            isBreakoutTrend: false,
             hashtags: '#evroadtrip, #electricvehicle, #roadtrip',
             reasoning: 'As electric vehicles become more common, potential buyers are curious about their real-world long-distance capabilities.',
             googleTrendsLink: 'https://trends.google.com/trends/explore?q=ev%20road%20trip',
@@ -216,11 +225,12 @@ For each trend, you must provide a comprehensive analysis. Your output must be a
 3.  **description**: A short, compelling one-sentence explanation of the trend.
 4.  **platform**: The main platform where it is currently trending in {{region}}.
 5.  **viralityScore**: A 0-100 score of its current viral potential in {{region}}.
-6.  **hashtags**: A comma-separated string of 3-5 relevant hashtags.
-7.  **reasoning**: A detailed explanation for why the trend is rising (cultural context, events, etc.).
-8.  **googleTrendsLink**: A full, working Google Trends URL for a relevant keyword, ideally localized for {{region}}.
-9.  **viralAudioSound**: If applicable, the name of a viral audio associated with the trend.
-10. **postPlan**: A complete AI-powered post plan including a hook, caption, emoji combo, and suggested format.
+6.  **isBreakoutTrend**: A boolean. Set this to true ONLY for trends experiencing explosive, rapid growth in the last 24-48 hours. Be selective; most trends should have this set to false.
+7.  **hashtags**: A comma-separated string of 3-5 relevant hashtags.
+8.  **reasoning**: A detailed explanation for why the trend is rising (cultural context, events, etc.).
+9.  **googleTrendsLink**: A full, working Google Trends URL for a relevant keyword, ideally localized for {{region}}.
+10. **viralAudioSound**: If applicable, the name of a viral audio associated with the trend.
+11. **postPlan**: A complete AI-powered post plan including a hook, caption, emoji combo, and suggested format.
 
 Your response must be in JSON format.`,
 });
@@ -262,3 +272,5 @@ const topTrendsFlow = ai.defineFlow(
     }
   }
 );
+
+    
