@@ -38,6 +38,28 @@ const footerLinks = [
     { href: '/blog', label: 'Blog' },
 ];
 
+function Footer() {
+    return (
+        <footer className="py-8 md:py-6 border-t bg-muted/50">
+            <div className="container flex flex-col items-center justify-center gap-6 text-center">
+                <VisitorCounter />
+                <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+                   <span>© {new Date().getFullYear()} Up Trend Finder.</span>
+                   {footerLinks.map((link) => (
+                      <React.Fragment key={link.href}>
+                          <span className="hidden md:inline">|</span>
+                          <Link href={link.href} className="hover:text-primary hover:underline underline-offset-4">
+                              {link.label}
+                          </Link>
+                      </React.Fragment>
+                   ))}
+                </div>
+            </div>
+        </footer>
+    );
+}
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -66,21 +88,7 @@ export default function RootLayout({
             <main className="flex-grow">
               {children}
             </main>
-            <footer className="py-8 md:py-6 border-t bg-muted/50">
-                <div className="container flex flex-col items-center justify-center gap-4 text-center">
-                    <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-                       <span>© {new Date().getFullYear()} Up Trend Finder.</span>
-                       {footerLinks.map((link) => (
-                          <React.Fragment key={link.href}>
-                              <span className="hidden md:inline">|</span>
-                              <Link href={link.href} className="hover:text-primary hover:underline underline-offset-4">
-                                  {link.label}
-                              </Link>
-                          </React.Fragment>
-                       ))}
-                    </div>
-                </div>
-            </footer>
+            <Footer />
           </div>
           <Toaster />
         </ThemeProvider>
