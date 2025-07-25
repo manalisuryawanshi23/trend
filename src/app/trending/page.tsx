@@ -13,6 +13,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TrendDetailDialog } from '@/components/trend-detail-dialog';
 import { countries } from '@/lib/data';
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 
 export default function TrendingPage() {
   const [trendsData, setTrendsData] = useState<TopTrendsOutput | null>(null);
@@ -212,10 +214,19 @@ export default function TrendingPage() {
                                    <Badge variant="outline">{trend.platform}</Badge>
                                 </div>
                                 {trend.isBreakoutTrend && (
-                                    <Badge variant="destructive" className="animate-pulse">
-                                        <Flame className="w-3 h-3 mr-1"/>
-                                        Breakout
-                                    </Badge>
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger>
+                                        <Badge variant="destructive" className="animate-pulse cursor-help">
+                                            <Flame className="w-3 h-3 mr-1"/>
+                                            Breakout
+                                        </Badge>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>This trend is experiencing explosive, rapid growth.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
                                 )}
                             </div>
                             <h3 className="font-headline text-xl font-bold pt-2">{trend.trendName}</h3>
@@ -253,5 +264,3 @@ export default function TrendingPage() {
     </div>
   );
 }
-
-    

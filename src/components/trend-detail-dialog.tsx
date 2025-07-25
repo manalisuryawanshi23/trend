@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { PlatformIcon } from "@/components/platform-icon";
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   Lightbulb, 
   Captions, 
@@ -36,10 +37,19 @@ export function TrendDetailDialog({ trend, children }: TrendDetailDialogProps) {
             <div className="flex flex-col">
               <span>{trend.trendName}</span>
               {trend.isBreakoutTrend && (
-                <Badge variant="destructive" className="animate-pulse w-fit mt-1">
-                    <Flame className="w-3 h-3 mr-1"/>
-                    Breakout Trend
-                </Badge>
+                 <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Badge variant="destructive" className="animate-pulse w-fit mt-1 cursor-help">
+                                <Flame className="w-3 h-3 mr-1"/>
+                                Breakout Trend
+                            </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>This trend is experiencing explosive, rapid growth.</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
               )}
             </div>
           </DialogTitle>
@@ -106,5 +116,3 @@ export function TrendDetailDialog({ trend, children }: TrendDetailDialogProps) {
     </Dialog>
   );
 }
-
-    
