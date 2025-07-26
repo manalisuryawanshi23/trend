@@ -22,8 +22,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
 const trendFormSchema = z.object({
-  platform: z.string({ required_error: "Please select a platform." }),
-  niche: z.string({ required_error: "Please select a niche." }),
+  platform: z.string({ required_error: "Please select a platform." }).min(1, "Please select a platform."),
+  niche: z.string({ required_error: "Please select a niche." }).min(1, "Please select a niche."),
   otherNiche: z.string().optional(),
   microNiche: z.string().optional(),
   otherMicroNiche: z.string().optional(),
@@ -100,8 +100,12 @@ export default function ForecastPage() {
     if (selectedRegion) {
         const availablePlatforms = getPlatformsForCountry(selectedRegion);
         const currentPlatform = trendForm.getValues("platform");
-        if (!availablePlatforms.some(p => p.name === currentPlatform)) {
-             trendForm.setValue('platform', availablePlatforms[0]?.name || '');
+        
+        // If a platform is selected but it's not available in the new region, reset it.
+        // This prevents the form from holding an invalid value.
+        // It does NOT auto-select a default if no platform was chosen, preserving the placeholder.
+        if (currentPlatform && !availablePlatforms.some(p => p.name === currentPlatform)) {
+             trendForm.setValue('platform', '');
         }
     }
    }, [selectedRegion, trendForm]);
