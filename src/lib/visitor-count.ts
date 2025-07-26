@@ -21,7 +21,7 @@ async function readDailyLog(): Promise<DailyVisitorsLog> {
   try {
     const data = await fs.readFile(dailyVisitorsLogPath, 'utf-8');
     return JSON.parse(data);
-  } catch (error) {
+  } catch (error: any) {
     // If the file doesn't exist or is invalid, start with an empty log
     if (error.code === 'ENOENT' || error instanceof SyntaxError) {
       return {};
@@ -38,8 +38,9 @@ async function writeDailyLog(data: DailyVisitorsLog): Promise<void> {
  * Tracks a unique visitor for the current day and returns the count of unique visitors for the day.
  */
 export async function trackUniqueVisitor(): Promise<number> {
-  const forwardedFor = headers().get('x-forwarded-for');
-  const ip = forwardedFor ? forwardedFor.split(',')[0] : headers().get('x-real-ip');
+  const headersList = headers();
+  const forwardedFor = headersList.get('x-forwarded-for');
+  const ip = forwardedFor ? forwardedFor.split(',')[0] : headersList.get('x-real-ip');
   
   // Use a fallback for local development if no IP is found
   const identifier = ip || 'local-dev-user';
