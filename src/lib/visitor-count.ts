@@ -1,71 +1,95 @@
+import type {Metadata} from 'next';
+import Link from 'next/link';
+import React from 'react';
+import './globals.css';
+import { Toaster } from "@/components/ui/toaster";
+import { Nav } from '@/components/nav';
+import { Inter, Space_Grotesk } from 'next/font/google';
+import { cn } from '@/lib/utils';
+import { ThemeProvider } from "@/components/theme-provider";
+import './globals.css';
 
-'use server';
+const fontInter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { headers } from 'next/headers';
-import { createHash } from 'crypto';
+const fontSpaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+});
 
-
-// Note: This is a simple file-based analytics system for demonstration purposes.
-// In a production environment, this could lead to race conditions.
-// A more robust solution would use a database (like Redis or Firestore) with atomic operations.
-
-const dailyVisitorsLogPath = path.join(process.cwd(), 'daily-visitors.json');
-
-type DailyVisitorsLog = {
-  [date: string]: string[]; // date format: YYYY-MM-DD, value is an array of hashed IPs
+export const metadata: Metadata = {
+  title: {
+    default: 'Up Trend Finder | AI-Powered Social Media Trend Forecasting',
+    template: '%s | Up Trend Finder',
+  },
+  description: 'Forecast viral trends 24-72 hours before they explode. Up Trend Finder uses AI to analyze social media data, giving you the insights to go viral.',
 };
 
-async function readDailyLog(): Promise<DailyVisitorsLog> {
-  try {
-    const data = await fs.readFile(dailyVisitorsLogPath, 'utf-8');
-    return JSON.parse(data);
-  } catch (error: any) {
-    // If the file doesn't exist or is invalid, start with an empty log
-    if (error.code === 'ENOENT' || error instanceof SyntaxError) {
-      return {};
-    }
-    throw error;
-  }
+const footerLinks = [
+    { href: '/about', label: 'About Us' },
+    { href: '/contact', label: 'Contact Us' },
+    { href: '/privacy-policy', label: 'Privacy Policy' },
+    { href: '/terms-and-conditions', label: 'Terms & Conditions' },
+    { href: '/disclaimer', label: 'Disclaimer' },
+    { href: '/blog', label: 'Blog' },
+];
+
+function Footer() {
+    return (
+        <footer className="py-8 md:py-6 border-t bg-muted/50">
+            <div className="container flex flex-col items-center justify-center gap-4 text-center">
+                <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+                   <span>© {new Date().getFullYear()} Up Trend Finder.</span>
+                   {footerLinks.map((link) => (
+                      <React.Fragment key={link.href}>
+                          <span className="hidden md:inline">|</span>
+                          <Link href={link.href} className="hover:text-primary hover:underline underline-offset-4">
+                              {link.label}
+                          </Link>
+                      </React.Fragment>
+                   ))}
+                </div>
+            </div>
+        </footer>
+    );
 }
 
-async function writeDailyLog(data: DailyVisitorsLog): Promise<void> {
-  await fs.writeFile(dailyVisitorsLogPath, JSON.stringify(data, null, 2), 'utf-8');
-}
 
-/**
- * Tracks a unique visitor for the current day and returns the count of unique visitors for the day.
- */
-export async function trackUniqueVisitor(): Promise<number> {
-  const headersList = headers();
-  const forwardedFor = headersList.get('x-forwarded-for');
-  const ip = forwardedFor ? forwardedFor.split(',')[0] : headersList.get('x-real-ip');
-  
-  // Use a fallback for local development if no IP is found
-  const identifier = ip || 'local-dev-user';
-
-  // For privacy, we'll hash the IP address along with a daily salt (the date)
-  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-  const hash = createHash('sha256').update(identifier + today).digest('hex');
-
-  const log = await readDailyLog();
-
-  // Clean up old log entries to keep the file size manageable
-  const recentDates = Object.keys(log).slice(-30); // Keep last 30 days
-  const recentLog: DailyVisitorsLog = {};
-  for (const date of recentDates) {
-      recentLog[date] = log[date];
-  }
-  
-  if (!recentLog[today]) {
-    recentLog[today] = [];
-  }
-
-  if (!recentLog[today].includes(hash)) {
-    recentLog[today].push(hash);
-    await writeDailyLog(recentLog);
-  }
-
-  return recentLog[today].length;
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn("font-body antialiased", fontInter.variable, fontSpaceGrotesk.variable)}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex flex-col min-h-screen bg-background">
+            <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <div className="container mx-auto px-4 sm:px-6 py-3">
+                <div className="flex items-center justify-between gap-4">
+                    <Link href="/" className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                      Up Trend Finder
+                    </Link>
+                    <Nav />
+                </div>
+              </div>
+            </header>
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </div>
+          <Toaster />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }
