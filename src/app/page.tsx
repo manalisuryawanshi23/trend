@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -46,7 +46,7 @@ export default function ForecastPage() {
     resolver: zodResolver(trendFormSchema),
     defaultValues: {
       platform: '',
-      niche: 'Fashion',
+      niche: '',
       otherNiche: '',
       microNiche: '',
       otherMicroNiche: '',
@@ -283,7 +283,7 @@ export default function ForecastPage() {
                             <Select 
                                 onValueChange={field.onChange} 
                                 value={field.value} 
-                                disabled={selectedNiche !== 'Other' && microNicheOptions.length === 0}
+                                disabled={!selectedNiche || (selectedNiche !== 'Other' && microNicheOptions.length === 0)}
                             >
                             <FormControl>
                                 <SelectTrigger>
