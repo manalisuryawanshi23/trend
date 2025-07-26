@@ -8,7 +8,9 @@ import { Nav } from '@/components/nav';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from "@/components/theme-provider";
-import { VisitorCounter } from '@/components/visitor-counter';
+import { trackUniqueVisitor } from '@/lib/visitor-count';
+import { Badge } from '@/components/ui/badge';
+import { Users } from 'lucide-react';
 import './globals.css';
 
 const fontInter = Inter({
@@ -38,11 +40,18 @@ const footerLinks = [
     { href: '/blog', label: 'Blog' },
 ];
 
-function Footer() {
+async function Footer() {
+    const uniqueVisitors = await trackUniqueVisitor();
     return (
         <footer className="py-8 md:py-6 border-t bg-muted/50">
             <div className="container flex flex-col items-center justify-center gap-6 text-center">
-                <VisitorCounter />
+                 <Badge variant="outline" className="py-2 px-4 border-primary/20 text-sm">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Users className="h-4 w-4 text-primary" />
+                        <span className="font-semibold">{uniqueVisitors.toLocaleString()}</span>
+                        <span>Unique Visitors Today</span>
+                    </div>
+                </Badge>
                 <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                    <span>© {new Date().getFullYear()} Up Trend Finder.</span>
                    {footerLinks.map((link) => (
