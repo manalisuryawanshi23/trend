@@ -39,115 +39,445 @@ export const allPlatforms = [
   ] as const;
   
   export const niches = [
-      { 
-          name: 'AI & Future Tech', 
-          microNiches: ['AI Tools & Reviews', 'Generative Art', 'AI News & Ethics', 'Robotics', 'Virtual & Augmented Reality', 'Future of Work', 'Prompt Engineering'] 
-      },
-      { 
-          name: 'Automotive',
-          microNiches: ['Car Reviews', 'Classic Cars', 'EVs (Electric Vehicles)', 'Car Modding / Tuning', 'Motorsports', 'Supercars', 'Off-roading & Overlanding']
-      },
-      { 
-          name: 'Beauty', 
-          microNiches: ['Skincare & Routines', 'Makeup Tutorials', 'Clean & Sustainable Beauty', 'Haircare & Styling', 'Fragrance Reviews', 'Nail Art', 'Cosplay & SFX Makeup'] 
-      },
-      {
-        name: 'Books & Literature',
-        microNiches: ['Book Reviews (#BookTok)', 'Author Interviews', 'Fantasy & Sci-Fi Books', 'Young Adult (YA)', 'Classic Literature', 'Poetry Readings', 'Book Hauls']
-      },
-      {
-        name: 'Business & Entrepreneurship',
-        microNiches: ['Startup Life & Vlogs', 'Marketing & Growth Hacks', 'Side Hustles & Passive Income', 'E-commerce Tips', 'Productivity Systems', 'Leadership Advice', 'Small Business Stories']
-      },
-      { 
-          name: 'Comedy',
-          microNiches: ['Skits & Sketches', 'Memes & Viral Sounds', 'Stand-up Clips', 'Relatable Humor', 'Parody & Satire', 'Improv', 'Character Comedy']
-      },
-      {
-          name: 'Dance',
-          microNiches: ['Dance Challenges', 'Choreography', 'Dance Tutorials', 'Specific Styles (e.g., Hip Hop, Ballet)', 'Live Performance', 'Dance History', 'Freestyle']
-      },
-      {
-          name: 'DIY & Crafts',
-          microNiches: ['Home Decor Projects', 'Woodworking', 'Knitting & Crochet', 'Upcycling & Thrifting Flips', 'Pottery & Ceramics', '3D Printing', 'Candle & Soap Making']
-      },
-      {
-          name: 'Education',
-          microNiches: ['Language Learning', 'History Facts', 'Study Tips & Hacks', 'Book Summaries', 'Math Tricks', 'Software Tutorials', 'General Knowledge']
-      },
-      { 
-          name: 'Fashion', 
-          microNiches: ['Streetwear & Sneakers', 'Luxury Fashion', 'Thrift & Vintage Hauls', 'Sustainable & Ethical Fashion', 'Plus-Size Fashion', 'Fashion History', 'DIY & Sewing'] 
-      },
-      { 
-          name: 'Finance & Investing', 
-          microNiches: ['Personal Finance & Budgeting', 'Cryptocurrency & Web3', 'Stock Market Analysis', 'Real Estate Investing', 'Side Hustles', 'FIRE Movement', 'Fintech & Robo-advising'] 
-      },
-      { 
-          name: 'Food & Cooking', 
-          microNiches: ['Quick Recipes (Under 30 mins)', 'Vegan & Plant-Based', 'Baking & Desserts', 'Gourmet & Fine Dining', 'Street Food Reviews', 'Meal Prep & Planning', 'ASMR Eating'] 
-      },
-      { 
-          name: 'Gaming', 
-          microNiches: ['Indie Game Discoveries', 'eSports & Competitive Gaming', 'Retro Gaming', 'Mobile Gaming', 'Game Development Logs', 'Let\'s Play & Walkthroughs', 'Gaming News & Rumors'] 
-      },
-      { 
-          name: 'Health & Wellness', 
-          microNiches: ['Fitness Routines & Challenges', 'Mental Health & Mindfulness', 'Nutrition & Healthy Eating', 'Yoga & Meditation', 'Biohacking', 'Sober & Mindful Drinking', 'Holistic & Alternative Health'] 
-      },
-      {
-        name: 'Home & Garden',
-        microNiches: ['Interior Design Trends', 'Gardening & Plant Care', 'Home Organization & Cleaning Hacks', 'Renovation & DIY Projects', 'House Plants', 'Sustainable Living', 'Smart Home Tech']
-      },
-      { 
-          name: 'Movies & TV', 
-          microNiches: ['Film & TV Show Analysis', 'Fan Theories', 'TV Show Reviews', 'Behind-the-Scenes Facts', 'Movie News & Trailers', 'Anime & Manga', 'K-Drama & J-Drama']
-      },
-      {
-          name: 'Music',
-          microNiches: ['Live Performance Clips', 'Music Production Tutorials', 'Song Covers', 'Artist Interviews', 'Vinyl & Record Collecting', 'Music Theory Lessons', 'New Music Discovery']
-      },
-      {
-          name: 'Parenting',
-          microNiches: ['Newborn Tips', 'Toddler Activities', 'Teen Parenting Advice', 'Family Travel', 'Montessori & Gentle Parenting', 'Homeschooling Life', 'Dad Jokes & Family Humor']
-      },
-      {
-          name: 'Pets',
-          microNiches: ['Dog Training Tips', 'Funny Cat Videos', 'Exotic Pets Care', 'Pet Product Reviews', 'Animal Rescue Stories', 'Pet Health & Nutrition', 'Obedience & Agility Training']
-      },
-      {
-          name: 'Real Estate',
-          microNiches: ['Luxury House Tours', 'Investment Properties', 'Interior Design Inspiration', 'Real Estate Market Analysis', 'First-Time Home Buying Guide', 'Tiny Homes & Alternative Living']
-      },
-      {
-        name: 'Relationships & Dating',
-        microNiches: ['Dating App Advice', 'Relationship Goals & Skits', 'Friendship & Social Life', 'Self-Love & Personal Growth', 'Storytime: Dating Disasters', 'Marriage Humor']
-      },
-      {
-          name: 'Science & Nature',
-          microNiches: ['Science Experiments', 'Nature Documentaries', 'Space & Astronomy', 'Biology & Animal Facts', 'Environmental Science', 'Cool Science Explained', 'Weather Phenomena']
-      },
-      {
-          name: 'Sports',
-          microNiches: ['Football (Soccer) Analysis', 'Basketball Highlights & Breakdowns', 'Fantasy Sports Strategy', 'Extreme Sports', 'Athlete Interviews & Documentaries', 'Sports Betting Tips', 'Calisthenics & Bodyweight Fitness']
-      },
-      {
-        name: 'Spirituality & Mindfulness',
-        microNiches: ['Astrology & Horoscopes', 'Tarot & Oracle Readings', 'Manifestation Techniques', 'Guided Meditations', 'Crystal Healing', 'Modern Witchcraft (#WitchTok)', 'Mindful Living']
-      },
-      { 
-          name: 'Tech', 
-          microNiches: ['Gadget Reviews', 'Productivity Hacks & Apps', 'Smart Home Setups', 'PC Building & Modding', 'Cybersecurity Tips', 'Web Development'] 
-      },
-      { 
-          name: 'Travel', 
-          microNiches: ['Budget Travel & Backpacking', 'Luxury & 5-Star Travel', 'Adventure & Extreme Travel', 'Cultural Immersion & Slow Travel', 'Digital Nomad Lifestyle', 'Unique Stays (AirBnb, etc.)', 'Van Life'] 
-      },
-      {
-          name: 'ASMR',
-          microNiches: ['Tapping & Scratching', 'Whispering & Soft Speaking', 'Crinkling & Packaging Sounds', 'Roleplays', 'Unintentional ASMR', 'No-talking ASMR']
-      }
-  ];
+    {
+        "name": "Dance",
+        "microNiches": [
+            "Choreography",
+            "Dance covers",
+            "Trending songs",
+            "Freestyle dance",
+            "Classical dance",
+            "Dance tutorials",
+            "Dance challenges",
+            "Regional dances",
+            "Group dance reels"
+        ]
+    },
+    {
+        "name": "Lip Sync & Dialogue",
+        "microNiches": [
+            "Movie scenes",
+            "Comedy dialogues",
+            "Emotional dialogues",
+            "Trending voiceovers",
+            "TV serials mimicry",
+            "Reel remixes"
+        ]
+    },
+    {
+        "name": "Comedy/Skits",
+        "microNiches": [
+            "Situational humor",
+            "Parody content",
+            "Relatable daily life",
+            "Office comedy",
+            "School/College humor",
+            "Regional comedy",
+            "Stand-up clips",
+            "Meme-style skits"
+        ]
+    },
+    {
+        "name": "Art & Craft",
+        "microNiches": [
+            "DIY crafts",
+            "Recycled art",
+            "Drawing tutorials",
+            "Painting timelapse",
+            "Clay art",
+            "Sketching",
+            "Resin art",
+            "Origami",
+            "Calligraphy",
+            "Paper crafts"
+        ]
+    },
+    {
+        "name": "Makeup & Beauty",
+        "microNiches": [
+            "Daily makeup looks",
+            "Bridal makeup",
+            "Before-after transformations",
+            "Product reviews",
+            "Get ready with me (GRWM)",
+            "Skincare routines",
+            "Eye makeup tutorials",
+            "Lipstick swatches"
+        ]
+    },
+    {
+        "name": "Fashion & Styling",
+        "microNiches": [
+            "OOTD (Outfit of the day)",
+            "Styling tips",
+            "Wardrobe hacks",
+            "Outfit transitions",
+            "Fashion hacks",
+            "Accessories styling",
+            "Traditional wear looks",
+            "Thrifted fashion"
+        ]
+    },
+    {
+        "name": "Photography/Videography",
+        "microNiches": [
+            "Photo editing tricks",
+            "Mobile photography tips",
+            "Behind the scenes (BTS)",
+            "Reel transitions",
+            "Cinematic shots",
+            "Creative angles",
+            "Lightroom/VSCO tips"
+        ]
+    },
+    {
+        "name": "Home Decor",
+        "microNiches": [
+            "Room makeover",
+            "Home DIYs",
+            "Budget decor tips",
+            "Aesthetic setups",
+            "Organizing hacks",
+            "Wall art",
+            "IKEA hacks",
+            "Interior styling"
+        ]
+    },
+    {
+        "name": "Motivational/Quotes",
+        "microNiches": [
+            "Success quotes",
+            "Morning affirmations",
+            "Entrepreneur motivation",
+            "Life advice",
+            "Self-growth",
+            "Audio + caption reels",
+            "Mindset reels"
+        ]
+    },
+    {
+        "name": "Book Reviews",
+        "microNiches": [
+            "Book summaries",
+            "Top 5 book lists",
+            "Reading hacks",
+            "Book quotes",
+            "Book vs Movie",
+            "Favorite books by genre"
+        ]
+    },
+    {
+        "name": "Facts & Curiosities",
+        "microNiches": [
+            "History facts",
+            "Space exploration",
+            "Tech facts",
+            "Unbelievable world facts",
+            "Health myths",
+            "Did-you-know series",
+            "Human body facts"
+        ]
+    },
+    {
+        "name": "Language Learning",
+        "microNiches": [
+            "English grammar",
+            "Spoken English tips",
+            "Language challenges",
+            "Multilingual comparisons",
+            "Word of the day",
+            "Idioms and phrases",
+            "Regional language basics"
+        ]
+    },
+    {
+        "name": "Life Hacks/Tips",
+        "microNiches": [
+            "Productivity tips",
+            "Study hacks",
+            "Smartphone tricks",
+            "Money-saving hacks",
+            "Office hacks",
+            "Household hacks",
+            "DIY fixes"
+        ]
+    },
+    {
+        "name": "Fitness",
+        "microNiches": [
+            "Home workouts",
+            "Gym workouts",
+            "Weight loss journey",
+            "Fitness motivation",
+            "Yoga + strength mix",
+            "Workout challenges",
+            "Equipment-free fitness"
+        ]
+    },
+    {
+        "name": "Yoga/Meditation",
+        "microNiches": [
+            "Morning flow",
+            "Breathing techniques",
+            "Guided meditations",
+            "Yoga for stress",
+            "Yoga poses for beginners",
+            "Mindfulness tips",
+            "Spiritual affirmations"
+        ]
+    },
+    {
+        "name": "Nutrition/Diet",
+        "microNiches": [
+            "Weight loss recipes",
+            "Healthy snacks",
+            "Calorie tracking",
+            "Meal prep ideas",
+            "Smoothie recipes",
+            "Diabetic/keto-friendly meals",
+            "Immunity boosting foods"
+        ]
+    },
+    {
+        "name": "Self-care/Mental Health",
+        "microNiches": [
+            "Mental wellness tips",
+            "Journaling prompts",
+            "Night routine",
+            "Burnout recovery",
+            "Affirmations",
+            "Digital detox ideas"
+        ]
+    },
+    {
+        "name": "Travel & Exploration",
+        "microNiches": [
+            "Hidden places",
+            "Solo travel",
+            "Budget travel hacks",
+            "Food while traveling",
+            "Vlogs",
+            "Adventure activities",
+            "Cultural reels"
+        ]
+    },
+    {
+        "name": "Small Business",
+        "microNiches": [
+            "Order packing videos",
+            "Product labeling",
+            "Behind-the-scenes of business",
+            "Business journey",
+            "Etsy/Shopee tips",
+            "Product showcase",
+            "Customer reviews"
+        ]
+    },
+    {
+        "name": "Digital Marketing",
+        "microNiches": [
+            "Instagram growth tips",
+            "SEO basics",
+            "Social media strategy",
+            "Paid ads hacks",
+            "Content creation tools",
+            "Analytics & insights"
+        ]
+    },
+    {
+        "name": "Affiliate Marketing",
+        "microNiches": [
+            "Amazon product finds",
+            "Niche-based product lists",
+            "How to use the product",
+            "Commission tricks",
+            "Coupon codes usage"
+        ]
+    },
+    {
+        "name": "Finance & Investment",
+        "microNiches": [
+            "Personal budgeting",
+            "Crypto for beginners",
+            "Mutual funds basics",
+            "Investing tips",
+            "Credit card hacks",
+            "Teen finance",
+            "Stock market education"
+        ]
+    },
+    {
+        "name": "E-commerce/Drop-shipping",
+        "microNiches": [
+            "Store design",
+            "Product research tools",
+            "Shopify tips",
+            "Ad strategy",
+            "Sourcing products",
+            "Order fulfillment workflow"
+        ]
+    },
+    {
+        "name": "Cooking & Recipes",
+        "microNiches": [
+            "Quick snacks",
+            "Indian recipes",
+            "One-pot meals",
+            "5-ingredient recipes",
+            "Tiffin ideas",
+            "International cuisines",
+            "Street food at home",
+            "2-minute recipes"
+        ]
+    },
+    {
+        "name": "Street Food/Reviews",
+        "microNiches": [
+            "Local vendor reels",
+            "Unique food items",
+            "Taste test reactions",
+            "Hidden food gems",
+            "Regional food special",
+            "Food festival content"
+        ]
+    },
+    {
+        "name": "Food Art",
+        "microNiches": [
+            "Aesthetic plating",
+            "Bento box art",
+            "Cake decoration",
+            "Food styling tutorials",
+            "Fruit carving",
+            "Smoothie art"
+        ]
+    },
+    {
+        "name": "Singing",
+        "microNiches": [
+            "Cover songs",
+            "Duets",
+            "Original songs",
+            "Trending audio covers",
+            "Reaction reels",
+            "Regional song covers",
+            "Singing challenges"
+        ]
+    },
+    {
+        "name": "Instrumental Music",
+        "microNiches": [
+            "Solo instrument play",
+            "Music practice clips",
+            "Instrumental covers",
+            "Tutorials",
+            "Duet with singers",
+            "Classical/jazz/folk reels"
+        ]
+    },
+    {
+        "name": "Music Production",
+        "microNiches": [
+            "Beat making",
+            "Studio tour",
+            "Music equipment setup",
+            "Vocal layering",
+            "Sound effects",
+            "Behind the scenes of a song"
+        ]
+    },
+    {
+        "name": "Tech Reviews",
+        "microNiches": [
+            "Smartphone reviews",
+            "Gadgets unboxing",
+            "Camera comparisons",
+            "Budget tech",
+            "Pros & cons",
+            "Tech for content creators"
+        ]
+    },
+    {
+        "name": "App Tips & Tools",
+        "microNiches": [
+            "Top 5 apps",
+            "Hidden features",
+            "Productivity tools",
+            "AI tools",
+            "Reel/video editing apps",
+            "Phone customization apps"
+        ]
+    },
+    {
+        "name": "Gaming",
+        "microNiches": [
+            "Gameplay highlights",
+            "Funny game moments",
+            "Live stream clips",
+            "Gaming memes",
+            "Game review reels",
+            "Game comparisons"
+        ]
+    },
+    {
+        "name": "Pet Content",
+        "microNiches": [
+            "Cute pet moments",
+            "Pet routines",
+            "Pet care tips",
+            "Voice-over pets",
+            "Pet transformation",
+            "Animal rescues",
+            "Feeding time ASMR"
+        ]
+    },
+    {
+        "name": "Couple Content",
+        "microNiches": [
+            "Love story reels",
+            "Couple challenges",
+            "Pranks",
+            "Travel with partner",
+            "Anniversary specials",
+            "Couple quotes",
+            "Relationship tips"
+        ]
+    },
+    {
+        "name": "Parenting/Mom Life",
+        "microNiches": [
+            "Baby tips",
+            "Newborn hacks",
+            "Funny mom reels",
+            "Growth milestone",
+            "Parenting struggles",
+            "Baby product reviews",
+            "Daily routine with toddler"
+        ]
+    },
+    {
+        "name": "Friendship Content",
+        "microNiches": [
+            "Friendship pranks",
+            "Emotional bond reels",
+            "Best friend challenges",
+            "Group college memories",
+            "BFF quotes"
+        ]
+    },
+    {
+        "name": "Reel-Specific Trends",
+        "microNiches": [
+            "Outfit transitions",
+            "Voiceover reels",
+            "POV reels",
+            "Text-based storytelling",
+            "Trend templates",
+            "Viral transitions",
+            "Glow-up reels"
+        ]
+    }
+];
   
   
   export const countries = [
