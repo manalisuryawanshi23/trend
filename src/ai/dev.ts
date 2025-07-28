@@ -10,3 +10,4 @@ import '@/ai/flows/analyze-post.ts';
 import '@/ai/flows/generate-visual-concept.ts';
 import '@/ai/flows/generate-captions.ts';
 import '@/ai/flows/top-trends.ts';
+import '@/ai/flows/generate-bio.ts';
