@@ -10,13 +10,14 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle, SheetHeader 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper, Captions, Flame } from 'lucide-react';
+import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper, Captions, Flame, User } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
   { href: '/', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
   { href: '/trending', label: 'Top Trending', icon: <Flame className="h-5 w-5" /> },
   { href: '/captions', label: 'Captions', icon: <Captions className="h-5 w-5" /> },
+  { href: '/bio', label: 'Bio', icon: <User className="h-5 w-5" /> },
   { href: '/repurpose', label: 'Repurpose', icon: <Sparkles className="h-5 w-5" /> },
   { href: '/analyze', label: 'Analyze', icon: <Search className="h-5 w-5" /> },
   { href: '/visualize', label: 'Visualize', icon: <Image className="h-5 w-5" /> },
@@ -38,15 +39,27 @@ const helpGuide = [
     },
     {
         tool: "Captions",
-        description: "Generates 5 unique caption and hashtag ideas from your image.",
+        description: "Generates 8 unique caption and hashtag ideas from your image or video.",
         useCase: "Best for overcoming writer's block and getting creative copy for your posts.",
         steps: [
-            "Upload an image.",
+            "Upload an image or video.",
             "Select the social media platform you're posting to.",
             "Optionally, add some context or instructions for the AI.",
-            "Click 'Generate Captions' to get 5 distinct options."
+            "Click 'Generate Captions' to get 8 distinct options."
         ],
         proTip: "Use the 'Optional Context' field to guide the AI's tone, e.g., 'make it funny' or 'ask an engaging question'."
+    },
+    {
+        tool: "Bio",
+        description: "Generates 5 unique and compelling social media bios.",
+        useCase: "Best for crafting a professional and impactful bio that converts visitors to followers.",
+        steps: [
+            "Select your target platform (e.g., Instagram, Twitter).",
+            "Enter your name/brand and a short description.",
+            "Choose your desired 'vibe' (e.g., Professional, Witty).",
+            "Click 'Generate Bios' for 5 ready-to-use options."
+        ],
+        proTip: "Try generating bios with different 'vibes' to see which one best fits your brand's personality."
     },
     {
         tool: "Repurpose",
