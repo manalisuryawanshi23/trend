@@ -506,8 +506,8 @@ export const allPlatforms = [
     ] as const;
   
   export const aiModels = [
+     { name: 'gemini-2.5-flash', label: 'Gemini-2.5 Flash', description: 'For complex analysis and high-quality creative content.' },
       { name: 'gemini-1.5-flash-latest', label: 'Gemini 1.5 Flash (Fast & Balanced)', description: 'Ideal for most tasks. Quick and cost-effective.' },
-      { name: 'gemini-1.5-pro-latest', label: 'Gemini 1.5 Pro (Powerful)', description: 'For complex analysis and high-quality creative content.' },
       { name: 'gemini-2.5-pro-preview', label: 'Gemini 2.5 Pro (Experimental)', description: 'The latest experimental model with cutting-edge capabilities.' },
       { name: 'gemini-1.0-pro-latest', label: 'Gemini 1.0 Pro (Legacy)', description: 'A stable and reliable previous generation model.' },
   ] as const;
