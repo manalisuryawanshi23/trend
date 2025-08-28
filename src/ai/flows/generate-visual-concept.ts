@@ -11,7 +11,6 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { saveImage } from '@/lib/image-utils';
 
 const GenerateVisualConceptInputSchema = z.object({
   trendName: z.string().describe('The name of the trend.'),
@@ -22,7 +21,7 @@ const GenerateVisualConceptInputSchema = z.object({
 export type GenerateVisualConceptInput = z.infer<typeof GenerateVisualConceptInputSchema>;
 
 const GenerateVisualConceptOutputSchema = z.object({
-  imageUrl: z.string().describe('The public URL of the generated image.'),
+  imageUrl: z.string().describe('The data URI of the generated image.'),
 });
 export type GenerateVisualConceptOutput = z.infer<typeof GenerateVisualConceptOutputSchema>;
 
@@ -39,10 +38,6 @@ function getAspectRatio(format: string): string {
         return '1:1';
     }
     return '16:9';
-}
-
-const slugify = (text: string) => {
-    return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
 }
 
 const generateVisualConceptFlow = ai.defineFlow(
@@ -76,11 +71,8 @@ The style should be modern, photographic, and suitable for social media.`;
       throw new Error('Image generation failed.');
     }
 
-    const filename = `${slugify(trendName)}-${Date.now()}.png`;
-    const publicUrl = await saveImage({ dataUri: media.url, filename });
-
     return {
-      imageUrl: publicUrl,
+      imageUrl: media.url,
     };
   }
 );
