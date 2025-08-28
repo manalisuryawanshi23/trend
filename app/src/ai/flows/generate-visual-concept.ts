@@ -61,9 +61,9 @@ The style should be modern, photographic, and suitable for social media.`;
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-preview-image-generation',
       prompt: prompt,
-      aspectRatio: aspectRatio,
       config: {
         responseModalities: ['TEXT', 'IMAGE'],
+        aspectRatio: aspectRatio,
       },
     });
 
