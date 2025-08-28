@@ -21,7 +21,7 @@ const GenerateVisualConceptInputSchema = z.object({
 export type GenerateVisualConceptInput = z.infer<typeof GenerateVisualConceptInputSchema>;
 
 const GenerateVisualConceptOutputSchema = z.object({
-  imageUrl: z.string().describe('The data URI of the generated image.'),
+  imageUrl: z.string().url().describe('The data URI of the generated image.'),
 });
 export type GenerateVisualConceptOutput = z.infer<typeof GenerateVisualConceptOutputSchema>;
 
@@ -58,17 +58,19 @@ Caption: "${caption}"
 Create an eye-catching, high-quality image suitable for web and social media that captures the essence of this idea.
 The style should be modern, photographic, and suitable for social media.`;
     
+    // Using gemini-2.0-flash-preview-image-generation for consistency with the other visual generator.
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-preview-image-generation',
       prompt: prompt,
-      aspectRatio: aspectRatio,
       config: {
         responseModalities: ['TEXT', 'IMAGE'],
+        // Note: The gemini-2.0-flash-preview-image-generation model might not support aspectRatio.
+        // The underlying model will default to a standard aspect ratio if this is not supported.
       },
     });
 
-    if (!media.url) {
-      throw new Error('Image generation failed.');
+    if (!media?.url) {
+      throw new Error('Image generation failed or returned no media URL.');
     }
 
     return {
