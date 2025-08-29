@@ -135,6 +135,55 @@ function CaptionCard({ vibe, caption, hashtags }: { vibe: string; caption: strin
     );
 }
 
+// Helper function to extract frames from a video
+async function extractFramesFromVideo(file: File, numFrames: number = 5): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.src = URL.createObjectURL(file);
+        
+        video.onloadedmetadata = () => {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            if (!context) return reject(new Error('Canvas context not available'));
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const frames: string[] = [];
+            const duration = video.duration;
+            const interval = duration / numFrames;
+
+            let framesExtracted = 0;
+
+            const extractFrame = (time: number) => {
+                video.currentTime = time;
+            };
+
+            video.onseeked = () => {
+                context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+                frames.push(canvas.toDataURL('image/jpeg'));
+                framesExtracted++;
+
+                if (framesExtracted < numFrames) {
+                    extractFrame(framesExtracted * interval);
+                } else {
+                    URL.revokeObjectURL(video.src);
+                    resolve(frames);
+                }
+            };
+            
+            // Start extracting the first frame
+            extractFrame(0);
+        };
+
+        video.onerror = (e) => {
+            reject(e);
+        };
+    });
+}
+
+
 export default function CaptionsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<GenerateCaptionsOutput | null>(null);
@@ -187,10 +236,17 @@ export default function CaptionsPage() {
     setResult(null);
     try {
       const mediaFile = values.media[0];
-      const mediaDataUri = await toBase64(mediaFile);
+      let mediaDataUris: string[] = [];
+
+      if (mediaFile.type.startsWith('video/')) {
+        toast({ title: "Processing Video...", description: "Extracting keyframes to analyze. This may take a moment." });
+        mediaDataUris = await extractFramesFromVideo(mediaFile);
+      } else {
+        mediaDataUris = [await toBase64(mediaFile)];
+      }
 
       const input: GenerateCaptionsInput = {
-        media: mediaDataUri,
+        media: mediaDataUris,
         platform: values.platform,
         userInput: values.userInput,
         vibe: values.vibe === 'Other' ? values.otherVibe : values.vibe,
@@ -248,7 +304,7 @@ export default function CaptionsPage() {
                                     <FormItem>
                                         <FormLabel>Image or Video</FormLabel>
                                         <FormControl>
-                                            <div 
+                                            <div
                                                 className="w-full aspect-video border-2 border-dashed border-muted-foreground/50 rounded-lg flex flex-col items-center justify-center text-center p-4 cursor-pointer hover:bg-muted/50 transition-colors"
                                                 onClick={() => fileInputRef.current?.click()}
                                             >

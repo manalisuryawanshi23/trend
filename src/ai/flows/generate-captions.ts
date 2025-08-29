@@ -14,9 +14,9 @@ import {z} from 'genkit';
 
 const GenerateCaptionsInputSchema = z.object({
   media: z
-    .string()
+    .array(z.string())
     .describe(
-      "A photo or video, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
+      "An array of images, as data URIs that must include a MIME type and use Base64 encoding. For videos, these are keyframes. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
     ),
   platform: z.string().describe('The social media platform (e.g., Instagram, TikTok, Twitter).'),
   niche: z.string().optional().describe('The content niche (e.g., fashion, food, memes).'),
@@ -47,7 +47,12 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateCaptionsInputSchema},
   output: {schema: GenerateCaptionsOutputSchema},
   templateFormat: 'handlebars',
-  prompt: `You are a social media expert and a brilliant copywriter. Your task is to analyze the provided image/video and generate 8 distinct and creative caption options for a social media post.
+  prompt: `You are a social media expert and a brilliant copywriter. Your task is to analyze the provided media and generate 8 distinct and creative caption options for a social media post.
+
+**Media Analysis:**
+The provided media is an array of data URIs.
+- If the array contains a single image, analyze that image.
+- If the array contains multiple images, they represent keyframes extracted from a video. Analyze the sequence of frames to understand the video's narrative, action, and subject.
 
 **Analysis Context:**
 - **Platform:** {{platform}}
@@ -58,7 +63,7 @@ const prompt = ai.definePrompt({
 
 
 **Your Task:**
-Based on the visual content and the provided context, generate exactly 8 unique options. 
+Based on the visual content and the provided context, generate exactly 8 unique options.
 - Each option must have a different "vibe" or "angle". If a specific vibe was requested, ensure some options match it while still offering creative alternatives.
 - If a call-to-action was requested, seamlessly integrate it into the captions. For example, if the goal is "Ask an engaging question," end the caption with a relevant question. If the goal is "Promote a link in bio," naturally guide users to check it out.
 - For each option, provide:
@@ -67,7 +72,9 @@ Based on the visual content and the provided context, generate exactly 8 unique 
 3.  A relevant, comma-separated string of hashtags.
 
 **Media for Analysis:**
-{{media url=media}}
+{{#each media}}
+{{media url=this}}
+{{/each}}
 
 Output your response in the required JSON format.`,
 });
