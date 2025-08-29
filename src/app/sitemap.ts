@@ -1,12 +1,9 @@
-
 import { type MetadataRoute } from 'next';
 import { allPosts } from '@/lib/blog-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // IMPORTANT: Replace this with your actual domain
   const siteUrl = 'https://www.uptrendfinder.com';
 
-  // Generate URLs for all static pages
   const staticRoutes = [
     '',
     '/about',
@@ -22,15 +19,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/visualize',
   ].map((route) => ({
     url: `${siteUrl}${route}`,
-    lastModified: new Date().toISOString(),
+    // ✅ CHANGED: Removed time part, keeping only date
+    lastModified: new Date().toISOString().split('T')[0],  
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1 : 0.8,
   }));
 
-  // Generate URLs for all blog posts
   const blogRoutes = allPosts.map((post) => ({
     url: `${siteUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.date).toISOString(),
+    // ✅ CHANGED: Removed time part, keeping only date
+    lastModified: new Date(post.date).toISOString().split('T')[0],  
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
