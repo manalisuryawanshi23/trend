@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   description: 'Forecast viral trends 24-72 hours before they explode. Up Trend Finder uses AI to analyze social media data, giving you the insights to go viral.',
   alternates: {
-    canonical: 'https://www.hexasend.com',
+    canonical: 'https://www.uptrendfinder.com',
   },
 };
 
