@@ -2,12 +2,16 @@
 import { type Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, BarChart2, Zap, Brain, Users, RefreshCw, PenSquare, Search } from 'lucide-react';
+import { ArrowRight, Sparkles, Search, Wand2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { Badge } from '@/components/ui/badge';
+import { allPlatforms } from '@/lib/data';
+import { PlatformIcon } from '@/components/platform-icon';
+import { cn } from '@/lib/utils';
+
 
 export const metadata: Metadata = {
   title: 'UpTrendFinder: AI Social Media Trend Prediction Tool',
@@ -16,25 +20,22 @@ export const metadata: Metadata = {
 
 const features = [
   {
-    icon: <BarChart2 className="w-8 h-8 mb-4 text-primary" />,
+    icon: <Wand2 className="w-8 h-8 mb-4 text-primary" />,
     title: "Trend Forecasting",
     description: "Predict viral trends 24-72 hours before they happen. Our AI analyzes millions of data points to give you an unfair advantage.",
     link: "/forecast",
-    image: placeholderImages['feature-forecast']
   },
   {
-    icon: <RefreshCw className="w-8 h-8 mb-4 text-primary" />,
+    icon: <Sparkles className="w-8 h-8 mb-4 text-primary" />,
     title: "Content Repurposing",
     description: "Magically transform any URL—like a blog post or news article—into a ready-to-post social media update for any platform.",
     link: "/repurpose",
-    image: placeholderImages['feature-repurpose']
   },
   {
     icon: <Search className="w-8 h-8 mb-4 text-primary" />,
     title: "Post Analyzer",
     description: "Deconstruct the success of any social media post from a URL. Get a virality score and a breakdown of what made it work.",
     link: "/analyze",
-    image: placeholderImages['feature-analyze']
   }
 ];
 
@@ -59,31 +60,71 @@ const testimonials = [
   }
 ];
 
+const socialProofLogos = [
+  { name: 'Forbes', src: 'https://img.shields.io/badge/Forbes-000000?style=for-the-badge&logo=forbes&logoColor=white' },
+  { name: 'TechCrunch', src: 'https://img.shields.io/badge/TechCrunch-0A9E01?style=for-the-badge&logo=techcrunch&logoColor=white' },
+  { name: 'Wired', src: 'https://img.shields.io/badge/WIRED-000000?style=for-the-badge&logo=wired&logoColor=white' },
+  { name: 'The Verge', src: 'https://img.shields.io/badge/The_Verge-E52925?style=for-the-badge&logo=theverge&logoColor=white' },
+  { name: 'Mashable', src: 'https://img.shields.io/badge/Mashable-00AEEF?style=for-the-badge&logo=mashable&logoColor=white' },
+];
+
+function SocialProofMarquee() {
+  const globalPlatforms = allPlatforms.filter(p => p.regions === 'global');
+  const marqueePlatforms = [...globalPlatforms, ...globalPlatforms]; // Duplicate for seamless loop
+
+  return (
+    <div className="relative w-full overflow-hidden bg-background py-8">
+       <div 
+        className="absolute inset-y-0 left-0 w-24 z-10 bg-gradient-to-r from-background to-transparent"
+        aria-hidden="true"
+      />
+      <div className="flex marquee">
+        {marqueePlatforms.map((platform, index) => (
+          <Link
+            href="/forecast"
+            key={`${platform.name}-${index}`}
+            className="flex-shrink-0 mx-4 flex items-center gap-3 p-3 rounded-full border border-border bg-secondary/50 group hover:bg-primary/10 hover:border-primary/50 transition-colors"
+          >
+            <PlatformIcon platform={platform.name} className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+            <span className="font-semibold text-foreground whitespace-nowrap">
+              Get Your {platform.name.replace('Reels', '').replace('Shorts', '')} Trends
+            </span>
+          </Link>
+        ))}
+      </div>
+       <div 
+        className="absolute inset-y-0 right-0 w-24 z-10 bg-gradient-to-l from-background to-transparent"
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
+
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background">
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative bg-background text-center py-20 md:py-32 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-background -z-0"></div>
+        <section className="relative text-center py-20 md:py-32 overflow-hidden">
+            <div className="absolute inset-0 bg-grid-slate-900/[0.04] [mask-image:linear-gradient(to_bottom,white_5%,transparent_90%)] -z-0"></div>
              <div 
-                className="absolute top-0 left-0 w-96 h-96 bg-accent/20 rounded-full filter blur-3xl opacity-30 animate-pulse"
+                className="absolute top-0 left-0 w-96 h-96 bg-accent/10 rounded-full filter blur-3xl opacity-30 animate-pulse"
                 style={{ animationDuration: '8s' }}
             ></div>
             <div 
-                className="absolute bottom-0 right-0 w-96 h-96 bg-primary/20 rounded-full filter blur-3xl opacity-30 animate-pulse"
+                className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full filter blur-3xl opacity-30 animate-pulse"
                 style={{ animationDuration: '10s', animationDelay: '2s' }}
             ></div>
             <div className="container relative z-10">
-                <Badge variant="outline" className="mb-6 border-primary/50 text-primary font-semibold">
-                    🚀 Now with Gemini 2.5 Pro
+                <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/10 text-primary font-semibold">
+                    🚀 Powered by Gemini 2.5 Pro
                 </Badge>
                 <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-tighter mb-6">
                     Stop Chasing Trends. Start Setting Them.
                 </h1>
                 <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-10">
-                    UpTrendFinder is your AI co-pilot for social media. We analyze millions of data points to forecast viral trends, generate content ideas, and give you the tools to grow faster.
+                    Trend Seer is your AI co-pilot for social media. We analyze millions of data points to forecast viral trends, generate content ideas, and give you the tools to grow faster.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link href="/forecast">
@@ -96,10 +137,26 @@ export default function LandingPage() {
             </div>
         </section>
 
+        {/* Social Proof Logos */}
+        <section className="py-8 bg-secondary/20">
+          <div className="container text-center">
+            <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">Trusted by creators at top companies & publications</p>
+             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-60">
+                {socialProofLogos.map((logo) => (
+                    <Image key={logo.name} src={logo.src} alt={logo.name} width={120} height={32} className="h-6 w-auto" />
+                ))}
+            </div>
+          </div>
+        </section>
+        
+        {/* Social Platform Marquee */}
+        <SocialProofMarquee />
+
+
         {/* Features Section */}
-        <section className="py-16 md:py-24 bg-muted/50">
+        <section className="py-16 md:py-24">
             <div className="container">
-                <div className="text-center max-w-3xl mx-auto mb-12">
+                <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
                         The Ultimate Content Creator Toolkit
                     </h2>
@@ -110,7 +167,7 @@ export default function LandingPage() {
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {features.map((feature) => (
                         <Link href={feature.link} key={feature.title} className="group flex">
-                            <Card className="h-full flex flex-col overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 w-full">
+                            <Card className="h-full flex flex-col overflow-hidden bg-secondary/30 shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 w-full border border-border hover:border-primary/50">
                                 <CardHeader>
                                     {feature.icon}
                                     <CardTitle className="font-headline text-2xl">{feature.title}</CardTitle>
@@ -131,32 +188,32 @@ export default function LandingPage() {
         </section>
 
         {/* How It Works Section */}
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-16 md:py-24 bg-secondary/20">
             <div className="container">
-                 <div className="text-center max-w-3xl mx-auto mb-12">
+                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
-                        Go From Idea to Viral in 3 Steps
+                        Go From Idea to Viral in 3 Simple Steps
                     </h2>
                     <p className="mt-4 text-lg text-muted-foreground">
                         Our workflow is designed to be simple, fast, and powerful.
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-6xl mx-auto">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center p-6 border border-border rounded-xl bg-background/30">
                         <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
                             <span className="font-headline text-2xl font-bold">1</span>
                         </div>
                         <h3 className="font-headline text-xl font-semibold mb-2">Define Your Niche</h3>
                         <p className="text-muted-foreground">Tell our AI your platform, niche, and region to get hyper-relevant trend predictions.</p>
                     </div>
-                     <div className="flex flex-col items-center">
+                     <div className="flex flex-col items-center p-6 border border-border rounded-xl bg-background/30">
                         <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
                            <span className="font-headline text-2xl font-bold">2</span>
                         </div>
                         <h3 className="font-headline text-xl font-semibold mb-2">Get an AI Post Plan</h3>
                         <p className="text-muted-foreground">Instantly receive a list of emerging trends, complete with a hook, caption, hashtags, and more.</p>
                     </div>
-                     <div className="flex flex-col items-center">
+                     <div className="flex flex-col items-center p-6 border border-border rounded-xl bg-background/30">
                         <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
                            <span className="font-headline text-2xl font-bold">3</span>
                         </div>
@@ -168,18 +225,20 @@ export default function LandingPage() {
         </section>
         
         {/* Social Proof Section */}
-        <section className="py-16 md:py-24 bg-muted/50">
+        <section className="py-16 md:py-24">
             <div className="container">
-                 <div className="text-center max-w-3xl mx-auto mb-12">
+                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
                         Trusted by the World's Fastest-Growing Creators
                     </h2>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
                     {testimonials.map((testimonial) => (
-                        <Card key={testimonial.author} className="bg-background/50 border-0 shadow-none">
-                            <CardContent className="p-6">
-                                <p className="text-lg text-foreground font-medium mb-6">"{testimonial.quote}"</p>
+                        <Card key={testimonial.author} className="bg-secondary/30 border-border shadow-lg flex flex-col">
+                            <CardContent className="p-6 flex-grow">
+                                <p className="text-lg text-foreground/90 mb-6">"{testimonial.quote}"</p>
+                            </CardContent>
+                             <CardFooter className="p-6 bg-background/30">
                                 <div className="flex items-center gap-4">
                                     <Avatar className="h-12 w-12 border-2 border-primary/50">
                                         <AvatarImage src={testimonial.avatar.src} alt={testimonial.avatar.alt} data-ai-hint={testimonial.avatar.hint} />
@@ -190,7 +249,7 @@ export default function LandingPage() {
                                         <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                                     </div>
                                 </div>
-                            </CardContent>
+                            </CardFooter>
                         </Card>
                     ))}
                 </div>
@@ -198,7 +257,7 @@ export default function LandingPage() {
         </section>
 
          {/* Final CTA Section */}
-        <section className="py-20 md:py-32 text-center bg-background">
+        <section className="py-20 md:py-32 text-center bg-secondary/20">
             <div className="container">
                 <h2 className="font-headline text-4xl md:text-5xl font-bold tracking-tight mb-4">
                     Ready to Go Viral?
