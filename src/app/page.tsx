@@ -2,11 +2,12 @@
 import { type Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, CheckCircle2, BarChart2, Zap, Brain, Users, RefreshCw, PenSquare, Search } from 'lucide-react';
+import { ArrowRight, BarChart2, Zap, Brain, Users, RefreshCw, PenSquare, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import placeholderImages from '@/lib/placeholder-images.json';
+import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
   title: 'UpTrendFinder: AI Social Media Trend Prediction Tool',
@@ -108,8 +109,8 @@ export default function LandingPage() {
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {features.map((feature) => (
-                        <Link href={feature.link} key={feature.title} className="group">
-                            <Card className="h-full flex flex-col overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <Link href={feature.link} key={feature.title} className="group flex">
+                            <Card className="h-full flex flex-col overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 w-full">
                                 <CardHeader>
                                     {feature.icon}
                                     <CardTitle className="font-headline text-2xl">{feature.title}</CardTitle>
