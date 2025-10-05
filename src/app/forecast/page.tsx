@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LoaderCircle, Wand2, Save, Users } from "lucide-react";
+import { LoaderCircle, Wand2, Save } from "lucide-react";
 
 import { trendForecasting } from "@/ai/flows/trend-forecasting";
 import type { Trend } from "@/lib/types";
@@ -19,7 +19,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendCard } from "@/components/trend-card";
 import { useToast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
 
 const trendFormSchema = z.object({
   platform: z.string({ required_error: "Please select a platform." }).min(1, "Please select a platform."),
@@ -166,11 +165,7 @@ export default function ForecastPage() {
 
   const microNicheOptions = niches.find(n => n.name === selectedNiche)?.microNiches || [];
   const platformOptions = selectedRegion ? getPlatformsForCountry(selectedRegion) : [];
-  const { platform: selectedPlatform, niche: formNiche, microNiche: formMicroNiche, region: formRegion } = trendForm.getValues();
-  const niche = formNiche === 'Other' ? trendForm.getValues("otherNiche") : formNiche;
-  const microNiche = formMicroNiche === 'Other' ? trendForm.getValues("otherMicroNiche") : formMicroNiche;
-  const nicheValue = microNiche ? `${niche} (${microNiche})` : niche;
-
+  
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <header className="text-center mb-12">
@@ -432,17 +427,23 @@ export default function ForecastPage() {
           <div>
             <h2 className="font-headline text-3xl font-bold mb-6 text-center">🔥 Top 5 Emerging Trends</h2>
             <div className="space-y-4 max-w-4xl mx-auto">
-              {trends.map((trend, index) => (
-                <TrendCard 
-                    key={index} 
-                    trend={trend}
-                    context={{
-                        platform: selectedPlatform,
-                        niche: nicheValue,
-                        region: formRegion
-                    }}
-                />
-              ))}
+              {trends.map((trend, index) => {
+                const niche = trendForm.getValues("niche") === 'Other' ? trendForm.getValues("otherNiche") : trendForm.getValues("niche");
+                const microNiche = trendForm.getValues("microNiche") === 'Other' ? trendForm.getValues("otherMicroNiche") : trendForm.getValues("microNiche");
+                const nicheValue = microNiche ? `${niche} (${microNiche})` : niche;
+
+                return (
+                  <TrendCard 
+                      key={index} 
+                      trend={trend}
+                      context={{
+                          platform: trendForm.getValues("platform"),
+                          niche: nicheValue || '',
+                          region: trendForm.getValues("region")
+                      }}
+                  />
+                );
+              })}
             </div>
           </div>
         )}
