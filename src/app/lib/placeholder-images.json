@@ -1,0 +1,38 @@
+
+{
+  "landing-hero": {
+    "src": "https://picsum.photos/seed/hero-image/1200/800",
+    "alt": "A futuristic dashboard displaying social media trend graphs and charts, representing AI-powered analytics.",
+    "hint": "futuristic dashboard"
+  },
+  "feature-forecast": {
+    "src": "https://picsum.photos/seed/feature-forecast/800/600",
+    "alt": "An AI-generated image showing a crystal ball revealing glowing trend lines and charts.",
+    "hint": "crystal ball"
+  },
+  "feature-repurpose": {
+    "src": "https://picsum.photos/seed/feature-repurpose/800/600",
+    "alt": "An illustration showing a single blog post icon transforming into multiple social media post icons like Instagram and TikTok.",
+    "hint": "content repurposing"
+  },
+  "feature-analyze": {
+    "src": "https://picsum.photos/seed/feature-analyze/800/600",
+    "alt": "A magnifying glass hovering over a social media post, revealing its underlying performance metrics and data.",
+    "hint": "data analysis"
+  },
+  "avatar-1": {
+    "src": "https://picsum.photos/seed/avatar1/100/100",
+    "alt": "Avatar of a happy content creator.",
+    "hint": "person happy"
+  },
+  "avatar-2": {
+    "src": "https://picsum.photos/seed/avatar2/100/100",
+    "alt": "Avatar of a professional social media manager.",
+    "hint": "professional woman"
+  },
+  "avatar-3": {
+    "src": "https://picsum.photos/seed/avatar3/100/100",
+    "alt": "Avatar of a marketing agency owner.",
+    "hint": "man smiling"
+  }
+}

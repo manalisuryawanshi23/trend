@@ -2,202 +2,214 @@
 import { type Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, CheckCircle2, BarChart2, Zap, Brain, Users } from 'lucide-react';
+import { ArrowRight, CheckCircle2, BarChart2, Zap, Brain, Users, RefreshCw, PenSquare, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { allPosts } from '@/lib/blog-data';
+import placeholderImages from '@/lib/placeholder-images.json';
 
 export const metadata: Metadata = {
   title: 'UpTrendFinder: AI Social Media Trend Prediction Tool',
   description: 'Instantly discover the next viral trends with our AI trend forecasting tool. Get AI-powered content ideas to grow faster. Perfect for creators, influencers, and marketers.',
 };
 
+const features = [
+  {
+    icon: <BarChart2 className="w-8 h-8 mb-4 text-primary" />,
+    title: "Trend Forecasting",
+    description: "Predict viral trends 24-72 hours before they happen. Our AI analyzes millions of data points to give you an unfair advantage.",
+    link: "/forecast",
+    image: placeholderImages['feature-forecast']
+  },
+  {
+    icon: <RefreshCw className="w-8 h-8 mb-4 text-primary" />,
+    title: "Content Repurposing",
+    description: "Magically transform any URL—like a blog post or news article—into a ready-to-post social media update for any platform.",
+    link: "/repurpose",
+    image: placeholderImages['feature-repurpose']
+  },
+  {
+    icon: <Search className="w-8 h-8 mb-4 text-primary" />,
+    title: "Post Analyzer",
+    description: "Deconstruct the success of any social media post from a URL. Get a virality score and a breakdown of what made it work.",
+    link: "/analyze",
+    image: placeholderImages['feature-analyze']
+  }
+];
+
+const testimonials = [
+  {
+    quote: "UpTrendFinder is my secret weapon. I found a trend for my cooking channel, posted a video, and it hit a million views in two days. It felt like cheating.",
+    author: "@foodiecreator",
+    role: "TikTok Creator, 1.2M Followers",
+    avatar: placeholderImages['avatar-1']
+  },
+  {
+    quote: "As a social media manager for multiple brands, this tool saves me hours of research every week. The AI-powered accuracy is mind-blowing. I can finally be proactive instead of reactive.",
+    author: "Sarah L.",
+    role: "Social Media Manager",
+    avatar: placeholderImages['avatar-2']
+  },
+    {
+    quote: "We use UpTrendFinder to inform content strategy for all our clients. The ability to forecast trends by niche and region is a game-changer for getting our clients ahead of the competition.",
+    author: "Mark Chen",
+    role: "Founder, Apex Marketing Agency",
+    avatar: placeholderImages['avatar-3']
+  }
+];
+
+
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-20 md:py-32 text-center bg-background">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-transparent -z-10"></div>
+        <section className="relative bg-background text-center py-20 md:py-32 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-background -z-0"></div>
+             <div 
+                className="absolute top-0 left-0 w-96 h-96 bg-accent/20 rounded-full filter blur-3xl opacity-30 animate-pulse"
+                style={{ animationDuration: '8s' }}
+            ></div>
+            <div 
+                className="absolute bottom-0 right-0 w-96 h-96 bg-primary/20 rounded-full filter blur-3xl opacity-30 animate-pulse"
+                style={{ animationDuration: '10s', animationDelay: '2s' }}
+            ></div>
             <div className="container relative z-10">
-                <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent mb-6">
-                    Discover Tomorrow's Trends, Today.
+                <Badge variant="outline" className="mb-6 border-primary/50 text-primary font-semibold">
+                    🚀 Now with Gemini 2.5 Pro
+                </Badge>
+                <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-tighter mb-6">
+                    Stop Chasing Trends. Start Setting Them.
                 </h1>
-                <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
-                    UpTrendFinder is your AI-powered crystal ball for social media, forecasting viral trends 24-72 hours before they explode.
+                <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-10">
+                    UpTrendFinder is your AI co-pilot for social media. We analyze millions of data points to forecast viral trends, generate content ideas, and give you the tools to grow faster.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link href="/forecast">
-                        <Button size="lg" className="font-bold text-lg py-7 px-8 w-full sm:w-auto">
-                            🚀 Try Free Forecast Now
+                        <Button size="lg" className="font-bold text-lg py-7 px-8 w-full sm:w-auto group">
+                            Get Your Free Forecast
+                            <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                         </Button>
                     </Link>
                 </div>
-                 <div className="mt-12 flex justify-center">
-                    <Image
-                        src="https://picsum.photos/seed/landing-hero/1000/560"
-                        alt="Screenshot of the UpTrendFinder dashboard showing an AI trend forecast for a future social media trend."
-                        width={1000}
-                        height={560}
-                        className="rounded-lg border-2 border-primary/20 shadow-2xl shadow-primary/10"
-                        priority
-                        data-ai-hint="dashboard futuristic"
-                    />
-                </div>
             </div>
         </section>
 
-        {/* What It Does Section */}
-        <section className="py-16 md:py-24 bg-muted/50">
-            <div className="container text-center max-w-3xl">
-                 <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tight mb-4">
-                    Stop Guessing, Start Forecasting
-                </h2>
-                <p className="text-lg text-muted-foreground">
-                    UpTrendFinder analyzes millions of real-time social signals to give you a clear, data-driven advantage. Our AI finds emerging patterns, sounds, and topics in your niche, providing you with a complete post plan so you can create content with confidence.
-                </p>
-            </div>
-        </section>
-
-
-        {/* Sample Forecast Preview */}
-        <section className="py-16 md:py-24">
-            <div className="container text-center">
-                <h3 className="text-sm font-semibold uppercase text-primary tracking-wider mb-2">See It In Action</h3>
-                <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-8">
-                    Get actionable insights, not just data. Here’s a sample of what you'll get.
-                </p>
-                <div className="max-w-4xl mx-auto">
-                     <Card className="text-left overflow-hidden shadow-lg border-2 border-primary/10">
-                        <CardHeader>
-                            <CardTitle className="font-headline text-xl flex items-center gap-3">
-                                <BarChart2 className="text-primary"/>
-                                Example: Upcoming Trend in Fashion 2025
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <p className="font-semibold text-foreground">Trend Name: "Bio-Luminescent Outerwear"</p>
-                            <p className="text-sm text-muted-foreground">
-                                <span className="font-medium text-foreground">Why it's rising:</span> A fusion of wearable tech and sustainable fashion is driving interest in clothing that glows, powered by bioluminescent algae.
-                            </p>
-                            <div className="bg-muted/50 p-4 rounded-md space-y-2">
-                                <p className="text-sm"><span className="font-semibold">Hook Idea:</span> "My new jacket is alive..."</p>
-                                <p className="text-sm"><span className="font-semibold">Caption Idea:</span> "Wearing the future. This jacket is powered by bioluminescent algae, and it's lighting up my feed. What do you think of wearable tech? #bioluminescent #futurefashion #sustainabletech"</p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
-        </section>
-
-        {/* Benefits Section */}
+        {/* Features Section */}
         <section className="py-16 md:py-24 bg-muted/50">
             <div className="container">
                 <div className="text-center max-w-3xl mx-auto mb-12">
-                    <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tight">
-                        The Ultimate Content Creator Advantage
+                    <h2 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
+                        The Ultimate Content Creator Toolkit
                     </h2>
                     <p className="mt-4 text-lg text-muted-foreground">
-                        Get everything you need to outpace the competition and grow your audience faster than ever.
+                        Everything you need to outpace the competition and grow your audience faster than ever.
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <Card className="bg-background">
-                        <CardHeader>
-                            <Zap className="h-8 w-8 text-primary mb-2" />
-                            <CardTitle className="font-headline">Grow Faster</CardTitle>
-                            <CardDescription>Ride the viral wave by catching trends early, leading to explosive organic reach and follower growth.</CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <Card className="bg-background">
-                        <CardHeader>
-                            <Brain className="h-8 w-8 text-primary mb-2" />
-                            <CardTitle className="font-headline">AI-Powered Ideas</CardTitle>
-                            <CardDescription>Overcome creator's block with endless AI-generated content ideas, hooks, and captions tailored to your niche.</CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <Card className="bg-background">
-                         <CardHeader>
-                            <BarChart2 className="h-8 w-8 text-primary mb-2" />
-                            <CardTitle className="font-headline">Stay Ahead</CardTitle>
-                            <CardDescription>Our trend forecasting tool gives you the strategic insights to become a leader in your category, not a follower.</CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <Card className="bg-background">
-                        <CardHeader>
-                             <CheckCircle2 className="h-8 w-8 text-primary mb-2" />
-                            <CardTitle className="font-headline">Save Time</CardTitle>
-                            <CardDescription>Stop endlessly scrolling for ideas. Get data-backed trend reports and post plans in seconds.</CardDescription>
-                        </CardHeader>
-                    </Card>
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {features.map((feature) => (
+                        <Link href={feature.link} key={feature.title} className="group">
+                            <Card className="h-full flex flex-col overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                                <CardHeader>
+                                    {feature.icon}
+                                    <CardTitle className="font-headline text-2xl">{feature.title}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex-grow">
+                                    <CardDescription>{feature.description}</CardDescription>
+                                </CardContent>
+                                <CardFooter>
+                                    <span className="text-sm font-semibold text-primary group-hover:underline">
+                                        Try Now <ArrowRight className="inline-block ml-1 h-4 w-4" />
+                                    </span>
+                                </CardFooter>
+                            </Card>
+                        </Link>
+                    ))}
                 </div>
             </div>
         </section>
 
-        {/* Social Proof Section */}
-        <section className="py-16 md:py-24">
+        {/* How It Works Section */}
+        <section className="py-16 md:py-24 bg-background">
             <div className="container">
                  <div className="text-center max-w-3xl mx-auto mb-12">
-                    <div className="flex justify-center items-center gap-2 mb-4">
-                        <Users className="h-6 w-6 text-primary" />
-                        <p className="font-semibold text-lg text-muted-foreground">
-                            Trusted by 2,000+ creators and marketers
-                        </p>
+                    <h2 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
+                        Go From Idea to Viral in 3 Steps
+                    </h2>
+                    <p className="mt-4 text-lg text-muted-foreground">
+                        Our workflow is designed to be simple, fast, and powerful.
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-6xl mx-auto">
+                    <div className="flex flex-col items-center">
+                        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
+                            <span className="font-headline text-2xl font-bold">1</span>
+                        </div>
+                        <h3 className="font-headline text-xl font-semibold mb-2">Define Your Niche</h3>
+                        <p className="text-muted-foreground">Tell our AI your platform, niche, and region to get hyper-relevant trend predictions.</p>
+                    </div>
+                     <div className="flex flex-col items-center">
+                        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
+                           <span className="font-headline text-2xl font-bold">2</span>
+                        </div>
+                        <h3 className="font-headline text-xl font-semibold mb-2">Get an AI Post Plan</h3>
+                        <p className="text-muted-foreground">Instantly receive a list of emerging trends, complete with a hook, caption, hashtags, and more.</p>
+                    </div>
+                     <div className="flex flex-col items-center">
+                        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
+                           <span className="font-headline text-2xl font-bold">3</span>
+                        </div>
+                        <h3 className="font-headline text-xl font-semibold mb-2">Create and Post</h3>
+                        <p className="text-muted-foreground">Use the AI-powered plan to create content with confidence and post it before the trend gets saturated.</p>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <Card>
-                        <CardContent className="p-6">
-                            <p className="text-muted-foreground mb-4">"UpTrendFinder is my secret weapon. I found a trend for my cooking channel, posted a video, and it hit a million views in two days. It felt like cheating."</p>
-                            <div className="flex items-center gap-3">
-                                <Avatar>
-                                    <AvatarImage src="https://picsum.photos/seed/avatar1/40/40" alt="@foodiecreator" data-ai-hint="person happy"/>
-                                    <AvatarFallback>FC</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="font-semibold">@foodiecreator</p>
-                                    <p className="text-sm text-muted-foreground">TikTok Creator</p>
+            </div>
+        </section>
+        
+        {/* Social Proof Section */}
+        <section className="py-16 md:py-24 bg-muted/50">
+            <div className="container">
+                 <div className="text-center max-w-3xl mx-auto mb-12">
+                    <h2 className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
+                        Trusted by the World's Fastest-Growing Creators
+                    </h2>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    {testimonials.map((testimonial) => (
+                        <Card key={testimonial.author} className="bg-background/50 border-0 shadow-none">
+                            <CardContent className="p-6">
+                                <p className="text-lg text-foreground font-medium mb-6">"{testimonial.quote}"</p>
+                                <div className="flex items-center gap-4">
+                                    <Avatar className="h-12 w-12 border-2 border-primary/50">
+                                        <AvatarImage src={testimonial.avatar.src} alt={testimonial.avatar.alt} data-ai-hint={testimonial.avatar.hint} />
+                                        <AvatarFallback>{testimonial.author.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-semibold text-foreground">{testimonial.author}</p>
+                                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className="p-6">
-                            <p className="text-muted-foreground mb-4">"As a social media manager, this tool saves me hours of research every week. The AI-powered accuracy is mind-blowing. I can finally be proactive instead of reactive."</p>
-                            <div className="flex items-center gap-3">
-                                <Avatar>
-                                    <AvatarImage src="https://picsum.photos/seed/avatar2/40/40" alt="Sarah L." data-ai-hint="professional woman"/>
-                                    <AvatarFallback>SL</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="font-semibold">Sarah L.</p>
-                                    <p className="text-sm text-muted-foreground">Social Media Manager</p>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+                            </CardContent>
+                        </Card>
+                    ))}
                 </div>
             </div>
         </section>
 
          {/* Final CTA Section */}
-        <section className="py-20 md:py-32 text-center bg-muted/50">
+        <section className="py-20 md:py-32 text-center bg-background">
             <div className="container">
-                <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tight mb-4">
+                <h2 className="font-headline text-4xl md:text-5xl font-bold tracking-tight mb-4">
                     Ready to Go Viral?
                 </h2>
-                <p className="max-w-xl mx-auto text-lg text-muted-foreground mb-8">
-                    Your next big hit is just a click away. Get an instant, AI-powered trend forecast for your niche right now.
+                <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-8">
+                    Your next big hit is just a click away. Get an instant, AI-powered trend forecast for your niche right now—no credit card or sign-up required.
                 </p>
                 <Link href="/forecast">
                     <Button size="lg" className="font-bold text-lg py-7 px-8 animate-pulse">
-                        🚀 Try Free Forecast Now
+                        🚀 Get Your Free Trend Forecast Now
                     </Button>
                 </Link>
-                <p className="mt-4 text-sm text-muted-foreground">
-                    No sign-up needed. Get your first forecast instantly.
-                </p>
             </div>
         </section>
       </main>
