@@ -99,7 +99,6 @@ export default function ForecastPage() {
         trendForm.reset(savedPrefs);
       } catch (e) {
         console.error("Failed to parse saved preferences", e);
-        // If parsing fails, fetch location as a fallback
         fetchUserLocation();
       }
     } else {
@@ -108,7 +107,6 @@ export default function ForecastPage() {
     
     async function fetchUserLocation() {
       try {
-        // A simple, privacy-friendly API to get country code
         const response = await fetch('https://ipapi.co/json/');
         if (!response.ok) throw new Error('Failed to fetch location');
         const data = await response.json();
@@ -119,11 +117,9 @@ export default function ForecastPage() {
         }
       } catch (error) {
         console.error("Could not fetch user location:", error);
-        // Silently fail and keep the default 'United States'
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trendForm.reset]);
+  }, [trendForm]);
 
   const selectedNiche = trendForm.watch("niche");
   const selectedMicroNiche = trendForm.watch("microNiche");
@@ -135,9 +131,6 @@ export default function ForecastPage() {
         const availablePlatforms = getPlatformsForCountry(selectedRegion);
         const currentPlatform = trendForm.getValues("platform");
         
-        // If a platform is selected but it's not available in the new region, reset it.
-        // This prevents the form from holding an invalid value.
-        // It does NOT auto-select a default if no platform was chosen, preserving the placeholder.
         if (currentPlatform && !availablePlatforms.some(p => p.name === currentPlatform)) {
              trendForm.setValue('platform', '');
         }
