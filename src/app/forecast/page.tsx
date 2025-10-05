@@ -56,6 +56,41 @@ export default function ForecastPage() {
     },
   });
 
+  async function onTrendSubmit(values: TrendFormValues) {
+    setIsLoadingTrends(true);
+    setTrends([]);
+    try {
+      const niche = values.niche === 'Other' ? values.otherNiche : values.niche;
+      const microNiche = values.microNiche === 'Other' ? values.otherMicroNiche : values.microNiche;
+      const userType = values.userType === 'Other' ? values.otherUserType : values.userType;
+      
+      const nicheValue = microNiche ? `${niche} (${microNiche})` : niche;
+
+      const result = await trendForecasting({
+        platform: values.platform,
+        niche: nicheValue || '',
+        region: values.region,
+        userType: userType || '',
+        model: values.model,
+      });
+
+      if (result && result.trends) {
+        setTrends(result.trends.map(t => ({...t, viralityScore: Math.floor(Math.random() * 31) + 70})));
+      } else {
+        throw new Error("Invalid response from AI");
+      }
+    } catch (e) {
+      console.error(e);
+      toast({
+        variant: "destructive",
+        title: "Error Forecasting Trends",
+        description: "An unexpected error occurred. The selected AI model may be overloaded. Please try again later.",
+      });
+    } finally {
+      setIsLoadingTrends(false);
+    }
+  }
+
   useEffect(() => {
     const savedPrefsString = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (savedPrefsString) {
@@ -109,41 +144,6 @@ export default function ForecastPage() {
     }
    }, [selectedRegion, trendForm]);
 
-
-  async function onTrendSubmit(values: TrendFormValues) {
-    setIsLoadingTrends(true);
-    setTrends([]);
-    try {
-      const niche = values.niche === 'Other' ? values.otherNiche : values.niche;
-      const microNiche = values.microNiche === 'Other' ? values.otherMicroNiche : values.microNiche;
-      const userType = values.userType === 'Other' ? values.otherUserType : values.userType;
-      
-      const nicheValue = microNiche ? `${niche} (${microNiche})` : niche;
-
-      const result = await trendForecasting({
-        platform: values.platform,
-        niche: nicheValue || '',
-        region: values.region,
-        userType: userType || '',
-        model: values.model,
-      });
-
-      if (result && result.trends) {
-        setTrends(result.trends.map(t => ({...t, viralityScore: Math.floor(Math.random() * 31) + 70})));
-      } else {
-        throw new Error("Invalid response from AI");
-      }
-    } catch (e) {
-      console.error(e);
-      toast({
-        variant: "destructive",
-        title: "Error Forecasting Trends",
-        description: "An unexpected error occurred. The selected AI model may be overloaded. Please try again later.",
-      });
-    } finally {
-      setIsLoadingTrends(false);
-    }
-  }
 
   function savePreferences() {
     const values = trendForm.getValues();
