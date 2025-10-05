@@ -2,7 +2,7 @@
 import { type Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, CheckCircle2, BarChart2, Zap, BrainCircuit, Users } from 'lucide-react';
+import { ArrowRight, CheckCircle2, BarChart2, Zap, Brain, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -112,7 +112,7 @@ export default function LandingPage() {
                     </Card>
                     <Card className="bg-background">
                         <CardHeader>
-                            <BrainCircuit className="h-8 w-8 text-primary mb-2" />
+                            <Brain className="h-8 w-8 text-primary mb-2" />
                             <CardTitle className="font-headline">AI-Powered Ideas</CardTitle>
                             <CardDescription>Overcome creator's block with endless AI-generated content ideas, hooks, and captions tailored to your niche.</CardDescription>
                         </CardHeader>
