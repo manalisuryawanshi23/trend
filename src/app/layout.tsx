@@ -2,12 +2,11 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import React from 'react';
-import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Nav } from '@/components/nav';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import { ThemeProvider } from "@/components/theme-provider";
+import { AppThemeProvider } from "@/components/theme-provider";
 import './globals.css';
 import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 
@@ -83,12 +82,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn("font-body antialiased", fontInter.variable, fontSpaceGrotesk.variable)}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+          <AppThemeProvider>
             <div className="flex flex-col min-h-screen bg-background">
               <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="container mx-auto px-4 sm:px-6 py-3">
@@ -106,7 +100,7 @@ export default function RootLayout({
               <Footer />
             </div>
             <Toaster />
-          </ThemeProvider>
+          </AppThemeProvider>
       </body>
     </html>
   );
