@@ -143,7 +143,7 @@ export default function LandingPage() {
             <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">Trusted by creators at top companies & publications</p>
              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-60">
                 {socialProofLogos.map((logo) => (
-                    <Image key={logo.name} src={logo.src} alt={logo.name} width={120} height={32} className="h-6 w-auto" />
+                    <img key={logo.name} src={logo.src} alt={logo.name} className="h-6 w-auto" />
                 ))}
             </div>
           </div>

@@ -83,30 +83,30 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn("font-body antialiased", fontInter.variable, fontSpaceGrotesk.variable)}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex flex-col min-h-screen bg-background">
-            <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              <div className="container mx-auto px-4 sm:px-6 py-3">
-                <div className="flex items-center justify-between gap-4">
-                    <Link href="/" className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                      UpTrendFinder
-                    </Link>
-                    <Nav />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="flex flex-col min-h-screen bg-background">
+              <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="container mx-auto px-4 sm:px-6 py-3">
+                  <div className="flex items-center justify-between gap-4">
+                      <Link href="/" className="font-headline text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                        UpTrendFinder
+                      </Link>
+                      <Nav />
+                  </div>
                 </div>
-              </div>
-            </header>
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <Toaster />
-        </ThemeProvider>
+              </header>
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <Toaster />
+          </ThemeProvider>
       </body>
     </html>
   );
