@@ -10,11 +10,12 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle, SheetHeader 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper, Captions, Flame, User } from 'lucide-react';
+import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper, Captions, Flame, User, Home } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
-  { href: '/', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
+  { href: '/', label: 'Home', icon: <Home className="h-5 w-5" /> },
+  { href: '/forecast', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
   { href: '/trending', label: 'Top Trending', icon: <Flame className="h-5 w-5" /> },
   { href: '/captions', label: 'Captions', icon: <Captions className="h-5 w-5" /> },
   { href: '/bio', label: 'Bio', icon: <User className="h-5 w-5" /> },
@@ -137,7 +138,7 @@ export function Nav() {
                       
                        <div className="space-y-2 bg-primary/10 p-3 rounded-md">
                         <h4 className="font-semibold text-primary flex items-center gap-2"><Star className="h-4 w-4" />Pro Tip</h4>
-                        <p>{item.proTip}</p>
+                        <p className="text-primary/90">{item.proTip}</p>
                       </div>
 
                   </AccordionContent>
