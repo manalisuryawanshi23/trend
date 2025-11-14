@@ -83,6 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
         <head>
+          {/* Google Tag Manager */}
           <Script id="google-tag-manager" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -90,12 +91,28 @@ export default function RootLayout({
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-N7LD5VDR');`}
           </Script>
+          {/* End Google Tag Manager */}
+
+          {/* Google tag (gtag.js) */}
+          <Script async src="https://www.googletagmanager.com/gtag/js?id=G-58EXMBMZ1W"></Script>
+          <Script id="google-analytics">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-58EXMBMZ1W');
+            `}
+          </Script>
+          {/* End Google tag (gtag.js) */}
         </head>
       <body className={cn("font-body antialiased", fontInter.variable, fontSpaceGrotesk.variable)}>
+          {/* Google Tag Manager (noscript) */}
           <noscript>
             <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N7LD5VDR"
             height="0" width="0" style={{display: "none", visibility: "hidden"}}></iframe>
           </noscript>
+          {/* End Google Tag Manager (noscript) */}
           <AppThemeProvider>
             <div className="flex flex-col min-h-screen bg-background">
               <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
