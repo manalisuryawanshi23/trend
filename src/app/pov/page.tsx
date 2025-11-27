@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
 
 const vibes = ['Funny', 'Dramatic', 'Relatable', 'Wholesome', 'Cringe', 'Sarcastic', 'Heartwarming', 'Chaotic'];
 const languages = ['English', 'Hinglish'];
@@ -27,6 +28,8 @@ const povFormSchema = z.object({
   vibe: z.string({ required_error: "Please select a vibe." }),
   language: z.enum(['English', 'Hinglish'], { required_error: "Please select a language." }),
   includeSong: z.boolean().default(true),
+  includeEmojis: z.boolean().default(true),
+  userInputSong: z.string().optional(),
 });
 
 function PovResultCard({ caption, songSuggestion }: { caption: string, songSuggestion?: string }) {
@@ -42,7 +45,7 @@ function PovResultCard({ caption, songSuggestion }: { caption: string, songSugge
         <Card className="bg-muted/50">
             <CardContent className="p-4 flex items-start justify-between gap-4">
                 <div className="flex-grow space-y-2">
-                    <p className="text-sm text-muted-foreground">{caption}</p>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{caption}</p>
                     {songSuggestion && (
                          <div className="flex items-center gap-2 text-xs text-primary/80">
                             <Music className="h-3 w-3" />
@@ -70,6 +73,8 @@ export default function PovPage() {
       vibe: "Funny",
       language: "English",
       includeSong: true,
+      includeEmojis: true,
+      userInputSong: "",
     }
   });
 
@@ -119,8 +124,8 @@ export default function PovPage() {
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="md:col-span-2">
+                  <div className="space-y-6">
+                    <div>
                         <FormField
                             control={form.control}
                             name="description"
@@ -135,74 +140,113 @@ export default function PovPage() {
                             )}
                         />
                     </div>
-                    <FormField
-                      control={form.control}
-                      name="vibe"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Vibe / Tone</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a vibe" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {vibes.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="language"
-                      render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel>Language</FormLabel>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              className="flex flex-row space-x-4"
-                            >
-                              {languages.map(lang => (
-                                <FormItem key={lang} className="flex items-center space-x-2 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value={lang} />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {lang}
-                                  </FormLabel>
-                                </FormItem>
-                              ))}
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                     <FormField
+                    <div>
+                        <FormField
+                          control={form.control}
+                          name="userInputSong"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Your Song/Lyric Idea (Optional)</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g., 'Running up that hill...' or 'As It Was by Harry Styles'" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
                         control={form.control}
-                        name="includeSong"
+                        name="vibe"
                         render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 md:col-span-2">
-                            <div className="space-y-0.5">
-                                <FormLabel className="text-base">
-                                Suggest a Song/Lyric
-                                </FormLabel>
-                                <FormMessage />
-                            </div>
-                            <FormControl>
-                                <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
+                            <FormItem>
+                            <FormLabel>Vibe / Tone</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a vibe" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                {vibes.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
                             </FormItem>
                         )}
                         />
+                        <FormField
+                        control={form.control}
+                        name="language"
+                        render={({ field }) => (
+                            <FormItem className="space-y-3">
+                            <FormLabel>Language</FormLabel>
+                            <FormControl>
+                                <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="flex flex-row space-x-4 pt-2"
+                                >
+                                {languages.map(lang => (
+                                    <FormItem key={lang} className="flex items-center space-x-2 space-y-0">
+                                    <FormControl>
+                                        <RadioGroupItem value={lang} />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                        {lang}
+                                    </FormLabel>
+                                    </FormItem>
+                                ))}
+                                </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                            control={form.control}
+                            name="includeEmojis"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                                <div className="space-y-0.5">
+                                    <FormLabel className="text-base">
+                                    Include Emojis
+                                    </FormLabel>
+                                    <FormMessage />
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                </FormItem>
+                            )}
+                            />
+                        <FormField
+                            control={form.control}
+                            name="includeSong"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                                <div className="space-y-0.5">
+                                    <FormLabel className="text-base">
+                                    Suggest a Song/Lyric
+                                    </FormLabel>
+                                    <FormMessage />
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                </FormItem>
+                            )}
+                            />
+                    </div>
                   </div>
                   <Button type="submit" disabled={isLoading} className="w-full md:w-auto font-bold text-lg py-6 px-8" size="lg">
                     {isLoading && <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />}
