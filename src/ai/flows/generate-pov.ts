@@ -42,9 +42,9 @@ const prompt = ai.definePrompt({
   input: {schema: GeneratePovInputSchema},
   output: {schema: GeneratePovOutputSchema},
   templateFormat: 'handlebars',
-  prompt: `You are a social media expert and a viral content creator specializing in POV (Point of View) style videos.
+  prompt: `You are a social media expert and a viral content creator specializing in short, eye-catchy POV (Point of View) style videos.
 
-Your task is to generate 5 unique and creative POV caption options based on the following details. Each caption should be a captivating hook designed to stop the scroll.
+Your task is to generate 5 unique and creative POV caption options based on the following details. Each caption must be a short, powerful, and scroll-stopping hook.
 
 **POV Details:**
 - **Scenario:** {{description}}
@@ -54,7 +54,7 @@ Your task is to generate 5 unique and creative POV caption options based on the 
 
 **Instructions:**
 1.  Generate exactly 5 distinct POV caption options.
-2.  Each option must start with "POV:" and be written as a **captivating hook**. It should create immediate curiosity and make the viewer want to see what happens next.
+2.  Each option must start with "POV:" and be written as a **short, eye-catchy hook**. It should create immediate curiosity and be easily readable in a fast-paced video feed.
 3.  Creatively interpret the scenario with the requested 'vibe'.
 4.  Write the captions in {{language}}.
 5.  {{#if includeEmojis}}Each caption should include relevant and trendy emojis to make it more engaging.{{else}}Do not use any emojis in the captions.{{/if}}
