@@ -44,7 +44,7 @@ const prompt = ai.definePrompt({
   templateFormat: 'handlebars',
   prompt: `You are a social media expert and a viral content creator specializing in POV (Point of View) style videos.
 
-Your task is to generate 5 unique and creative POV caption options based on the following details.
+Your task is to generate 5 unique and creative POV caption options based on the following details. Each caption should be a captivating hook designed to stop the scroll.
 
 **POV Details:**
 - **Scenario:** {{description}}
@@ -54,11 +54,12 @@ Your task is to generate 5 unique and creative POV caption options based on the 
 
 **Instructions:**
 1.  Generate exactly 5 distinct POV caption options.
-2.  Each option should start with "POV:" and creatively interpret the scenario with the requested 'vibe'.
-3.  Write the captions in {{language}}.
-4.  {{#if includeEmojis}}Each caption should include relevant and trendy emojis to make it more engaging.{{else}}Do not use any emojis in the captions.{{/if}}
-5.  {{#if includeSong}}For each caption, also provide a "songSuggestion" with a trending song or lyric that fits the mood. If you suggest a song, format it as "Song: [Song Name] - [Artist]". If you suggest a lyric, format it as "Lyric: '[lyric phrase...]'".{{else}}Do not include song suggestions.{{/if}}
-6.  Ensure the captions are engaging and optimized for platforms like TikTok and Instagram Reels.
+2.  Each option must start with "POV:" and be written as a **captivating hook**. It should create immediate curiosity and make the viewer want to see what happens next.
+3.  Creatively interpret the scenario with the requested 'vibe'.
+4.  Write the captions in {{language}}.
+5.  {{#if includeEmojis}}Each caption should include relevant and trendy emojis to make it more engaging.{{else}}Do not use any emojis in the captions.{{/if}}
+6.  {{#if includeSong}}For each caption, also provide a "songSuggestion" with a trending song or lyric that fits the mood. If you suggest a song, format it as "Song: [Song Name] - [Artist]". If you suggest a lyric, format it as "Lyric: '[lyric phrase...]'".{{else}}Do not include song suggestions.{{/if}}
+7.  Ensure the captions are optimized for platforms like TikTok and Instagram Reels.
 
 Output your response in the required JSON format.`,
 });
