@@ -10,7 +10,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle, SheetHeader 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper, Captions, Flame, User, Home } from 'lucide-react';
+import { Wand2, Search, Sparkles, Image, Menu, X, LifeBuoy, CheckCircle2, Star, Rocket, Newspaper, Captions, Flame, User, Home, Eye } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
@@ -18,6 +18,7 @@ const navItems = [
   { href: '/forecast', label: 'Forecast', icon: <Wand2 className="h-5 w-5" /> },
   { href: '/trending', label: 'Top Trending', icon: <Flame className="h-5 w-5" /> },
   { href: '/captions', label: 'Captions', icon: <Captions className="h-5 w-5" /> },
+  { href: '/pov', label: 'POV', icon: <Eye className="h-5 w-5" /> },
   { href: '/bio', label: 'Bio', icon: <User className="h-5 w-5" /> },
   { href: '/repurpose', label: 'Repurpose', icon: <Sparkles className="h-5 w-5" /> },
   { href: '/analyze', label: 'Analyze', icon: <Search className="h-5 w-5" /> },
@@ -49,6 +50,18 @@ const helpGuide = [
             "Click 'Generate Captions' to get 8 distinct options."
         ],
         proTip: "Use the 'Optional Context' field to guide the AI's tone, e.g., 'make it funny' or 'ask an engaging question'."
+    },
+     {
+        tool: "POV",
+        description: "Generates 5 creative POV (Point of View) caption ideas for a scenario.",
+        useCase: "Perfect for creating relatable or funny POV-style videos for TikTok and Reels.",
+        steps: [
+            "Describe the scenario (e.g., 'A dog watching its owner leave for work').",
+            "Choose the 'vibe' you're going for (e.g., Funny, Dramatic).",
+            "Select the language (English or Hinglish).",
+            "Click 'Generate POVs' for 5 ready-to-use captions, complete with song suggestions."
+        ],
+        proTip: "The more specific your scenario, the more creative the AI's response will be."
     },
     {
         tool: "Bio",
@@ -113,7 +126,7 @@ export function Nav() {
           </DialogDescription>
       </DialogHeader>
       <Accordion type="single" collapsible className="w-full">
-          {helpGuide.map((item) => (
+          {helpGuide.sort((a,b) => a.tool.localeCompare(b.tool)).map((item) => (
               <AccordionItem value={item.tool} key={item.tool}>
                   <AccordionTrigger className="font-semibold text-lg">{item.tool}</AccordionTrigger>
                   <AccordionContent className="text-muted-foreground space-y-4">
